@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&display=swap");
+
+.todolist--header-outer {
+  display: flex;
+  flex-direction: column;
+  background-color: cornsilk;
+}
+
+.date-time,
+.todolist--header {
+  padding: 0 10px;
+  display: flex;
+}
+
+.date-time {
+  font-family: "Zen Kaku Gothic Antique", sans-serif;
+  justify-content: space-between;
+}
+
+.todolist--header {
+  height: 3rem;
+  background-color: lightsalmon;
+  border-radius: 10px 10px 0 0;
+  align-items: center;
+  font-family: cursive;
+  font-weight: bold;
+}
+
+.todolist--header button,
+.todolist--header button:hover {
+  color: black;
+  border-color: grey;
+}
