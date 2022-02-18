@@ -9,11 +9,12 @@ h1 {
 
 .main {
   box-shadow: -2px 2px 5px darkgray;
-  overflow: hidden;
   margin: 0 auto;
   border: 2px solid lightyellow;
   border-radius: 10px 10px 0 0;
   width: 30rem;
   height: 30rem;
   max-width: 90%;
+  display: flex;
+  flex-direction: column;
 }

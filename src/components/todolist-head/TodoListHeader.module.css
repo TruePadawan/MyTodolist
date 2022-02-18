@@ -12,11 +12,16 @@
 
 .date-time,
 .todolist--header {
-  padding: 0 10px;
   display: flex;
 }
 
+.todolist--header {
+  box-sizing: content-box;
+  padding: 2px 10px;
+}
+
 .date-time {
+  padding: 0 10px;
   font-family: "Zen Kaku Gothic Antique", sans-serif;
   justify-content: space-between;
 }
@@ -45,10 +50,15 @@
 
 .todolist--header button {
   display: flex;
+  align-items: center;
   gap: 5px;
   padding: 10px 12px;
 }
 
+.todolist--header select:focus {
+  outline: none;
+  border: none;
+}
 .todolist--header button > svg {
   color: indianred;
 }
@@ -57,7 +67,7 @@
 }
 
 .todolist--header button:active {
-  background-color: rgb(197, 162, 117);
+  background-color: burlywood;
 }
 
 .todolist--header button:disabled {

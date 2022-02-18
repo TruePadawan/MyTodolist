@@ -1,8 +1,5 @@
 import { useMemo, useState } from "react";
-
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-// import ToggleButton from "@mui/material/ToggleButton";
-
 import ButtonUnstyled from "@mui/base/ButtonUnstyled";
 
 import styles from "./TodoListHeader.module.css";
@@ -45,6 +42,8 @@ const DateTime = () => {
 };
 
 const TodoListHeader = () => {
+  // const [newTaskDialogOpened, setNewTaskDialogOpened] = useState(false);
+
   return (
     <div className={styles["todolist--header-outer"]}>
       <DateTime />
