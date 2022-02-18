@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&display=swap");
 
+* {
+  font-family: "Zen Kaku Gothic Antique", sans-serif;
+}
+
 .todolist--header-outer {
   display: flex;
   flex-direction: column;
@@ -19,15 +23,49 @@
 
 .todolist--header {
   height: 3rem;
-  background-color: lightsalmon;
+  background-color: bisque;
   border-radius: 10px 10px 0 0;
+  justify-content: space-between;
   align-items: center;
   font-family: cursive;
   font-weight: bold;
 }
 
 .todolist--header button,
-.todolist--header button:hover {
+.todolist--header select {
+  font-family: "Zen Kaku Gothic Antique", sans-serif;
   color: black;
-  border-color: grey;
+  font-size: 0.875rem;
+  background-color: burlywood;
+  border-radius: 8px;
+  transition: all 150ms ease;
+  cursor: pointer;
+  border: none;
+}
+
+.todolist--header button {
+  display: flex;
+  gap: 5px;
+  padding: 10px 12px;
+}
+
+.todolist--header button > svg {
+  color: indianred;
+}
+.todolist--header button:hover {
+  background-color: rgb(168, 136, 93);
+}
+
+.todolist--header button:active {
+  background-color: rgb(197, 162, 117);
+}
+
+.todolist--header button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.todolist--header select {
+  text-align: center;
+  padding: 12px 5px;
 }

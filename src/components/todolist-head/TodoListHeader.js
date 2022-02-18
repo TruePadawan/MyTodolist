@@ -1,14 +1,18 @@
-import { useMemo, useState, useEffect } from "react";
-import Button from "@mui/material/Button";
+import { useMemo, useState } from "react";
+
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import AddTaskIcon from "@mui/icons-material/AddTask";
+// import ToggleButton from "@mui/material/ToggleButton";
+
+import ButtonUnstyled from "@mui/base/ButtonUnstyled";
+
 import styles from "./TodoListHeader.module.css";
 
-const TodoListHeader = () => {
+const DateTime = () => {
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
   );
 
+  /* Update the time every 1 second */
   setTimeout(() => {
     setCurrentTime(new Date().toLocaleTimeString());
   }, 1000);
@@ -29,22 +33,33 @@ const TodoListHeader = () => {
       "December",
     ];
     let date = new Date();
-    return [date.getDate(), months[date.getMonth()]];
+    return `${date.getDate()}. ${months[date.getMonth()]}`;
   }, []);
 
   return (
+    <div className={styles["date-time"]}>
+      <p>{currentDate}</p>
+      <p>{currentTime}</p>
+    </div>
+  );
+};
+
+const TodoListHeader = () => {
+  return (
     <div className={styles["todolist--header-outer"]}>
-      <div className={styles["date-time"]}>
-        <p>
-          {currentDate[0]}. {currentDate[1]}
-        </p>
-        <p>{currentTime}</p>
-      </div>
+      <DateTime />
 
       <div className={styles["todolist--header"]}>
-        <Button variant="outlined" startIcon={<AddCircleOutlineIcon />}>
+        <ButtonUnstyled>
+          <AddCircleOutlineIcon />
           New Task
-        </Button>
+        </ButtonUnstyled>
+
+        <select>
+          <option value="all">All</option>
+          <option value="not_done">Not Done</option>
+          <option value="done">Done</option>
+        </select>
       </div>
     </div>
   );
