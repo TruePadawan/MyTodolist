@@ -1,0 +1,7 @@
+.newTask {
+  display: flex;
+  flex-direction: column;
+}
+.newTaskAddBtn {
+  background-color: bisque;
+}

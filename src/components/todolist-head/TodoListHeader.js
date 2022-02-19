@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ButtonUnstyled from "@mui/base/ButtonUnstyled";
+import NewTaskDialog from "./NewTaskDialog";
 
 import styles from "./TodoListHeader.module.css";
 
@@ -42,25 +43,38 @@ const DateTime = () => {
 };
 
 const TodoListHeader = () => {
-  // const [newTaskDialogOpened, setNewTaskDialogOpened] = useState(false);
+  const [newTaskDialogOpened, setNewTaskDialogOpened] = useState(false);
+
+  function openDialogHandler() {
+    setNewTaskDialogOpened(true);
+  }
+
+  function closeDialogHandler() {
+    setNewTaskDialogOpened(false);
+  }
 
   return (
-    <div className={styles["todolist--header-outer"]}>
-      <DateTime />
+    <>
+      {newTaskDialogOpened && (
+        <NewTaskDialog closeDialog={closeDialogHandler} />
+      )}
+      <div className={styles["todolist--header-outer"]}>
+        <DateTime />
 
-      <div className={styles["todolist--header"]}>
-        <ButtonUnstyled>
-          <AddCircleOutlineIcon />
-          New Task
-        </ButtonUnstyled>
+        <div className={styles["todolist--header"]}>
+          <ButtonUnstyled onClick={openDialogHandler}>
+            <AddCircleOutlineIcon />
+            New Task
+          </ButtonUnstyled>
 
-        <select>
-          <option value="all">All</option>
-          <option value="not_done">Not Done</option>
-          <option value="done">Done</option>
-        </select>
+          <select>
+            <option value="all">All</option>
+            <option value="not_done">Not Done</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
