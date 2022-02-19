@@ -13,4 +13,6 @@
   left: 50%;
   transform: translate(-50%, -50%);
   max-width: 95%;
+  border-radius: 10px;
+  background-color: rgb(250, 222, 161);
 }

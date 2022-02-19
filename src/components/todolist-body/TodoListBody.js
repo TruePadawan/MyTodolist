@@ -1,62 +1,56 @@
-import { useState } from "react";
-
+import { useState, useContext } from "react";
+import EditTodoListItemDialog from "./EditTodoListItem/EditTodoListItemDialog";
+import TodoListContext from "../context/TodoListContext";
 import styles from "./TodoListBody.module.css";
-
-const DUMMY_DATA = [
-  {
-    title: "Do the Laundry",
-    status: false,
-  },
-  {
-    title: "Read a Book",
-    status: false,
-  },
-  {
-    title: "Work on ReactJS Project",
-    status: true,
-  },
-  {
-    title: "Read a Book",
-    status: false,
-  },
-  {
-    title: "Read a Book",
-    status: false,
-  },
-  {
-    title: "Read a Book",
-    status: false,
-  },
-  {
-    title: "Read a Book",
-    status: false,
-  },
-];
 
 const TodoListItem = (props) => {
   const [isTaskDone, setIsTaskDone] = useState(props.status);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   function changeTaskStatus() {
     setIsTaskDone((current) => !current);
   }
 
+  function openEditDialog() {
+    setIsEditDialogOpen(true);
+  }
+
+  function closeEditDialog() {
+    setIsEditDialogOpen(false);
+  }
+
   return (
-    <li
-      className={`${styles["todolist-item"]} ${
-        styles[isTaskDone ? "task_done" : ""]
-      }`}
-    >
-      <p onClick={changeTaskStatus}>{props.title}</p>
-      <button>Edit</button>
-    </li>
+    <>
+      {isEditDialogOpen && (
+        <EditTodoListItemDialog
+          closeDialog={closeEditDialog}
+          currentValue={props.title}
+        />
+      )}
+
+      <li
+        className={`${styles["todolist-item"]} ${
+          styles[isTaskDone ? "task_done" : ""]
+        }`}
+      >
+        <p onClick={changeTaskStatus}>{props.title}</p>
+        <button onClick={openEditDialog}>Edit</button>
+      </li>
+    </>
   );
 };
 
 const TodoListBody = () => {
+  const { contextData } = useContext(TodoListContext);
+
   let listOfTasks = (
     <ul>
-      {DUMMY_DATA.map((task) => (
-        <TodoListItem title={task.title} status={task.status} />
+      {contextData.taskList.map((task) => (
+        <TodoListItem
+          key={task.title}
+          title={task.title}
+          status={task.status}
+        />
       ))}
     </ul>
   );

@@ -1,7 +1,5 @@
 .newTask {
   width: 20rem;
-  background-color: rgb(250, 222, 161);
-  border-radius: 10px;
 }
 
 .newTask h3 {
@@ -25,14 +23,20 @@
 .newTaskAddBtn {
   border: none;
   height: 2.5rem;
-  background-color: rgb(182, 85, 32);
+  background-color: lightgreen;
   border-radius: 10px;
+  box-shadow: 1px 1px 5px grey;
+}
+
+.newTaskAddBtn svg {
+  vertical-align: -7px;
+  margin-right: 4px;
 }
 
 .newTaskAddBtn:hover {
-  background-color: rgb(100, 53, 28);
+  background-color: rgb(108, 185, 108);
 }
 
 .newTaskAddBtn:active {
-  background-color: rgb(182, 85, 32);
+  background-color: lightgreen;
 }

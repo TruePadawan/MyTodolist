@@ -4,6 +4,7 @@ ul {
 
 .todolist-body {
   overflow: scroll;
+  height: 100%;
 }
 
 .todolist-body ul {
