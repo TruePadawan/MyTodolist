@@ -9,6 +9,10 @@ html {
   padding: 0;
 }
 
+input:focus {
+  outline: none;
+}
+
 body {
   height: 100vh;
   background: #eacda3; /* fallback for old browsers */

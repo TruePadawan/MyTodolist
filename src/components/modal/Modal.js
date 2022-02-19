@@ -1,12 +1,12 @@
 import ReactDOM from "react-dom";
-import styles from "./Modal.module.css";
+import "./Modal.css";
 
 const Backdrop = (props) => {
-  return <div onClick={props.closeModal} className={styles["backdrop"]}></div>;
+  return <div onClick={props.closeModal} className="backdrop"></div>;
 };
 
 const ModalBody = (props) => {
-  return <div className={styles["modal-body"]}>{props.passChild}</div>;
+  return <div className={`modal-body ${props.classes}`}>{props.passChild}</div>;
 };
 
 const Modal = (props) => {
@@ -17,7 +17,11 @@ const Modal = (props) => {
         document.getElementById("modal")
       )}
       {ReactDOM.createPortal(
-        <ModalBody closeModal={props.close} passChild={props.children} />,
+        <ModalBody
+          closeModal={props.close}
+          passChild={props.children}
+          classes={props.className}
+        />,
         document.getElementById("modal")
       )}
     </>

@@ -1,15 +1,15 @@
 import Modal from "../modal/Modal";
 
-import "./NewTaskDialog.module.css";
+import styles from "./NewTaskDialog.module.css";
 
 const NewTaskDialog = (props) => {
   return (
-    <Modal close={props.closeDialog}>
-      <h2>Add New Task</h2>
-      <div className="newTask">
-        <input minLength="2" maxLength="50" />
-        <button className="newTaskAddBtn">Add</button>
-      </div>
+    <Modal className={styles["newTask"]} close={props.closeDialog}>
+      <h3 style={{"textAlign": "center"}}>Add New Task</h3>
+      <form>
+        <input minLength="2" maxLength="50" placeholder="Title" required />
+        <button className={styles["newTaskAddBtn"]}>Add</button>
+      </form>
     </Modal>
   );
 };
