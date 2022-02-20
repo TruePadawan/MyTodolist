@@ -6,20 +6,22 @@ import styles from "./TodoListItem.module.css";
 
 const TodoListItem = (props) => {
   const { contextData, setContextData } = useContext(TodoListContext);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   let isTaskDone = contextData.taskList[props.index].status;
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  console.log(props.index);
 
   function changeTaskStatus() {
     setContextData((currentContextData) => {
       const itemCurrentStatus = currentContextData.taskList[props.index].status;
       currentContextData.taskList[props.index].status = !itemCurrentStatus;
+
+      window.localStorage.setObj("taskList", currentContextData.taskList);
+
       isTaskDone = !itemCurrentStatus;
       return { taskList: currentContextData.taskList };
     });
   }
-
-  console.log(`up: ${props.index}`);
 
   function openEditDialog() {
     setIsEditDialogOpen(true);

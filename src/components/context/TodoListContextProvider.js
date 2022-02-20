@@ -3,10 +3,8 @@ import TodoListContext from "./TodoListContext";
 
 const TodoListContextProvider = (props) => {
   const [contextData, setContextData] = useState({
-    taskList: [],
+    taskList: window.localStorage.getObj("taskList"),
   });
-
-  // const contextValue = { contextData, setContextData };
 
   return (
     <TodoListContext.Provider value={{ contextData, setContextData }}>

@@ -8,6 +8,7 @@ import styles from "./NewTaskDialog.module.css";
 const NewTaskDialog = (props) => {
   const { setContextData } = useContext(TodoListContext);
 
+  /* Create a new list of existing tasks and update local storage along with context data state */
   function addNewTask(e) {
     e.preventDefault();
 
@@ -18,12 +19,12 @@ const NewTaskDialog = (props) => {
         taskList: [
           ...currentContextData.taskList,
           {
-            index: currentContextData.taskList.length,
             title: newTaskTitle,
             status: false,
           },
         ],
       };
+      window.localStorage.setObj("taskList", updatedContextData.taskList);
 
       return updatedContextData;
     });

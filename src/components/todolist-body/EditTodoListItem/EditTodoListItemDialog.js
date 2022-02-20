@@ -16,7 +16,6 @@ const EditTodoListItemDialog = (props) => {
 
   function saveEditedTask(e) {
     e.preventDefault();
-
     const editItemInput = document.getElementById("editItemInput");
     let currentItem = contextData.taskList[props.itemIndex];
 
@@ -30,22 +29,25 @@ const EditTodoListItemDialog = (props) => {
           taskList: currentContextData.taskList,
         };
 
+        window.localStorage.setObj("taskList", updatedContextValue.taskList);
+
         return updatedContextValue;
       });
     }
-
     props.closeDialog();
   }
 
+  /* Delete task item from list of tasks and update contextData state along with localStorage */
   function deleteTask(e) {
     e.preventDefault();
-
     setContextData((currentContextData) => {
       currentContextData.taskList.splice(props.itemIndex, 1);
 
       const updatedContextValue = {
         taskList: currentContextData.taskList,
       };
+
+      window.localStorage.setObj("taskList", updatedContextValue.taskList);
 
       return updatedContextValue;
     });
