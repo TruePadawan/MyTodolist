@@ -11,18 +11,21 @@ const NewTaskDialog = (props) => {
   function addNewTask(e) {
     e.preventDefault();
 
-    setContextData((current) => {
+    setContextData((currentContextData) => {
       let newTaskTitle = document.getElementById("newTaskInput").value;
 
-      return {
+      let updatedContextData = {
         taskList: [
-          ...current.taskList,
+          ...currentContextData.taskList,
           {
+            index: currentContextData.taskList.length,
             title: newTaskTitle,
             status: false,
           },
         ],
       };
+
+      return updatedContextData;
     });
 
     props.closeDialog();
