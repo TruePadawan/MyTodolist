@@ -3,43 +3,25 @@ ul {
 }
 
 .todolist-body {
-  overflow: scroll;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: bisque cornsilk;
   height: 100%;
+}
+
+.todolist-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.todolist-body::-webkit-scrollbar-track {
+  background-color: cornsilk;
+}
+
+.todolist-body::-webkit-scrollbar-thumb {
+  background-color: bisque;
 }
 
 .todolist-body ul {
   display: flex;
   flex-direction: column;
-}
-
-.todolist-item {
-  background-color: cornsilk;
-  margin: 10px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-}
-
-.todolist-item button {
-  cursor: pointer;
-  background-color: rgba(173, 216, 230, 0.713);
-  border: none;
-  border-radius: 5px;
-  height: 30px;
-}
-
-.todolist-item button:hover {
-  background-color: rgba(173, 216, 230, 0.926);
-}
-
-.todolist-item button:active {
-  background-color: rgba(173, 216, 230, 0.713);
-}
-
-.task_done {
-  background-color: rgba(144, 238, 144, 0.459);
 }
