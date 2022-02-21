@@ -17,12 +17,12 @@ const EditTodoListItemDialog = (props) => {
   function saveEditedTask(e) {
     e.preventDefault();
     const editItemInput = document.getElementById("editItemInput");
-    let currentItem = contextData.taskList[props.itemIndex];
+    const itemIndex = contextData.taskList.findIndex(item => item.id === props.itemID);
+    let currentItem = contextData.taskList[itemIndex];
 
     /* Update context value only if the value in editItemInput isn't the same as the already-stored title for task item to be updated */
     if (currentItem.title.trim() !== editItemInput.value.trim()) {
-      setContextData((currentContextData) => {
-        const itemIndex = currentContextData.taskList.findIndex(item => item.id === props.itemID);
+      setContextData((currentContextData) => {   
         if (itemIndex !== -1)
         {
           currentContextData.taskList[itemIndex].title = editItemInput.value;
