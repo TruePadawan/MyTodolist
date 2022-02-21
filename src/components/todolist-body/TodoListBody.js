@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import TodoListItem from "./TodoListItem/TodoListItem";
 import TodoListContext from "../context/TodoListContext";
 import styles from "./TodoListBody.module.css";
@@ -11,10 +11,12 @@ const TodoListBody = () => {
       (item) => item.title === task.title
     );
 
+  // const itemID = useMemo(() => ,[])
     return (
       <TodoListItem
         index={index}
-        key={`${task.title}${task.index}`}
+        id={task.id}
+        key={`${task.title}${task.id}`}
         title={task.title}
         status={task.status}
       />

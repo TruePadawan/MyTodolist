@@ -22,16 +22,18 @@ const EditTodoListItemDialog = (props) => {
     /* Update context value only if the value in editItemInput isn't the same as the already-stored title for task item to be updated */
     if (currentItem.title.trim() !== editItemInput.value.trim()) {
       setContextData((currentContextData) => {
-        currentContextData.taskList[props.itemIndex].title =
-          editItemInput.value;
+        const itemIndex = currentContextData.taskList.findIndex(item => item.id === props.itemID);
+        if (itemIndex !== -1)
+        {
+          currentContextData.taskList[itemIndex].title = editItemInput.value;
 
-        const updatedContextValue = {
-          taskList: currentContextData.taskList,
-        };
+          const updatedContextValue = { taskList: currentContextData.taskList};
 
-        window.localStorage.setObj("taskList", updatedContextValue.taskList);
+          window.localStorage.setObj("taskList", updatedContextValue.taskList);
 
-        return updatedContextValue;
+          return updatedContextValue;
+        }
+        return currentContextData;
       });
     }
     props.closeDialog();
@@ -41,15 +43,20 @@ const EditTodoListItemDialog = (props) => {
   function deleteTask(e) {
     e.preventDefault();
     setContextData((currentContextData) => {
-      currentContextData.taskList.splice(props.itemIndex, 1);
+      const itemIndex = currentContextData.taskList.findIndex(item => item.id === props.itemID);
+      if (itemIndex !== -1)
+      {
+        currentContextData.taskList.splice(itemIndex, 1);
 
-      const updatedContextValue = {
-        taskList: currentContextData.taskList,
-      };
+        const updatedContextValue = {
+          taskList: currentContextData.taskList,
+        };
 
-      window.localStorage.setObj("taskList", updatedContextValue.taskList);
+        window.localStorage.setObj("taskList", updatedContextValue.taskList);
 
-      return updatedContextValue;
+        return updatedContextValue;
+      }
+      return currentContextData;
     });
     props.closeDialog();
   }

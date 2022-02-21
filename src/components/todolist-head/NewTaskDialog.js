@@ -5,20 +5,26 @@ import Modal from "../modal/Modal";
 
 import styles from "./NewTaskDialog.module.css";
 
+function generateID(itemTitle)
+{
+  return `${Date.now()} ${itemTitle.at(-1)}`;
+}
+
 const NewTaskDialog = (props) => {
   const { setContextData } = useContext(TodoListContext);
 
   /* Create a new list of existing tasks and update local storage along with context data state */
   function addNewTask(e) {
     e.preventDefault();
-
     setContextData((currentContextData) => {
       let newTaskTitle = document.getElementById("newTaskInput").value;
+      const itemID = generateID(newTaskTitle);
 
       let updatedContextData = {
         taskList: [
           ...currentContextData.taskList,
           {
+            id: itemID,
             title: newTaskTitle,
             status: false,
           },
