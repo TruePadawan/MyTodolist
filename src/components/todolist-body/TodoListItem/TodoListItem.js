@@ -8,21 +8,24 @@ const TodoListItem = (props) => {
   const { contextData, setContextData } = useContext(TodoListContext);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  const itemIndex = contextData.taskList.findIndex(item => item.id === props.id);
+  const itemIndex = contextData.taskList.findIndex(
+    (item) => item.id === props.id
+  );
   let isTaskDone = contextData.taskList[itemIndex].status;
 
   function changeTaskStatus() {
     setContextData((currentContextData) => {
-      const itemIndex = currentContextData.taskList.findIndex(item => item.id === props.id);
-      if (itemIndex !== -1)
-      {
+      const itemIndex = currentContextData.taskList.findIndex(
+        (item) => item.id === props.id
+      );
+      if (itemIndex !== -1) {
         const itemCurrentStatus = currentContextData.taskList[itemIndex].status;
+        isTaskDone = !itemCurrentStatus;
         currentContextData.taskList[itemIndex].status = !itemCurrentStatus;
-
+        let updatedContextValue = { taskList: currentContextData.taskList };
         window.localStorage.setObj("taskList", currentContextData.taskList);
 
-        isTaskDone = !itemCurrentStatus;
-        return { taskList: currentContextData.taskList };
+        return updatedContextValue;
       }
       return currentContextData;
     });

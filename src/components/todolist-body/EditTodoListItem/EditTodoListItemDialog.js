@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-
 import TodoListContext from "../../context/TodoListContext";
 import Modal from "../../modal/Modal";
 import CheckIcon from "@mui/icons-material/Check";
@@ -17,18 +16,17 @@ const EditTodoListItemDialog = (props) => {
   function saveEditedTask(e) {
     e.preventDefault();
     const editItemInput = document.getElementById("editItemInput");
-    const itemIndex = contextData.taskList.findIndex(item => item.id === props.itemID);
+    const itemIndex = contextData.taskList.findIndex(
+      (item) => item.id === props.itemID
+    );
     let currentItem = contextData.taskList[itemIndex];
 
     /* Update context value only if the value in editItemInput isn't the same as the already-stored title for task item to be updated */
     if (currentItem.title.trim() !== editItemInput.value.trim()) {
-      setContextData((currentContextData) => {   
-        if (itemIndex !== -1)
-        {
+      setContextData((currentContextData) => {
+        if (itemIndex !== -1) {
           currentContextData.taskList[itemIndex].title = editItemInput.value;
-
-          const updatedContextValue = { taskList: currentContextData.taskList};
-
+          const updatedContextValue = { taskList: currentContextData.taskList };
           window.localStorage.setObj("taskList", updatedContextValue.taskList);
 
           return updatedContextValue;
@@ -43,14 +41,13 @@ const EditTodoListItemDialog = (props) => {
   function deleteTask(e) {
     e.preventDefault();
     setContextData((currentContextData) => {
-      const itemIndex = currentContextData.taskList.findIndex(item => item.id === props.itemID);
-      if (itemIndex !== -1)
-      {
+      const itemIndex = currentContextData.taskList.findIndex(
+        (item) => item.id === props.itemID
+      );
+      if (itemIndex !== -1) {
         currentContextData.taskList.splice(itemIndex, 1);
 
-        const updatedContextValue = {
-          taskList: currentContextData.taskList,
-        };
+        const updatedContextValue = { taskList: currentContextData.taskList };
 
         window.localStorage.setObj("taskList", updatedContextValue.taskList);
 

@@ -17,16 +17,7 @@
 
 .todolist--header {
   box-sizing: content-box;
-  padding: 2px 10px;
-}
-
-.date-time {
-  padding: 0 10px;
-  font-family: "Zen Kaku Gothic Antique", sans-serif;
-  justify-content: space-between;
-}
-
-.todolist--header {
+  padding: 5px 10px;
   height: 3rem;
   background-color: bisque;
   border-radius: 10px 10px 0 0;
@@ -36,8 +27,13 @@
   font-weight: bold;
 }
 
-.todolist--header button,
-.todolist--header select {
+.date-time {
+  padding: 0 10px;
+  font-family: "Zen Kaku Gothic Antique", sans-serif;
+  justify-content: space-between;
+}
+
+.todolist--header button {
   font-family: "Zen Kaku Gothic Antique", sans-serif;
   color: black;
   font-size: 0.875rem;
@@ -49,10 +45,16 @@
 }
 
 .todolist--header button {
+  font-weight: normal;
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 10px 12px;
+  height: 100%;
+  padding: 0 12px;
+}
+
+.MuiButtonGroup-root {
+  height: 100%;
 }
 
 .todolist--header select:focus {
@@ -75,7 +77,9 @@
   cursor: not-allowed;
 }
 
-.todolist--header select {
-  text-align: center;
-  padding: 12px 5px;
+@media screen and (max-width: 320px) {
+  .todolist--header {
+    padding: 2px 0px;
+    justify-content: space-around;
+  }
 }

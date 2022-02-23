@@ -1,9 +1,17 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useContext } from "react";
+import {
+  sortBasedOnCompletion,
+  sortBasedOnUncompletion,
+} from "../../functions/sortFunctions";
+
+import TodoListContext from "../context/TodoListContext";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ButtonUnstyled from "@mui/base/ButtonUnstyled";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import NewTaskDialog from "./NewTaskDialog";
 
-import styles from "./TodoListHeader.module.css";
+import "./TodoListHeader.css";
 
 const DateTime = () => {
   const [currentTime, setCurrentTime] = useState(
@@ -35,7 +43,7 @@ const DateTime = () => {
   }, []);
 
   return (
-    <div className={styles["date-time"]}>
+    <div className="date-time">
       <p>{currentDate}</p>
       <p>{currentTime}</p>
     </div>
@@ -43,6 +51,7 @@ const DateTime = () => {
 };
 
 const TodoListHeader = () => {
+  const { setContextData } = useContext(TodoListContext);
   const [newTaskDialogOpened, setNewTaskDialogOpened] = useState(false);
 
   function openDialogHandler() {
@@ -53,25 +62,43 @@ const TodoListHeader = () => {
     setNewTaskDialogOpened(false);
   }
 
+  function sortItems(e) {
+    const btnValue = e.target.textContent;
+    if (btnValue === "Done") {
+      setContextData((currentContextData) => {
+        let sortedTaskList = sortBasedOnCompletion(currentContextData.taskList);
+        window.localStorage.setObj("taskList", sortedTaskList);
+        return { taskList: sortedTaskList };
+      });
+    } else if (btnValue === "Not Done") {
+      setContextData((currentContextData) => {
+        let sortedTaskList = sortBasedOnUncompletion(
+          currentContextData.taskList
+        );
+        window.localStorage.setObj("taskList", sortedTaskList);
+        return { taskList: sortedTaskList };
+      });
+    }
+  }
+
   return (
     <>
       {newTaskDialogOpened && (
         <NewTaskDialog closeDialog={closeDialogHandler} />
       )}
-      <div className={styles["todolist--header-outer"]}>
+      <div className="todolist--header-outer">
         <DateTime />
 
-        <div className={styles["todolist--header"]}>
+        <div className="todolist--header">
           <ButtonUnstyled onClick={openDialogHandler}>
             <AddCircleOutlineIcon />
             New Task
           </ButtonUnstyled>
 
-          <select>
-            <option value="all">All</option>
-            <option value="not_done">Not Done</option>
-            <option value="done">Done</option>
-          </select>
+          <ButtonGroup disableElevation disableRipple variant="text">
+            <Button onClick={sortItems}>Done</Button>
+            <Button onClick={sortItems}>Not Done</Button>
+          </ButtonGroup>
         </div>
       </div>
     </>
