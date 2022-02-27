@@ -6,7 +6,7 @@ import Modal from "../modal/Modal";
 import styles from "./NewTaskDialog.module.css";
 
 function generateID(itemTitle) {
-  return `${Date.now()} ${itemTitle.at(-1)}`;
+  return `${Date.now()} ${itemTitle[itemTitle.length - 1]}`;
 }
 
 const NewTaskDialog = (props) => {
