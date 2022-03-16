@@ -15,15 +15,19 @@ const NewTaskDialog = (props) => {
   /* Create a new list of existing tasks and update local storage along with context data state */
   function addNewTask(e) {
     e.preventDefault();
+    let newTaskTitleTrimmed = document.getElementById("newTaskInput").value.trim();
+    if (newTaskTitleTrimmed.length < 2)
+    {
+      return;
+    }
     setContextData((currentContextValue) => {
-      let newTaskTitle = document.getElementById("newTaskInput").value;
-      const itemID = generateID(newTaskTitle);
+      const itemID = generateID(newTaskTitleTrimmed);
 
       let updatedTaskList = [
         ...currentContextValue.taskList,
         {
           id: itemID,
-          title: newTaskTitle,
+          title: newTaskTitleTrimmed,
           status: false,
         },
       ];
