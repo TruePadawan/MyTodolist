@@ -9,10 +9,10 @@ function App() {
     <div className="App">
       <h1>MyTodoList</h1>
       <TodoListContextProvider>
-        <div className="main">
+        <main>
           <TodoListHeader />
           <TodoListBody />
-        </div>
+        </main>
       </TodoListContextProvider>
     </div>
   );

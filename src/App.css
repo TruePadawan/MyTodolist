@@ -7,13 +7,18 @@ h1 {
   margin-bottom: 2rem;
 }
 
-.main {
+main {
+  --min-width: 30rem;
+  --min-height: 30rem;
+  
+  resize: both;
+  overflow: hidden;
   box-shadow: -2px 2px 5px darkgray;
   margin: 0 auto;
   border: 2px solid lightyellow;
   border-radius: 10px 10px 0 0;
-  width: 30rem;
-  height: 30rem;
+  width: var(--min-width);
+  height: var(--min-height);
   max-width: 90%;
   display: flex;
   flex-direction: column;
