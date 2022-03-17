@@ -50,6 +50,7 @@ const NewTaskDialog = (props) => {
           maxLength="100"
           placeholder="Title"
           autoFocus
+          autoComplete="off"
           required
         />
         <button className={styles["newTaskAddBtn"]}>
