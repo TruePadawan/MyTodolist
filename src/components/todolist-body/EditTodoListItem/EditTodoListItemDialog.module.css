@@ -33,28 +33,40 @@
   vertical-align: -7px;
 }
 
-.editItemBtns > :first-child {
+.saveBtn {
   background-color: lightgreen;
   box-shadow: 1px 1px 3px rgba(172, 172, 172, 0.712);
 }
 
-.editItemBtns > :first-child:hover {
+.saveBtn:hover {
   background-color: rgb(118, 199, 118);
 }
 
-.editItemBtns > :first-child:active {
+.saveBtn:active {
   background-color: lightgreen;
 }
 
-.editItemBtns > :nth-child(2) {
+.setDoneOrNotDone {
+  background-color: lightblue;
+}
+
+.setDoneOrNotDone:hover {
+  background-color: rgb(141, 186, 201);
+}
+
+.setDoneOrNotDone:active {
+  background-color: lightblue;
+}
+
+.deleteBtn {
   background-color: indianred;
   box-shadow: 1px 1px 3px rgba(226, 154, 154, 0.856);
 }
 
-.editItemBtns > :nth-child(2):hover {
+.deleteBtn:hover {
   background-color: rgb(182, 81, 81);
 }
 
-.editItemBtns > :nth-child(2):active {
+.deleteBtn:active {
   background-color: indianred;
 }
