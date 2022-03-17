@@ -5,31 +5,13 @@ import EditTodoListItemDialog from "../EditTodoListItem/EditTodoListItemDialog";
 import styles from "./TodoListItem.module.css";
 
 const TodoListItem = (props) => {
-  const { contextData, setContextData } = useContext(TodoListContext);
+  const { contextData } = useContext(TodoListContext);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const itemIndex = contextData.taskList.findIndex(
     (item) => item.id === props.id
   );
   let isTaskDone = contextData.taskList[itemIndex].status;
-
-  function changeTaskStatus() {
-    setContextData((currentContextData) => {
-      const itemIndex = currentContextData.taskList.findIndex(
-        (item) => item.id === props.id
-      );
-      if (itemIndex !== -1) {
-        const itemCurrentStatus = currentContextData.taskList[itemIndex].status;
-        isTaskDone = !itemCurrentStatus;
-        currentContextData.taskList[itemIndex].status = !itemCurrentStatus;
-        let updatedContextValue = { taskList: currentContextData.taskList };
-        window.localStorage.setObj("taskList", currentContextData.taskList);
-
-        return updatedContextValue;
-      }
-      return currentContextData;
-    });
-  }
 
   function openEditDialog() {
     setIsEditDialogOpen(true);
@@ -50,11 +32,8 @@ const TodoListItem = (props) => {
       )}
 
       <li
-        className={`${styles["todolist-item"]} ${
-          styles[isTaskDone ? "task_done" : ""]
-        }`}
-      >
-        <p onClick={changeTaskStatus}>{props.title}</p>
+        className={`${styles["todolist-item"]} ${styles[isTaskDone ? "task_done" : ""]}`}>
+        <p>{props.title}</p>
         <button onClick={openEditDialog}>Edit</button>
       </li>
     </>
