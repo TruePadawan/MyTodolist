@@ -1,10 +1,10 @@
 import { useState, useContext } from "react";
 import TodoListContext from "../../context/TodoListContext";
-import EditTodoListItemDialog from "../EditTodoListItem/EditTodoListItemDialog";
+import EditTodoItemDialog from "../EditTodoItem/EditTodoItemDialog";
 
-import styles from "./TodoListItem.module.css";
+import styles from "./TodoItem.module.css";
 
-const TodoListItem = (props) => {
+const TodoItem = (props) => {
   const { contextData } = useContext(TodoListContext);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
@@ -24,7 +24,7 @@ const TodoListItem = (props) => {
   return (
     <>
       {isEditDialogOpen && (
-        <EditTodoListItemDialog
+        <EditTodoItemDialog
           closeDialog={closeEditDialog}
           currentValue={props.title}
           itemID={props.id}
@@ -40,4 +40,4 @@ const TodoListItem = (props) => {
   );
 };
 
-export default TodoListItem;
+export default TodoItem;

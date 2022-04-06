@@ -5,9 +5,9 @@ import DoneIcon from '@mui/icons-material/Done';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import styles from "./EditTodoListItemDialog.module.css";
+import styles from "./EditTodoItemDialog.module.css";
 
-const EditTodoListItemDialog = (props) => {
+const EditTodoItemDialog = (props) => {
   const [editItemInputValue, setEditItemInputValue] = useState(props.currentValue);
 
   const { contextData, setContextData } = useContext(TodoListContext);
@@ -105,4 +105,4 @@ const EditTodoListItemDialog = (props) => {
   );
 };
 
-export default EditTodoListItemDialog;
+export default EditTodoItemDialog;

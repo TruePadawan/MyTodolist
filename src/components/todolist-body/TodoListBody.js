@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import TodoListItem from "./TodoListItem/TodoListItem";
+import TodoItem from "./TodoItem/TodoItem";
 import TodoListContext from "../context/TodoListContext";
 import styles from "./TodoListBody.module.css";
 
@@ -8,7 +8,7 @@ const TodoListBody = () => {
 
   let listOfTasks = contextData.taskList.map((task) => {
     return (
-      <TodoListItem
+      <TodoItem
         id={task.id}
         key={`${task.title}${task.id}`}
         title={task.title}
