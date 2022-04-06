@@ -1,10 +1,6 @@
 import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-} from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAOe0dfJIzPvgXuX5DKDUegIwgHyF-w2DY",
@@ -19,23 +15,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-const googleProvider = new GoogleAuthProvider();
-
-export const signInWithGoogle = async () => {
-  if (auth.currentUser === null) {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user_name = result.user.displayName;
-      if (user_name) {
-        localStorage.setItem("user_name", user_name);
-        document.getElementById("userLogin-span").textContent = user_name;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  } else {
-    await signOut(auth);
-    localStorage.removeItem("user_name");
-    document.getElementById("userLogin-span").textContent = "Sign In";
-  }
-};
+export const googleProvider = new GoogleAuthProvider();
+export const database = getDatabase(app);
