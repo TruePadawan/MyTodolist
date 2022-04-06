@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+
+import TodoListContextProvider from "./components/context/TodoListContextProvider";
 import App from "./App";
 
 /* Simple functions for easily adding objects and array to localStorage */
@@ -20,7 +22,9 @@ if (window.localStorage.getObj("taskList") === null) {
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <TodoListContextProvider>
+      <App />
+    </TodoListContextProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
