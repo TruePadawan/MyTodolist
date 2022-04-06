@@ -1,42 +1,39 @@
 import { useContext } from "react";
+
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import TodoListContext from "../context/TodoListContext";
 import Modal from "../modal/Modal";
 
 import styles from "./NewTaskDialog.module.css";
 
-function generateID(itemTitle) {
-  return `${Date.now()} ${itemTitle[itemTitle.length - 1]}`;
-}
-
 const NewTaskDialog = (props) => {
-  const { setContextData } = useContext(TodoListContext);
+  const { setContextData, MainController } = useContext(TodoListContext);
 
   /* Create a new list of existing tasks and update local storage along with context data state */
   function addNewTask(e) {
     e.preventDefault();
-    let newTaskTitleTrimmed = document.getElementById("newTaskInput").value.trim();
-    if (newTaskTitleTrimmed.length < 2)
-    {
+
+    let taskTitle_trimmed = document.getElementById("newTaskInput").value.trim();
+    if (taskTitle_trimmed.length < 2) {
       return;
     }
-    setContextData((currentContextValue) => {
-      const itemID = generateID(newTaskTitleTrimmed);
 
-      let updatedTaskList = [
-        ...currentContextValue.taskList,
-        {
-          id: itemID,
-          title: newTaskTitleTrimmed,
-          status: false,
-        },
-      ];
-      let updatedContextData = { taskList: updatedTaskList };
-      window.localStorage.setObj("taskList", updatedContextData.taskList);
+    if (MainController._userLogged === true)
+    {
+      const newTaskItem = MainController.newTaskItem_Local(taskTitle_trimmed);
 
-      return updatedContextData;
-    });
+      setContextData((currentContextValue) => {
+        let updatedTasksList = [...currentContextValue.taskList, newTaskItem];
+        let updatedContextData = { taskList: updatedTasksList };
 
+        window.localStorage.setObj("taskList", updatedContextData.taskList);
+        return updatedContextData;
+      });
+    }
+    else {
+      MainController.newTaskItem_Database(taskTitle_trimmed);
+    }
+    
     props.closeDialog();
   }
 
