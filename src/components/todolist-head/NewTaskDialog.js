@@ -18,8 +18,9 @@ const NewTaskDialog = (props) => {
       return;
     }
 
-    if (MainController._userLogged === true)
+    if (!MainController.userLoggedIn)
     {
+      console.log('writing item to local storage');
       const newTaskItem = MainController.newTaskItem_Local(taskTitle_trimmed);
 
       setContextData((currentContextValue) => {
@@ -31,6 +32,7 @@ const NewTaskDialog = (props) => {
       });
     }
     else {
+      console.log('writing item to DB');
       MainController.newTaskItem_Database(taskTitle_trimmed);
     }
     
