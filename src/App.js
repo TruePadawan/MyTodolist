@@ -1,10 +1,17 @@
-import { useEffect } from "react";
-import TodoListContextProvider from "./components/context/TodoListContextProvider";
+import { useEffect, useState, useRef, useCallback, useContext } from "react";
+
+import TodoListContext from "./components/context/TodoListContext";
 import TodoListHeader from "./components/todolist-head/TodoListHeader";
 import TodoListBody from "./components/todolist-body/TodoListBody";
-import { signInWithGoogle } from "./firebase/firebase_init";
+
 import Button from "@mui/material/Button";
 import GoogleIcon from "@mui/icons-material/Google";
+
+import { MainController } from "./controller/controller";
+
+import { signInWithPopup, signOut } from "firebase/auth";
+import { onValue, ref } from "firebase/database";
+import { auth, database, googleProvider } from "./firebase/firebase_init";
 
 import "./App.css";
 
@@ -24,7 +31,29 @@ let resizeObserver = new ResizeObserver((entries) => {
 });
 
 function App() {
-  /* When app loads, set the app dimensions to what it was before it was closed */
+  const { setContextData } = useContext(TodoListContext);
+  const signedInIndicatorRef = useRef(null);
+  const [signInBtnText, setSignInBtnText] = useState("Sign In");
+
+  const loadTodoItemsFromDB = useCallback((snapshot) => {
+    const todoData = snapshot.val();
+    const todoList = [];
+
+    for (let id in todoData)
+    {
+      let todoItem = {
+        id,
+        title: todoData[id].title,
+        complete: todoData[id].complete
+      };
+
+      todoList.push(todoItem);
+    }
+
+    setContextData({ taskList: todoList });
+  },[setContextData]); 
+
+  /* When app loads, set the app size dimensions to what it was before it was closed and also sign in the user if there was a previous sign in*/
   useEffect(() => {
     let appSize = window.localStorage.getObj("appSize");
     let appBody = document.querySelector("main");
@@ -34,9 +63,36 @@ function App() {
       appBody.style.height = `${appSize.height}px`;
     }
     resizeObserver.observe(appBody);
-  }, []);
 
-  let userName = localStorage.getItem("user_name");
+    auth.onAuthStateChanged(() => {
+      if (auth.currentUser && signedInIndicatorRef.current.textContent === "Sign In") {
+        setSignInBtnText(auth.currentUser.displayName);
+        MainController.userLoggedIn = true;
+        MainController.userID = auth.currentUser.uid;
+
+        const todoItemsDBRef = ref(database, `/${auth.currentUser.uid}/items`);
+        onValue(todoItemsDBRef,loadTodoItemsFromDB);
+      }
+    });
+
+  }, [loadTodoItemsFromDB]);
+
+  const signInWithGoogle = async () => {
+    // IF THERE IS NO USER CURRENTLY LOGGED IN, LOGIN. ELSE, SIGN OUT
+    if (auth.currentUser === null) {
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        const user_name = result.user.displayName;
+        setSignInBtnText(user_name);
+      }
+      catch (error) {
+        alert(error);
+      }
+    } else {
+      await signOut(auth);
+      setSignInBtnText("Sign In");
+    }
+  };
 
   return (
     <div className="App">
@@ -47,15 +103,12 @@ function App() {
         startIcon={<GoogleIcon />}
         onClick={signInWithGoogle}
       >
-        <span id="userLogin-span">{userName ? userName : "Sign In"}</span>
+        <span ref={signedInIndicatorRef}>{signInBtnText}</span>
       </Button>
-
-      <TodoListContextProvider>
         <main>
           <TodoListHeader />
           <TodoListBody />
         </main>
-      </TodoListContextProvider>
     </div>
   );
 }
