@@ -64,33 +64,45 @@ function App() {
     }
     resizeObserver.observe(appBody);
 
+  }, []);
+
+  /* When app loads, sign in the user if there was a previous sign in */
+  useEffect(() => {
     auth.onAuthStateChanged(() => {
       if (auth.currentUser && signedInIndicatorRef.current.textContent === "Sign In") {
         setSignInBtnText(auth.currentUser.displayName);
+
         MainController.userLoggedIn = true;
         MainController.userID = auth.currentUser.uid;
+        console.log('user logged in');
 
         const todoItemsDBRef = ref(database, `/${auth.currentUser.uid}/items`);
         onValue(todoItemsDBRef,loadTodoItemsFromDB);
       }
     });
-
   }, [loadTodoItemsFromDB]);
 
+  
   const signInWithGoogle = async () => {
     // IF THERE IS NO USER CURRENTLY LOGGED IN, LOGIN. ELSE, SIGN OUT
     if (auth.currentUser === null) {
       try {
-        const result = await signInWithPopup(auth, googleProvider);
-        const user_name = result.user.displayName;
-        setSignInBtnText(user_name);
+        await signInWithPopup(auth, googleProvider);
       }
       catch (error) {
         alert(error);
       }
-    } else {
+    }
+    else {
       await signOut(auth);
+
+      MainController.userLoggedIn = false;
+      MainController.userID = '';
+
+      console.log('user logged out');
+
       setSignInBtnText("Sign In");
+      setContextData({taskList: window.localStorage.getObj("taskList")}); // WHEN THE USER SIGNS OUT, LOAD TODOITEMS FROM LOCAL STORAGE
     }
   };
 
