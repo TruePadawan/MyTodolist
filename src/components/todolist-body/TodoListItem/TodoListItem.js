@@ -11,7 +11,7 @@ const TodoListItem = (props) => {
   const itemIndex = contextData.taskList.findIndex(
     (item) => item.id === props.id
   );
-  let isTaskDone = contextData.taskList[itemIndex].status;
+  let isTaskDone = contextData.taskList[itemIndex].complete;
 
   function openEditDialog() {
     setIsEditDialogOpen(true);

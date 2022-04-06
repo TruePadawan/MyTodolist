@@ -15,12 +15,10 @@ const EditTodoListItemDialog = (props) => {
   function updateTodoListItem(e) {
     e.preventDefault();
     const updatedItemTitle = document.getElementById("editItemInput").value;
-    const itemIndex = contextData.taskList.findIndex(
-      (item) => item.id === props.itemID
-    );
+    const itemIndex = contextData.taskList.findIndex((item) => item.id === props.itemID);
     let currentItem = contextData.taskList[itemIndex];
 
-    /* Update context value only if the value in editItemInput isn't the same as the already-stored title for task item to be updated */
+    /* Update context value only if the new value isn't the same as the already-stored title for task item to be updated */
     if (currentItem.title.trim() !== updatedItemTitle.trim()) {
       setContextData((currentContextData) => {
         if (itemIndex !== -1) {
@@ -36,15 +34,16 @@ const EditTodoListItemDialog = (props) => {
     props.closeDialog();
   }
 
-  function setTaskDoneOrNotDone() {
+  function setTaskDoneOrNotDone(e) {
+    e.preventDefault();
     setContextData((currentContextData) => {
       const itemIndex = currentContextData.taskList.findIndex(
         (item) => item.id === props.itemID
       );
 
       if (itemIndex !== -1) {
-        const itemCurrentStatus = currentContextData.taskList[itemIndex].status;
-        currentContextData.taskList[itemIndex].status = !itemCurrentStatus;
+        const itemCurrentStatus = currentContextData.taskList[itemIndex].complete;
+        currentContextData.taskList[itemIndex].complete = !itemCurrentStatus;
         let updatedContextValue = { taskList: currentContextData.taskList };
         window.localStorage.setObj("taskList", currentContextData.taskList);
 
@@ -58,10 +57,10 @@ const EditTodoListItemDialog = (props) => {
   /* Delete task item from list of tasks and update contextData state along with localStorage */
   function deleteTodoListItem(e) {
     e.preventDefault();
+
     setContextData((currentContextData) => {
-      const itemIndex = currentContextData.taskList.findIndex(
-        (item) => item.id === props.itemID
-      );
+      const itemIndex = currentContextData.taskList.findIndex((item) => item.id === props.itemID);
+      
       if (itemIndex !== -1) {
         currentContextData.taskList.splice(itemIndex, 1);
 

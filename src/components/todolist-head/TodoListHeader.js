@@ -1,8 +1,5 @@
 import { useMemo, useState, useContext } from "react";
-import {
-  sortBasedOnCompletion,
-  sortBasedOnUncompletion,
-} from "../../functions/sortFunctions";
+import { sortBasedOnCompletion, sortBasedOnUncompletion } from "../../functions/sortFunctions";
 
 import TodoListContext from "../context/TodoListContext";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -50,6 +47,10 @@ const DateTime = () => {
   );
 };
 
+
+
+
+
 const TodoListHeader = () => {
   const { setContextData } = useContext(TodoListContext);
   const [newTaskDialogOpened, setNewTaskDialogOpened] = useState(false);
@@ -64,17 +65,18 @@ const TodoListHeader = () => {
 
   function sortItems(e) {
     const btnValue = e.target.textContent;
+
     if (btnValue === "Done") {
       setContextData((currentContextData) => {
         let sortedTaskList = sortBasedOnCompletion(currentContextData.taskList);
         window.localStorage.setObj("taskList", sortedTaskList);
         return { taskList: sortedTaskList };
       });
-    } else if (btnValue === "Not Done") {
+
+    }
+    else if (btnValue === "Not Done") {
       setContextData((currentContextData) => {
-        let sortedTaskList = sortBasedOnUncompletion(
-          currentContextData.taskList
-        );
+        let sortedTaskList = sortBasedOnUncompletion(currentContextData.taskList);
         window.localStorage.setObj("taskList", sortedTaskList);
         return { taskList: sortedTaskList };
       });

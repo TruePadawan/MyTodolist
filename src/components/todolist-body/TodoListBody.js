@@ -12,7 +12,7 @@ const TodoListBody = () => {
         id={task.id}
         key={`${task.title}${task.id}`}
         title={task.title}
-        status={task.status}
+        complete={task.complete}
       />
     );
   });

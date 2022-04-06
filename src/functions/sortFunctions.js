@@ -1,12 +1,12 @@
 export function sortBasedOnCompletion(taskList) {
   if (taskList.length === 0) return [];
 
-  let sortedTaskList = taskList.filter((item) => item.status === true);
+  let sortedTaskList = taskList.filter((item) => item.complete === true);
 
   if (sortedTaskList.length === 0) return taskList;
 
   for (let i = 0; i < taskList.length; ++i) {
-    if (taskList[i].status === false) {
+    if (taskList[i].complete === false) {
       sortedTaskList.push(taskList[i]);
     }
   }
@@ -17,12 +17,12 @@ export function sortBasedOnCompletion(taskList) {
 export function sortBasedOnUncompletion(taskList) {
   if (taskList.length === 0) return [];
 
-  let sortedTaskList = taskList.filter((item) => item.status === false);
+  let sortedTaskList = taskList.filter((item) => item.complete === false);
 
   if (sortedTaskList.length === 0) return taskList;
 
   for (let i = 0; i < taskList.length; ++i) {
-    if (taskList[i].status === true) {
+    if (taskList[i].complete === true) {
       sortedTaskList.push(taskList[i]);
     }
   }
