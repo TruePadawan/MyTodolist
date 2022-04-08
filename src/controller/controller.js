@@ -1,4 +1,4 @@
-import { storeTodoItemInDB } from "../functions/firebase_db";
+import { addTodoItem, updateTodoItem, deleteTodoItem } from "../functions/firebase_db";
 
 class Controller {
   #userLoggedIn;
@@ -36,10 +36,15 @@ class Controller {
 
   newTaskItem_Database(title) {
       const todoItem = { title, complete: false };
-      console.log('Creating DB Item');
-      // SEND TASK ITEM TO FIREBASE DB AND GET THE ITEM ID
+      addTodoItem(this.#userID, todoItem);
+  }
 
-      storeTodoItemInDB(this.#userID, todoItem);
+  updateTodoItemInDB(itemID, value) {
+    updateTodoItem(this.#userID, itemID, value);
+  }
+
+  deleteTodoItemFromDB(itemID) {
+    deleteTodoItem(this.#userID, itemID);
   }
 }
 
