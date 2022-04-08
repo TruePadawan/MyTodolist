@@ -53,7 +53,7 @@ function App() {
     setContextData({ taskList: todoList });
   },[setContextData]); 
 
-  /* When app loads, set the app size dimensions to what it was before it was closed and also sign in the user if there was a previous sign in*/
+  /* When app loads, set the app size dimensions to what it was before it was closed */
   useEffect(() => {
     let appSize = window.localStorage.getObj("appSize");
     let appBody = document.querySelector("main");
@@ -70,11 +70,10 @@ function App() {
   useEffect(() => {
     auth.onAuthStateChanged(() => {
       if (auth.currentUser && signedInIndicatorRef.current.textContent === "Sign In") {
-        setSignInBtnText(auth.currentUser.displayName);
+        setSignInBtnText(auth.currentUser.email);
 
         MainController.userLoggedIn = true;
         MainController.userID = auth.currentUser.uid;
-        console.log('user logged in');
 
         const todoItemsDBRef = ref(database, `/${auth.currentUser.uid}/items`);
         onValue(todoItemsDBRef,loadTodoItemsFromDB);
@@ -98,8 +97,6 @@ function App() {
 
       MainController.userLoggedIn = false;
       MainController.userID = '';
-
-      console.log('user logged out');
 
       setSignInBtnText("Sign In");
       setContextData({taskList: window.localStorage.getObj("taskList")}); // WHEN THE USER SIGNS OUT, LOAD TODOITEMS FROM LOCAL STORAGE
