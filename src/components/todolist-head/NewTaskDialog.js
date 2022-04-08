@@ -23,6 +23,7 @@ const NewTaskDialog = (props) => {
       const newTaskItem = MainController.newTaskItem_Local(taskTitle_trimmed);
 
       setContextData((currentContextValue) => {
+        console.log(currentContextValue.taskList);
         let updatedTasksList = [...currentContextValue.taskList, newTaskItem];
         let updatedContextData = { taskList: updatedTasksList };
 

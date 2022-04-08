@@ -8,10 +8,9 @@ const TodoItem = (props) => {
   const { contextData } = useContext(TodoListContext);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  const itemIndex = contextData.taskList.findIndex(
-    (item) => item.id === props.id
-  );
-  let isTaskDone = contextData.taskList[itemIndex].complete;
+  const itemIndex = contextData.taskList.findIndex((item) => Object.keys(item)[0] === props.id);
+
+  let isTaskDone = contextData.taskList[itemIndex][props.id].complete;
 
   function openEditDialog() {
     setIsEditDialogOpen(true);

@@ -6,13 +6,14 @@ import styles from "./TodoListBody.module.css";
 const TodoListBody = () => {
   const { contextData } = useContext(TodoListContext);
 
-  let listOfTasks = contextData.taskList.map((task) => {
+  let listOfTasks = contextData.taskList.map((item) => {
+    let itemID = Object.keys(item)[0];
     return (
       <TodoItem
-        id={task.id}
-        key={`${task.title}${task.id}`}
-        title={task.title}
-        complete={task.complete}
+        id={itemID}
+        key={`${item[itemID].title}${itemID}`}
+        title={item[itemID].title}
+        complete={item[itemID].complete}
       />
     );
   });

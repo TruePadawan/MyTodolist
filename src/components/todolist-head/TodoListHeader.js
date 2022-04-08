@@ -1,6 +1,8 @@
 import { useMemo, useState, useContext } from "react";
 import { sortBasedOnCompletion, sortBasedOnUncompletion } from "../../functions/sortFunctions";
 
+import { MainController } from "../../controller/controller";
+
 import TodoListContext from "../context/TodoListContext";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ButtonUnstyled from "@mui/base/ButtonUnstyled";
@@ -52,7 +54,7 @@ const DateTime = () => {
 
 
 const TodoListHeader = () => {
-  const { setContextData } = useContext(TodoListContext);
+  const { contextData, setContextData } = useContext(TodoListContext);
   const [newTaskDialogOpened, setNewTaskDialogOpened] = useState(false);
 
   function openDialogHandler() {
@@ -67,19 +69,35 @@ const TodoListHeader = () => {
     const btnValue = e.target.textContent;
 
     if (btnValue === "Done") {
-      setContextData((currentContextData) => {
-        let sortedTaskList = sortBasedOnCompletion(currentContextData.taskList);
-        window.localStorage.setObj("taskList", sortedTaskList);
-        return { taskList: sortedTaskList };
-      });
 
+      if (!MainController.userLoggedIn)
+      {
+        setContextData((currentContextData) => {
+          let sortedTaskList = sortBasedOnCompletion(currentContextData.taskList);
+          window.localStorage.setObj("taskList", sortedTaskList);
+          return { taskList: sortedTaskList };
+        });
+        return;
+      }
+
+      console.log('context', contextData.taskList);
+      let sortedTaskList = sortBasedOnCompletion(contextData.taskList);
+      MainController.updateTodoListInDB(sortedTaskList);
     }
     else if (btnValue === "Not Done") {
-      setContextData((currentContextData) => {
-        let sortedTaskList = sortBasedOnUncompletion(currentContextData.taskList);
-        window.localStorage.setObj("taskList", sortedTaskList);
-        return { taskList: sortedTaskList };
-      });
+
+      if (!MainController.userLoggedIn)
+      {
+        setContextData((currentContextData) => {
+          let sortedTaskList = sortBasedOnUncompletion(currentContextData.taskList);
+          window.localStorage.setObj("taskList", sortedTaskList);
+          return { taskList: sortedTaskList };
+        });
+        return;
+      }
+
+      let sortedTaskList = sortBasedOnUncompletion(contextData.taskList);
+      MainController.updateTodoListInDB(sortedTaskList);
     }
   }
 

@@ -13,24 +13,27 @@ const EditTodoItemDialog = (props) => {
 
   const { contextData, setContextData, MainController } = useContext(TodoListContext);
 
-  function updateTodoListItem(e) {
+  function updateItemTitle(e) {
     e.preventDefault();
 
-    const updatedItemTitle = document.getElementById("editItemInput").value;
+    const newTitle = document.getElementById("editItemInput").value;
     
     if (!MainController.userLoggedIn)
     {
-      const itemIndex = contextData.taskList.findIndex((item) => item.id === props.itemID);
-      let currentItem = contextData.taskList[itemIndex];
+      const itemIndex = contextData.taskList.findIndex((item) => Object.keys(item)[0] === props.itemID);
+      let currentTitle = contextData.taskList[itemIndex][props.itemID].title;
       
-      /* Update context value only if the new value isn't the same as the already-stored title for task item to be updated */
-      if (currentItem.title.trim() !== updatedItemTitle.trim()) {
+      /* Update item only if the new value isn't the same as the already-stored title for task item to be updated */
+      if (currentTitle.trim() !== newTitle.trim()) {
         setContextData((currentContextData) => {
           if (itemIndex !== -1) {
-            currentContextData.taskList[itemIndex].title = updatedItemTitle;
-            const updatedContextValue = { taskList: currentContextData.taskList };
-            window.localStorage.setObj("taskList", updatedContextValue.taskList);
+            const item = currentContextData.taskList[itemIndex];
+            item[props.itemID].title = newTitle;
 
+            currentContextData.taskList[itemIndex] = item;
+            const updatedContextValue = { taskList: currentContextData.taskList };
+
+            window.localStorage.setObj("taskList", updatedContextValue.taskList);
             return updatedContextValue;
           }
           return currentContextData;
@@ -38,25 +41,25 @@ const EditTodoItemDialog = (props) => {
       }
     }
     else {
-      MainController.updateTodoItemInDB(props.itemID,{title: updatedItemTitle});
+      MainController.updateTodoItemInDB(props.itemID,{title: newTitle});
     }
     
     props.closeDialog();
   }
 
-  function setTaskDoneOrNotDone(e) {
+  function setItemCompleteOrNot(e) {
     e.preventDefault();
     
     if (!MainController.userLoggedIn)
     {
       setContextData((currentContextData) => {
-        const itemIndex = currentContextData.taskList.findIndex(
-          (item) => item.id === props.itemID
-        );
+        const itemIndex = currentContextData.taskList.findIndex((item) => Object.keys(item)[0] === props.itemID);
 
         if (itemIndex !== -1) {
-          const itemCurrentStatus = currentContextData.taskList[itemIndex].complete;
-          currentContextData.taskList[itemIndex].complete = !itemCurrentStatus;
+          const item = currentContextData.taskList[itemIndex];
+          item[props.itemID].complete = !item[props.itemID].complete;
+
+          currentContextData.taskList[itemIndex] = item;
           let updatedContextValue = { taskList: currentContextData.taskList };
           window.localStorage.setObj("taskList", currentContextData.taskList);
 
@@ -73,13 +76,13 @@ const EditTodoItemDialog = (props) => {
     props.closeDialog();
   }
 
-  function deleteTodoListItem(e) {
+  function deleteTodoItem(e) {
     e.preventDefault();
 
     if (!MainController.userLoggedIn)
     {
       setContextData((currentContextData) => {
-        const itemIndex = currentContextData.taskList.findIndex((item) => item.id === props.itemID);
+        const itemIndex = currentContextData.taskList.findIndex((item) => Object.keys(item)[0] === props.itemID);
         
         if (itemIndex !== -1) {
           currentContextData.taskList.splice(itemIndex, 1);
@@ -115,15 +118,15 @@ const EditTodoItemDialog = (props) => {
           onChange={(e) => setEditItemInputValue(e.target.value)}
         />
         <div className={styles["editItemBtns"]}>
-          <button onClick={updateTodoListItem} className={styles["saveBtn"]}>
+          <button onClick={updateItemTitle} className={styles["saveBtn"]}>
             <SaveIcon /> Save
           </button>
 
-          <button onClick={setTaskDoneOrNotDone} className={styles["setDoneOrNotDone"]}>
+          <button onClick={setItemCompleteOrNot} className={styles["setDoneOrNotDone"]}>
             <DoneIcon /> Mark Done/Not Done
           </button>
 
-          <button onClick={deleteTodoListItem} className={styles["deleteBtn"]}>
+          <button onClick={deleteTodoItem} className={styles["deleteBtn"]}>
             <DeleteIcon /> Delete
           </button>
         </div>

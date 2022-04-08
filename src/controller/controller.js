@@ -1,4 +1,4 @@
-import { addTodoItem, updateTodoItem, deleteTodoItem } from "../functions/firebase_db";
+import { addTodoItem, updateTodoItem, updateTodoList, deleteTodoItem } from "../functions/firebase_db";
 
 class Controller {
   #userLoggedIn;
@@ -30,8 +30,17 @@ class Controller {
 
   newTaskItem_Local(title) {
       const id = this.generateID(title);
-      const taskItem = { id, title, complete: false };
-      return taskItem;
+
+      const todoItem = { 
+        [id]: {
+          title,
+          complete: false
+        }
+      };
+
+      console.log(todoItem);
+
+      return todoItem;
   }
 
   newTaskItem_Database(title) {
@@ -41,6 +50,10 @@ class Controller {
 
   updateTodoItemInDB(itemID, value) {
     updateTodoItem(this.#userID, itemID, value);
+  }
+
+  updateTodoListInDB(list) {
+    updateTodoList(this.#userID, list);
   }
 
   deleteTodoItemFromDB(itemID) {

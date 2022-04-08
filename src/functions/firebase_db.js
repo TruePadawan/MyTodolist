@@ -1,27 +1,21 @@
-import { ref, push, remove, update } from "firebase/database";
+import { ref, push, remove, update, set } from "firebase/database";
 import { database } from "../firebase/firebase_init";
 
 export function addTodoItem(userID, todoItem) {
   const todoItemsDBRef = ref(database, `/${userID}/items`);
-  let success;
-  let key = '';
 
   try {
-    const itemRef = push(todoItemsDBRef, todoItem);
-    key = itemRef.key;
-    success = true;
+    push(todoItemsDBRef, todoItem);
   }
   catch (error) {
     alert(error.message);
-    success = false;
   }
-
-  return { success,key };
 }
 
 export function updateTodoItem(userID, itemID, value) {
+  const itemRef = ref(database, `${userID}/items/${itemID}`);
+  
   try {
-    const itemRef = ref(database, `${userID}/items/${itemID}`);
     update(itemRef, value);
   }
   catch (error) {
@@ -30,9 +24,22 @@ export function updateTodoItem(userID, itemID, value) {
 }
 
 export function deleteTodoItem(userID, itemID) {
+  const itemRef = ref(database, `${userID}/items/${itemID}`);
+  
   try {
-    const itemRef = ref(database, `${userID}/items/${itemID}`);
     remove(itemRef);
+  }
+  catch (error) {
+    alert(error.message);
+  }
+}
+
+export function updateTodoList(userID, list) {
+  const itemsRef = ref(database, `${userID}/items`);
+  
+  console.log(list);
+  try {
+    set(itemsRef, list);
   }
   catch (error) {
     alert(error.message);

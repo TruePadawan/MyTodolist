@@ -42,9 +42,10 @@ function App() {
     for (let id in todoData)
     {
       let todoItem = {
-        id,
-        title: todoData[id].title,
-        complete: todoData[id].complete
+        [id]: {
+          title: todoData[id].title,
+          complete: todoData[id].complete,
+        },
       };
 
       todoList.push(todoItem);
