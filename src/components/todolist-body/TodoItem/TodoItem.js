@@ -28,6 +28,7 @@ const TodoItem = (props) => {
           closeDialog={closeEditDialog}
           currentValue={props.title}
           itemID={props.id}
+          isTaskComplete={isTaskDone}
         />
       )}
 
