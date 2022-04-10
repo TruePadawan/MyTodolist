@@ -1,4 +1,4 @@
-import { ref, push, remove, update, set } from "firebase/database";
+import { ref, push, remove, update } from "firebase/database";
 import { database } from "../firebase/firebase_init";
 
 export function addTodoItem(userID, todoItem) {
@@ -28,18 +28,6 @@ export function deleteTodoItem(userID, itemID) {
   
   try {
     remove(itemRef);
-  }
-  catch (error) {
-    alert(error.message);
-  }
-}
-
-export function updateTodoList(userID, list) {
-  const itemsRef = ref(database, `${userID}/items`);
-  
-  console.log(list);
-  try {
-    set(itemsRef, list);
   }
   catch (error) {
     alert(error.message);
