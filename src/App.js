@@ -38,7 +38,7 @@ function App() {
   const loadTodoItemsFromDB = useCallback((snapshot) => {
     const todoData = snapshot.val();
     const todoList = [];
-
+    
     for (let id in todoData)
     {
       let todoItem = {
