@@ -54,7 +54,7 @@ const DateTime = () => {
 
 
 const TodoListHeader = () => {
-  const { contextData, setContextData } = useContext(TodoListContext);
+  const { setContextData } = useContext(TodoListContext);
   const [newTaskDialogOpened, setNewTaskDialogOpened] = useState(false);
 
   function openDialogHandler() {
@@ -69,35 +69,26 @@ const TodoListHeader = () => {
     const btnValue = e.target.textContent;
 
     if (btnValue === "Done") {
-
-      if (!MainController.userLoggedIn)
-      {
-        setContextData((currentContextData) => {
-          let sortedTaskList = sortBasedOnCompletion(currentContextData.taskList);
+      setContextData(currentContextData => {
+        let sortedTaskList = sortBasedOnCompletion(currentContextData.taskList);
+        
+        if (!MainController.userLoggedIn)
+        {
           window.localStorage.setObj("taskList", sortedTaskList);
-          return { taskList: sortedTaskList };
-        });
-        return;
-      }
-
-      console.log('context', contextData.taskList);
-      let sortedTaskList = sortBasedOnCompletion(contextData.taskList);
-      MainController.updateTodoListInDB(sortedTaskList);
+        }
+        return { taskList: sortedTaskList };
+      });
     }
     else if (btnValue === "Not Done") {
-
-      if (!MainController.userLoggedIn)
-      {
-        setContextData((currentContextData) => {
-          let sortedTaskList = sortBasedOnUncompletion(currentContextData.taskList);
+      setContextData(currentContextData => {
+        let sortedTaskList = sortBasedOnUncompletion(currentContextData.taskList);
+        
+        if (!MainController.userLoggedIn)
+        {
           window.localStorage.setObj("taskList", sortedTaskList);
-          return { taskList: sortedTaskList };
-        });
-        return;
-      }
-
-      let sortedTaskList = sortBasedOnUncompletion(contextData.taskList);
-      MainController.updateTodoListInDB(sortedTaskList);
+        }
+        return { taskList: sortedTaskList };
+      });
     }
   }
 
@@ -112,7 +103,7 @@ const TodoListHeader = () => {
         <div className="todolist--header">
           <ButtonUnstyled onClick={openDialogHandler}>
             <AddCircleOutlineIcon />
-            New Task
+            New Item
           </ButtonUnstyled>
 
           <ButtonGroup disableElevation disableRipple variant="text">
