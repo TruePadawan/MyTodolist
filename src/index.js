@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 
 import TodoListContextProvider from "./components/context/TodoListContextProvider";
 import App from "./App";
+
+import "./index.css";
 
 /* Simple functions for easily adding objects and array to localStorage */
 Storage.prototype.setObj = function (key, obj) {
