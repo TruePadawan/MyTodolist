@@ -6,6 +6,9 @@ import Modal from "../modal/Modal";
 
 import styles from "./NewTaskDialog.module.css";
 
+
+
+
 const NewTaskDialog = (props) => {
   const { setContextData, MainController } = useContext(TodoListContext);
 
@@ -23,7 +26,6 @@ const NewTaskDialog = (props) => {
       const newTaskItem = MainController.newTaskItem_Local(taskTitle_trimmed);
 
       setContextData((currentContextValue) => {
-        console.log(currentContextValue.taskList);
         let updatedTasksList = [...currentContextValue.taskList, newTaskItem];
         let updatedContextData = { taskList: updatedTasksList };
 
@@ -37,6 +39,7 @@ const NewTaskDialog = (props) => {
     
     props.closeDialog();
   }
+
 
   return (
     <Modal className={styles["newTask"]} close={props.closeDialog}>
