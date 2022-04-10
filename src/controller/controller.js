@@ -1,4 +1,4 @@
-import { addTodoItem, updateTodoItem, updateTodoList, deleteTodoItem } from "../functions/firebase_db";
+import { addTodoItem, updateTodoItem, deleteTodoItem } from "../functions/firebase_db";
 
 class Controller {
   #userLoggedIn;
@@ -38,8 +38,6 @@ class Controller {
         }
       };
 
-      console.log(todoItem);
-
       return todoItem;
   }
 
@@ -50,10 +48,6 @@ class Controller {
 
   updateTodoItemInDB(itemID, value) {
     updateTodoItem(this.#userID, itemID, value);
-  }
-
-  updateTodoListInDB(list) {
-    updateTodoList(this.#userID, list);
   }
 
   deleteTodoItemFromDB(itemID) {
