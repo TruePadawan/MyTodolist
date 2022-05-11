@@ -25,6 +25,6 @@
   background-color: rgba(173, 216, 230, 0.713);
 }
 
-.task_done {
-  background-color: rgba(144, 238, 144, 0.459);
+.task_done > p{
+  text-decoration: line-through;
 }
