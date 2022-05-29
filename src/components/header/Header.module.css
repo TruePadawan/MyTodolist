@@ -1,0 +1,35 @@
+header {
+    width: 100%;
+}
+
+nav {
+    padding: 16px 14px;
+
+    height: 80px;
+
+    display: flex;
+    align-items: center;
+}
+
+.navMain {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.sidebarBtn {
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.sidebarBtn>img {
+    width: 40px;
+    height: auto;
+}
+
+.sidebarBtn:hover {
+    background-color: rgb(243, 186, 101);
+}
