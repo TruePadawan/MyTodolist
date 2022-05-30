@@ -9,7 +9,7 @@ const TodoListContextProvider = (props) => {
   const [sidebarState, setSideBarState] = useState("opened");
 
   useEffect(() => {
-    persistProjectsListData(contextData, userSignedIn);
+    persistProjectsListData(contextData);
   }, [contextData]);
 
   return (
