@@ -8,7 +8,9 @@ const TodoItem = (props) => {
   const { contextData } = useContext(TodoListContext);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  const itemIndex = contextData.taskList.findIndex((item) => Object.keys(item)[0] === props.id);
+  const itemIndex = contextData.taskList.findIndex(
+    (item) => Object.keys(item)[0] === props.id
+  );
 
   let isTaskDone = contextData.taskList[itemIndex][props.id].complete;
 
@@ -32,9 +34,14 @@ const TodoItem = (props) => {
       )}
 
       <li
-        className={`${styles["todolist-item"]} ${styles[isTaskDone ? "task_done" : ""]}`}>
+        className={`${styles["todolist-item"]} ${
+          styles[isTaskDone ? "task_done" : ""]
+        }`}
+      >
         <p>{props.title}</p>
-        <button onClick={openEditDialog}>Edit</button>
+        <button onClick={openEditDialog} type="button">
+          Edit
+        </button>
       </li>
     </>
   );
