@@ -1,0 +1,80 @@
+.sidebar {
+    background: transparent;
+
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+.projectsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.2rem;
+}
+
+.projectsContainer > h2 {
+    text-align: center;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background-color: #eacda3;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: rgb(194, 132, 50);
+}
+
+.closed {
+    display: none;
+}
+
+.opened {
+    padding: 23px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.2rem;
+}
+
+.sidebar>h2 {
+    font-size: 1.6rem;
+    align-self: center;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+}
+
+.newProjectBtn {
+    background-color: #b89466;
+    
+    font-size: 1.2rem;
+    min-height: 50px;
+    border-radius: 8px;
+    border: none;
+}
+
+.newProjectBtn:hover {
+    background-color: rgba(165, 156, 125, 0.7);
+}
+
+.projects {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media screen and (max-width: 700px) {
+    .sidebar {
+        z-index: 1;
+        background: linear-gradient(to right, #d6ae7b, #eacda3);
+    }
+
+    .opened {
+        position: absolute;
+        width: 100%;
+        height: calc(100% - 80px);
+    }
+}

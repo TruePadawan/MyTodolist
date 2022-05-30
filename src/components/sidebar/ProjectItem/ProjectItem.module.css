@@ -1,0 +1,47 @@
+.projects {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.projectItem {
+    background-color: rgb(243, 197, 105);
+    padding: 10px 10px;
+
+    width: 100%;
+    height: max-content;
+
+    display: flex;
+    align-items: center;
+
+    box-shadow: 0 2px 8px rgb(205 205 205 / 25%);
+    border-radius: 8px;
+    border: none;
+
+    font-size: 1.2rem;
+}
+
+.projectTitle {
+    overflow: hidden;
+
+    border: none;
+    border-bottom: 1px dashed;
+
+    font-size: 18px;
+    color: #535151;
+    margin-left: auto;
+
+    cursor: text;
+}
+
+.projectTitle:focus {
+    outline: none;
+}
+
+.projectItem>img {
+    margin-left: auto;
+}
+
+.active {
+    background-color: rgb(195, 159, 87);
+}
