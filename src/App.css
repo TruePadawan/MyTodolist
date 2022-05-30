@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Shizuru&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600&display=swap");
 
 .App {
   display: flex;
@@ -13,26 +14,64 @@ h1 {
 }
 
 main {
-  --min-width: 30rem;
-  --min-height: 30rem;
+  display: grid;
+  width: 100%;
+  height: 100%;
+}
 
-  resize: both;
-  overflow: hidden;
+.todolist {
+  height: 100%;
   box-shadow: -2px 2px 5px darkgray;
   margin: 0 auto;
+
   border: 2px solid lightyellow;
   border-radius: 10px 10px 0 0;
-  width: var(--min-width);
-  height: var(--min-height);
-  max-width: 90%;
+
   display: flex;
   flex-direction: column;
 }
 
-#signIn-btn {
-  font-weight: bold;
+/* SIDEBAR */
+
+.sidebarOpened {
+  grid-template-columns: min(100%, 280px) 1fr;
+}
+
+.sidebarClosed {
+  grid-template-columns: 1fr;
+}
+
+#currentProjectTitle {
+  font-family: "Open Sans", sans-serif;
+  font-weight: normal;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.container {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.2rem;
+}
+
+.container > * {
+  margin: 0 auto;
+  max-width: 102rem;
+  width: 100%;
+}
+
+#signInBtn {
+  font-weight: 700;
   color: brown;
   display: flex;
   align-items: center;
-  border-color: transparent;
+  border: none;
+}
+
+@media screen and (max-width: 700px) {
+  .sidebarClosed {
+    grid-template-columns: 1fr;
+  }
 }
