@@ -11,9 +11,9 @@ const SideBar = (props) => {
     const project = createProjectItem("Untitled");
 
     setContextData((projects) => {
-      let updatedProjectsList = { ...projects, [project.id] : project };
-      persistProjectsListData(updatedProjectsList, userSignedIn);
-      return updatedProjectsList;
+      projects[project.id] = project;
+      persistProjectsListData(projects, userSignedIn);
+      return { ...projects };
     });
   }
 
