@@ -1,12 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700&display=swap');
+
 html {
   box-sizing: border-box;
   height: 100%;
 }
 
 * {
+  font-family: "Zen Kaku Gothic Antique", sans-serif;
   box-sizing: inherit;
   margin: 0;
   padding: 0;
+}
+
+#root,
+.App {
+  height: 100%;
 }
 
 input:focus {
@@ -14,16 +22,16 @@ input:focus {
 }
 
 body {
-  height: 100vh;
-  background: #eacda3; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #d6ae7b,
-    #eacda3
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #d6ae7b,
-    #eacda3
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  height: 100%;
+  background: #eacda3;
+  background: -webkit-linear-gradient(to right,
+      #d6ae7b,
+      #eacda3);
+  background: linear-gradient(to right,
+      #d6ae7b,
+      #eacda3);
+}
+
+button {
+  cursor: pointer;
 }
