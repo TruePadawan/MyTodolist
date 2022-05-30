@@ -23,7 +23,7 @@ export function setActiveProject(projectID, projectsList) {
     }
   });
 
-  return projectsList;
+  return { ...projectsList };
 }
 
 export function createJSXProjectItems(list) {
@@ -31,13 +31,13 @@ export function createJSXProjectItems(list) {
   let projectsList = IDs.map((id) => {
     let title = list[id].title;
     let status = list[id].active;
-    return <ProjectItem title={title} active={status} key={id} />;
+    return <ProjectItem id={id} title={title} active={status} key={id} />;
   });
   return projectsList;
 }
 
 
-export function persistProjectsListData(list, userSignedIn)
+export function persistProjectsListData(list, userSignedIn = false)
 {
   if (!userSignedIn)
   {
