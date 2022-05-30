@@ -1,18 +1,17 @@
 import { useContext } from "react";
 import TodoListContext from "../context/TodoListContext";
-import { createProjectItem, createJSXProjectItems, persistProjectsListData } from "../../functions/projects";
+import { createProjectItem, createJSXProjectItems } from "../../functions/projects";
 
 import styles from "./sidebar.module.css";
 
 const SideBar = (props) => {
-  const { contextData, setContextData, userSignedIn } = useContext(TodoListContext);
+  const { contextData, setContextData } = useContext(TodoListContext);
 
   function addProject() {
     const project = createProjectItem("Untitled");
 
     setContextData((projects) => {
       projects[project.id] = project;
-      persistProjectsListData(projects, userSignedIn);
       return { ...projects };
     });
   }
