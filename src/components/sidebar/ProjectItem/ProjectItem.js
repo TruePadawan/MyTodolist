@@ -11,17 +11,29 @@ const ProjectItem = (props) => {
 
   function makeActive()
   {
+    if (props.active === true) return;
     setContextData((projects) => {
-      let updatedProjectsList = setActiveProject(props.id,projects);
-      persistProjectsListData(projects, userSignedIn);
-      return updatedProjectsList;
+      setActiveProject(props.id,projects);
+      return { ...projects };
+    });
+  }
+
+  function updateProjectTitle(e)
+  {
+    setContextData((projects) => {
+      projects[props.id].title = e.target.innerText;
+      persistProjectsListData(projects, userSignedIn); // DONT REDRAW PAGE WHEN USER CHANGES PROJECT TITLE
+      return projects;
     });
   }
 
   return (
     <>
       <button type="button" className={itemClass} onClick={makeActive}>
-        <span className={styles["projectTitle"]} role="textbox" contentEditable={true} suppressContentEditableWarning={true}>
+        <span className={styles["projectTitle"]} role="textbox"
+          contentEditable={true}
+          suppressContentEditableWarning={true}
+          onInput={updateProjectTitle}>
           {props.title}
         </span>
         <img
