@@ -1,72 +1,28 @@
-import { useEffect, useState, useRef, useCallback, useContext } from "react";
-import Header from "./components/header/Header";
-import TodoListContext from "./components/context/TodoListContext";
-import TodoListHeader from "./components/todolist-head/TodoListHeader";
-import TodoListBody from "./components/todolist-body/TodoListBody";
+import { useContext, useState, useRef, useEffect, useCallback } from "react";
+import { signInWithPopup, signOut } from "firebase/auth";
+import { onValue, ref } from "firebase/database";
+import { auth, database, googleProvider } from "./firebase/firebase_init";
+import { getTodoItemsFromDB } from "./functions/firebase_db";
 
 import Button from "@mui/material/Button";
 import GoogleIcon from "@mui/icons-material/Google";
 
-import { MainController } from "./controller/controller";
-
-import { signInWithPopup, signOut } from "firebase/auth";
-import { onValue, ref } from "firebase/database";
-import { auth, database, googleProvider } from "./firebase/firebase_init";
-
+import Header from "./components/header/Header";
+import SideBar from "./components/sidebar/sidebar";
+import TodoListContext from "./components/context/TodoListContext";
+import TodoListHeader from "./components/todolist-head/TodoListHeader";
+import TodoListBody from "./components/todolist-body/TodoListBody";
 import "./App.css";
 
-// OBSERVER CHANGES IN THE WIDTH OF THE APP
-let resizeObserver = new ResizeObserver((entries) => {
-  let width = entries[0].borderBoxSize[0].inlineSize;
-  let height = entries[0].borderBoxSize[0].blockSize;
-
-  if (width <= 0 || height <= 0) {
-    width = 480;
-    height = 480;
-  }
-
-  let appSize = { width, height };
-
-  window.localStorage.setObj("appSize", appSize);
-});
-
 function App() {
-  const { setContextData } = useContext(TodoListContext);
+  const { sidebarState, setContextData, MainController } = useContext(TodoListContext);
   const signedInIndicatorRef = useRef(null);
   const [signInBtnText, setSignInBtnText] = useState("Sign In");
 
-  const loadTodoItemsFromDB = useCallback(
-    (snapshot) => {
-      const todoData = snapshot.val();
-      const todoList = [];
-
-      for (let id in todoData) {
-        let todoItem = {
-          [id]: {
-            title: todoData[id].title,
-            complete: todoData[id].complete,
-          },
-        };
-
-        todoList.push(todoItem);
-      }
-
-      setContextData({ taskList: todoList });
-    },
-    [setContextData]
-  );
-
-  /* When app loads, set the app size dimensions to what it was before it was closed */
-  useEffect(() => {
-    let appSize = window.localStorage.getObj("appSize");
-    let appBody = document.querySelector("main");
-
-    if (appSize !== null) {
-      appBody.style.width = `${appSize.width}px`;
-      appBody.style.height = `${appSize.height}px`;
-    }
-    resizeObserver.observe(appBody);
-  }, []);
+  const loadTodoItemsFromDB = useCallback((snapshot) => {
+    const todoList = getTodoItemsFromDB(snapshot);
+    setContextData({ taskList: todoList });
+  }, [setContextData]);
 
   /* When app loads, sign in the user if there was a previous sign in */
   useEffect(() => {
@@ -84,7 +40,7 @@ function App() {
         onValue(todoItemsDBRef, loadTodoItemsFromDB);
       }
     });
-  }, [loadTodoItemsFromDB]);
+  }, [loadTodoItemsFromDB, MainController]);
 
   const signInWithGoogle = async () => {
     // IF THERE IS NO USER CURRENTLY LOGGED IN, LOGIN. ELSE, SIGN OUT
@@ -105,20 +61,27 @@ function App() {
     }
   };
 
+  let mainClassName = sidebarState === "closed" ? "sidebarClosed" : "sidebarOpened";
   return (
     <div className="App">
       <Header />
-      <Button
-        id="signIn-btn"
-        variant="outlined"
-        startIcon={<GoogleIcon />}
-        onClick={signInWithGoogle}
-      >
-        <span ref={signedInIndicatorRef}>{signInBtnText}</span>
-      </Button>
-      <main>
-        <TodoListHeader />
-        <TodoListBody />
+      <main className={mainClassName}>
+        <SideBar state={sidebarState}>
+          <Button
+          id="signInBtn"
+          variant="outlined"
+          startIcon={<GoogleIcon />}
+          onClick={signInWithGoogle}>
+            <span ref={signedInIndicatorRef}>{signInBtnText}</span>
+          </Button>
+        </SideBar>
+        <section className="container" aria-labelledby="currentProjectTitle">
+          <h2 id="currentProjectTitle">Default</h2>
+          <div className="todolist">
+            <TodoListHeader />
+            <TodoListBody />
+          </div>
+        </section>
       </main>
     </div>
   );
