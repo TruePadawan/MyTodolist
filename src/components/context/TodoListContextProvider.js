@@ -7,6 +7,7 @@ const TodoListContextProvider = (props) => {
   const [contextData, setContextData] = useState(window.localStorage.getObj("projects"));
   const [userSignedIn, setUserSignedIn] = useState(false);
   const [sidebarState, setSideBarState] = useState("opened");
+  const [activeProjectID, setActiveProjectID] = useState("");
 
   useEffect(() => {
     persistProjectsListData(contextData);
@@ -21,7 +22,9 @@ const TodoListContextProvider = (props) => {
         sidebarState,
         setSideBarState,
         userSignedIn,
-        setUserSignedIn
+        setUserSignedIn,
+        activeProjectID,
+        setActiveProjectID
       }}
     >
       {props.children}
