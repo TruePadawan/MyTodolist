@@ -2,7 +2,7 @@ import { useContext, useState, useRef, useEffect, useCallback } from "react";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { onValue, ref } from "firebase/database";
 import { auth, database, googleProvider } from "./firebase/firebase_init";
-import { getTodoItemsFromDB } from "./functions/firebase_db";
+import { DB_actions } from "./functions/firebase_db";
 
 import Button from "@mui/material/Button";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -15,12 +15,16 @@ import TodoListBody from "./components/todolist-body/TodoListBody";
 import "./App.css";
 
 function App() {
-  const { sidebarState, setContextData, MainController } = useContext(TodoListContext);
+  const { sidebarState,
+          contextData,
+          setContextData,
+          MainController,
+          activeProjectID } = useContext(TodoListContext);
   const signedInIndicatorRef = useRef(null);
   const [signInBtnText, setSignInBtnText] = useState("Sign In");
 
   const loadTodoItemsFromDB = useCallback((snapshot) => {
-    const todoList = getTodoItemsFromDB(snapshot);
+    const todoList = DB_actions.getTodoItemsFromDB(snapshot);
     setContextData({ taskList: todoList });
   }, [setContextData]);
 
@@ -61,7 +65,17 @@ function App() {
     }
   };
 
-  let mainClassName = sidebarState === "closed" ? "sidebarClosed" : "sidebarOpened";
+  const mainClassName = sidebarState === "closed" ? "sidebarClosed" : "sidebarOpened";
+  let activeProject = contextData[activeProjectID];
+  // IN CASE OF NO PROJECT ITEMS
+  if (activeProjectID === null)
+  {
+    activeProject = {
+      title : "",
+      todos : {}
+    }
+  }
+
   return (
     <div className="App">
       <Header />
@@ -76,10 +90,10 @@ function App() {
           </Button>
         </SideBar>
         <section className="container" aria-labelledby="currentProjectTitle">
-          <h2 id="currentProjectTitle">Default</h2>
+          <h2 id="currentProjectTitle">{activeProject.title}</h2>
           <div className="todolist">
             <TodoListHeader />
-            <TodoListBody />
+            <TodoListBody todos={activeProject.todos}/>
           </div>
         </section>
       </main>
