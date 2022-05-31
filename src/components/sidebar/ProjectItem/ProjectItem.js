@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import TodoListContext from "../../context/TodoListContext";
-import { setActiveProject, persistProjectsListData } from "../../../functions/projects";
+import { setActiveProject, persistProjectsListData, setNewActiveProject } from "../../../functions/projects";
 import TrashImg from "./resources/trash.png";
 import styles from "./ProjectItem.module.css";
 
@@ -38,8 +38,14 @@ const ProjectItem = (props) => {
     
     if (props.active === true)
     {
-      console.log('setting new active project');
-      // props.setNewActiveProject();
+      setContextData((projects) => {
+        let newList = setNewActiveProject(projects);
+        if (newList !== null)
+        {
+          return newList;
+        }
+        return {};
+      });
     }
   }
 
