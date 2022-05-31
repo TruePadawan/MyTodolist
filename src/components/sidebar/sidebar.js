@@ -11,6 +11,12 @@ const SideBar = (props) => {
     const project = createProjectItem("Untitled");
 
     setContextData((projects) => {
+      // IF THIS IS THE FIRST AND ONLY PROJECT ITEM, MAKE IT ACTIVE
+      if (Object.keys(projects).length === 0)
+      {
+        project.active = true;
+      }
+
       projects[project.id] = project;
       return { ...projects };
     });
