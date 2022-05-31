@@ -13,7 +13,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  max-width: 95%;
+  width: min(98%, 40rem);
   border-radius: 10px;
   background-color: rgb(250, 222, 161);
   z-index: 100;
