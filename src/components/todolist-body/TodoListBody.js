@@ -1,26 +1,28 @@
-import { useContext } from "react";
 import TodoItem from "./TodoItem/TodoItem";
-import TodoListContext from "../context/TodoListContext";
 import styles from "./TodoListBody.module.css";
 
-const TodoListBody = () => {
-  const { contextData } = useContext(TodoListContext);
+const TodoListBody = ({ todos }) => {
+  let todoList = [];
+  for (const itemID in todos)
+  {
+    let itemTitle = todos[itemID].title;
+    let itemDueDate = todos[itemID].dueDate;
+    let itemDesc = todos[itemID].desc;
+    let isItemDone = todos[itemID].done;
 
-  let listOfTasks = contextData.taskList.map((item) => {
-    let itemID = Object.keys(item)[0];
-    return (
-      <TodoItem
-        id={itemID}
-        key={`${item[itemID].title}${itemID}`}
-        title={item[itemID].title}
-        complete={item[itemID].complete}
-      />
+    todoList.push(
+      <TodoItem id={itemID} key={itemID}
+                title={itemTitle}
+                dueDate={itemDueDate}
+                desc={itemDesc}
+                done={isItemDone} />
     );
-  });
+  }
 
   return (
     <div className={styles["todolist-body"]}>
-      <ul>{listOfTasks}</ul>
+      <ul>{ todoList }</ul>
+      <ul></ul>
     </div>
   );
 };
