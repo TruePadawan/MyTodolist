@@ -58,3 +58,16 @@ export function setNewActiveProject(list)
   list[firstItemID].active = true;
   return { ...list };
 }
+
+export function getActiveProjectID(list)
+{
+  const IDs = Object.keys(list);
+  for (let i = 0; i < IDs.length; ++i)
+  {
+    if (list[IDs[i]].active === true)
+    {
+      return IDs[i];
+    }
+  }
+  return null;
+}
