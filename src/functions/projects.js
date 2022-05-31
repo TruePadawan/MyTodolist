@@ -46,3 +46,15 @@ export function persistProjectsListData(list, userSignedIn = false)
   }
   console.log('storing data to DB');
 }
+
+export function setNewActiveProject(list)
+{
+  const IDs = Object.keys(list);
+  if (IDs.length === 0)
+  {
+    return null;
+  }
+  let firstItemID = IDs[0];
+  list[firstItemID].active = true;
+  return { ...list };
+}
