@@ -22,9 +22,25 @@ const ProjectItem = (props) => {
   {
     setContextData((projects) => {
       projects[props.id].title = e.target.innerText;
-      persistProjectsListData(projects, userSignedIn); // DONT REDRAW PAGE WHEN USER CHANGES PROJECT TITLE
-      return projects;
+      persistProjectsListData(projects, userSignedIn); 
+      return projects; // DONT REDRAW PAGE WHEN USER CHANGES PROJECT TITLE
     });
+  }
+
+  function deleteItem(e)
+  {
+    e.stopPropagation(); // PREVENT CLICK EVENT FROM PROPAGATING TO BUTTON
+
+    setContextData((projects) => {
+      delete projects[props.id];
+      return { ...projects };
+    });
+    
+    if (props.active === true)
+    {
+      console.log('setting new active project');
+      // props.setNewActiveProject();
+    }
   }
 
   return (
@@ -33,7 +49,8 @@ const ProjectItem = (props) => {
         <span className={styles["projectTitle"]} role="textbox"
           contentEditable={true}
           suppressContentEditableWarning={true}
-          onInput={updateProjectTitle}>
+          onInput={updateProjectTitle}
+          onClick={e => e.stopPropagation()}>
           {props.title}
         </span>
         <img
@@ -41,6 +58,7 @@ const ProjectItem = (props) => {
           role="button"
           src={TrashImg}
           alt="Trash"
+          onClick={deleteItem}
         />
       </button>
     </>
