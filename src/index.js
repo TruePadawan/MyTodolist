@@ -16,8 +16,8 @@ Storage.prototype.getObj = function (key) {
 };
 
 /* Create a key-value pair in local storage when the app is initially run for the very first time */
-
-if (window.localStorage.getObj("projects") === null) {
+let projects = window.localStorage.getObj("projects");
+if (projects === null || Object.keys(projects).length === 0) {
   let projectItem = createProjectItem("Default", true);
   let defaultProjectsList = {
     [projectItem.id] : projectItem
