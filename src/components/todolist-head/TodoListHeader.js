@@ -8,7 +8,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ButtonUnstyled from "@mui/base/ButtonUnstyled";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import NewTaskDialog from "./NewTaskDialog";
+import NewItem from "./NewItem/NewItem";
 
 import "./TodoListHeader.css";
 
@@ -95,7 +95,7 @@ const TodoListHeader = () => {
   return (
     <>
       {newTaskDialogOpened && (
-        <NewTaskDialog closeDialog={closeDialogHandler} />
+        <NewItem closeDialog={closeDialogHandler} />
       )}
       <div className="todolist--header-outer">
         <DateTime />
