@@ -1,18 +1,10 @@
-import { useState, useContext } from "react";
-import TodoListContext from "../../context/TodoListContext";
+import { useState } from "react";
 import EditTodoItemDialog from "../EditTodoItem/EditTodoItemDialog";
 
 import styles from "./TodoItem.module.css";
 
 const TodoItem = (props) => {
-  const { contextData } = useContext(TodoListContext);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-
-  const itemIndex = contextData.taskList.findIndex(
-    (item) => Object.keys(item)[0] === props.id
-  );
-
-  let isTaskDone = contextData.taskList[itemIndex][props.id].complete;
 
   function openEditDialog() {
     setIsEditDialogOpen(true);
@@ -29,13 +21,13 @@ const TodoItem = (props) => {
           closeDialog={closeEditDialog}
           currentValue={props.title}
           itemID={props.id}
-          isTaskComplete={isTaskDone}
+          isTaskComplete={props.done}
         />
       )}
 
       <li
         className={`${styles["todolist-item"]} ${
-          styles[isTaskDone ? "task_done" : ""]
+          styles[props.done ? "task_done" : ""]
         }`}
       >
         <p>{props.title}</p>
