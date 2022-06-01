@@ -1,7 +1,6 @@
-import { useContext, useState, useRef } from "react";
+import { useContext, useRef } from "react";
 import TodoListContext from "../../../context/TodoListContext";
 import Modal from "../../../modal/Modal";
-
 import DoneIcon from '@mui/icons-material/Done';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -13,7 +12,7 @@ const TodoItemDetails = (props) => {
   const dueDateFieldRef = useRef();
   const descFieldRef = useRef();
 
-  const { projects, setProjects, MainController, userSignedIn, activeProjectID } = useContext(TodoListContext);
+  const { setProjects, activeProjectID } = useContext(TodoListContext);
 
   function updateItemData(e)
   {
