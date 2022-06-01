@@ -3,15 +3,15 @@ import { signInWithPopup, signOut } from "firebase/auth";
 import { onValue, ref } from "firebase/database";
 import { auth, database, googleProvider } from "./firebase/firebase_init";
 import { DB_actions } from "./functions/firebase_db";
-
+import { appManager } from "./managers/appManager";
 import Button from "@mui/material/Button";
 import GoogleIcon from "@mui/icons-material/Google";
-
 import Header from "./components/header/Header";
 import SideBar from "./components/sidebar/sidebar";
 import TodoListContext from "./components/context/TodoListContext";
 import TodoListHeader from "./components/todolist-head/TodoListHeader";
 import TodoListBody from "./components/todolist-body/TodoListBody";
+
 import "./App.css";
 
 function App() {
@@ -19,51 +19,61 @@ function App() {
     sidebarState,
     projects,
     setProjects,
-    MainController,
     activeProjectID,
+    userSignedIn, setUserSignedIn,
+    userID, setUserID,
   } = useContext(TodoListContext);
   const signedInIndicatorRef = useRef(null);
-  const [signInBtnText, setSignInBtnText] = useState("Sign In");
+  const [user, setUser] = useState("Sign In");
 
-  const loadTodoItemsFromDB = useCallback((snapshot) => {
-    const todoList = DB_actions.getTodoItemsFromDB(snapshot);
-    setProjects({ taskList: todoList });
-  }, [setProjects]);
+  const loadAppData = useCallback((snapshot) => {
+    const data = DB_actions.getAppData(snapshot);
+
+    console.log('appdata', data);
+    if (data === null)
+    {
+      appManager.addProjectItem(true, {
+        title : "Default",
+        active : true,
+        todos : {}
+      }, userID);
+    }
+  }, []);
 
   /* When app loads, sign in the user if there was a previous sign in */
   useEffect(() => {
     auth.onAuthStateChanged(() => {
-      if (
-        auth.currentUser &&
-        signedInIndicatorRef.current.textContent === "Sign In"
-      ) {
-        setSignInBtnText(auth.currentUser.email);
+      if (auth.currentUser && !userSignedIn)
+      {
+        setUser(auth.currentUser.displayName);
+        setUserSignedIn(true);
+        setUserID(auth.currentUser.uid);
 
-        MainController.userLoggedIn = true;
-        MainController.userID = auth.currentUser.uid;
-
-        const todoItemsDBRef = ref(database, `/${auth.currentUser.uid}/items`);
-        onValue(todoItemsDBRef, loadTodoItemsFromDB);
+        const projectsDataRef = ref(database, `/${auth.currentUser.uid}/projects`);
+        onValue(projectsDataRef, loadAppData);
       }
     });
-  }, [loadTodoItemsFromDB, MainController]);
+  }, [loadAppData]);
 
   const signInWithGoogle = async () => {
     // IF THERE IS NO USER CURRENTLY LOGGED IN, LOGIN. ELSE, SIGN OUT
-    if (auth.currentUser === null) {
+    if (auth.currentUser === null)
+    {
       try {
         await signInWithPopup(auth, googleProvider);
       } catch (error) {
         alert(error);
       }
-    } else {
+    }
+    else
+    {
       await signOut(auth);
 
-      MainController.userLoggedIn = false;
-      MainController.userID = "";
+      setUser("Sign In");
+      setUserSignedIn(false);
+      setUserID("");
 
-      setSignInBtnText("Sign In");
-      setProjects({ taskList: window.localStorage.getObj("taskList") }); // WHEN THE USER SIGNS OUT, LOAD TODOITEMS FROM LOCAL STORAGE
+      setProjects(window.localStorage.getObj("projects")); // WHEN THE USER SIGNS OUT, LOAD TODOITEMS FROM LOCAL STORAGE
     }
   };
 
@@ -88,7 +98,7 @@ function App() {
           variant="outlined"
           startIcon={<GoogleIcon />}
           onClick={signInWithGoogle}>
-            <span ref={signedInIndicatorRef}>{signInBtnText}</span>
+            <span ref={signedInIndicatorRef}>{user}</span>
           </Button>
         </SideBar>
         <section className="container" aria-labelledby="currentProjectTitle">
