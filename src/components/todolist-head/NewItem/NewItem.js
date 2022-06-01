@@ -11,7 +11,6 @@ const NewItem = (props) => {
   const dueDateRef = useRef();
   const descRef = useRef();
   const { userSignedIn,
-          activeProjectID,
           projects, setProjects,
           createDefaultProject } = useContext(TodoListContext);
 
@@ -28,6 +27,7 @@ const NewItem = (props) => {
       desc,
       done,
     };
+    const activeProjectID = appManager.activeProjectID;
 
     try {
       if (activeProjectID === null)
