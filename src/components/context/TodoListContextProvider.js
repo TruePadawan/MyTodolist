@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import TodoListContext from "./TodoListContext";
-import { persistProjectsListData, getActiveProjectID } from "../../functions/projects";
+import { persistProjectsListData, getActiveProjectID, createProjectItem } from "../../functions/projects";
 import { MainController } from "../../controller/controller";
 
 const TodoListContextProvider = (props) => {
@@ -8,6 +8,15 @@ const TodoListContextProvider = (props) => {
   const [userSignedIn, setUserSignedIn] = useState(false);
   const [sidebarState, setSideBarState] = useState("opened");
   const [activeProjectID, setActiveProjectID] = useState(getActiveProjectID(projects));
+
+  function createDefaultProject() {
+    let projectItem = createProjectItem("Default", true);
+    let defaultProjectsList = {
+      [projectItem.id]: projectItem,
+    };
+    window.localStorage.setObj("projects", defaultProjectsList);
+    setProjects(window.localStorage.getObj("projects"));
+  }
 
   useEffect(() => {
     persistProjectsListData(projects);
@@ -24,7 +33,8 @@ const TodoListContextProvider = (props) => {
         userSignedIn,
         setUserSignedIn,
         activeProjectID,
-        setActiveProjectID
+        setActiveProjectID,
+        createDefaultProject,
       }}
     >
       {props.children}
