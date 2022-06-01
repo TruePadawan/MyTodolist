@@ -31,7 +31,6 @@ class AppManager {
 
     #todoItemDB(data, projectID)
     {
-        console.log(`storing ${data} in DB`);
         DB_actions.addTodoItem(this.uid, projectID, data);
     }
 
