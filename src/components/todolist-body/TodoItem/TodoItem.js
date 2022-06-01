@@ -1,23 +1,25 @@
 import { useState } from "react";
-import EditTodoItemDialog from "../EditTodoItem/EditTodoItemDialog";
+import TodoItemDetails from "./TodoItemDetails/TodoItemDetails";
 
 import styles from "./TodoItem.module.css";
 
 const TodoItem = (props) => {
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   function openEditDialog() {
-    setIsEditDialogOpen(true);
+    setOpenDetailsDialog(true);
   }
 
   function closeEditDialog() {
-    setIsEditDialogOpen(false);
+    setOpenDetailsDialog(false);
   }
+
+  let componentClassName = `${styles["todolist-item"]} ${styles[props.done ? "task_done" : ""]}`;
 
   return (
     <>
-      {isEditDialogOpen && (
-        <EditTodoItemDialog
+      {openDetailsDialog && (
+        <TodoItemDetails
           closeDialog={closeEditDialog}
           currentValue={props.title}
           itemID={props.id}
@@ -25,15 +27,9 @@ const TodoItem = (props) => {
         />
       )}
 
-      <li
-        className={`${styles["todolist-item"]} ${
-          styles[props.done ? "task_done" : ""]
-        }`}
-      >
+      <li className={componentClassName}>
         <p>{props.title}</p>
-        <button onClick={openEditDialog} type="button">
-          Edit
-        </button>
+        <button onClick={openEditDialog} type="button">Edit</button>
       </li>
     </>
   );
