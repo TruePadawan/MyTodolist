@@ -13,73 +13,49 @@ const TodoItemDetails = (props) => {
   const dueDateFieldRef = useRef();
   const descFieldRef = useRef();
 
-  const { projects, setProjects, MainController, userSignedIn } = useContext(TodoListContext);
+  const { projects, setProjects, MainController, userSignedIn, activeProjectID } = useContext(TodoListContext);
 
-  function updateItemTitle(e) {
+  function updateItemData(e)
+  {
     e.preventDefault();
+    const title = titleFieldRef.current.value;
+    const dueDate = dueDateFieldRef.current.value;
+    const desc = descFieldRef.current.value;
+
+    setProjects((projects) => {
+      projects[activeProjectID].todos[props.itemID].title = title;
+      projects[activeProjectID].todos[props.itemID].dueDate = dueDate;
+      projects[activeProjectID].todos[props.itemID].desc = desc;
+
+      return { ...projects };
+    });
 
     props.closeDialog();
   }
 
-  function setItemCompleteOrNot(e) {
-    e.preventDefault();
-    
-    if (!MainController.userLoggedIn)
-    {
-      setProjects((currentprojects) => {
-        const itemIndex = currentprojects.taskList.findIndex((item) => Object.keys(item)[0] === props.itemID);
+  function setItemStatus()
+  {
+    setProjects((projects) => {
+      let currentStatus = projects[activeProjectID].todos[props.itemID].done;
+      projects[activeProjectID].todos[props.itemID].done = !currentStatus;
+      return { ...projects }
+    });
 
-        if (itemIndex !== -1) {
-          const item = currentprojects.taskList[itemIndex];
-          item[props.itemID].complete = !item[props.itemID].complete;
-
-          currentprojects.taskList[itemIndex] = item;
-          let updatedContextValue = { taskList: currentprojects.taskList };
-          window.localStorage.setObj("taskList", currentprojects.taskList);
-
-          return updatedContextValue;
-        }
-        return currentprojects;
-      });
-    }
-    else {
-      MainController.updateTodoItemInDB(props.itemID, {
-        complete: !props.isTaskComplete
-      });
-    }
     props.closeDialog();
   }
 
-  function deleteTodoItem(e) {
-    e.preventDefault();
-
-    if (!MainController.userLoggedIn)
-    {
-      setProjects((currentprojects) => {
-        const itemIndex = currentprojects.taskList.findIndex((item) => Object.keys(item)[0] === props.itemID);
-        
-        if (itemIndex !== -1) {
-          currentprojects.taskList.splice(itemIndex, 1);
-
-          const updatedContextValue = { taskList: currentprojects.taskList };
-
-          window.localStorage.setObj("taskList", updatedContextValue.taskList);
-
-          return updatedContextValue;
-        }
-        return currentprojects;
-      });
-    }
-    else {
-      MainController.deleteTodoItemFromDB(props.itemID);
-    }
-
+  function deleteItem()
+  {
+    setProjects((projects) => {
+      delete projects[activeProjectID].todos[props.itemID];
+      return { ...projects };
+    });
     props.closeDialog();
   }
 
   return (
     <Modal close={props.closeDialog} className="itemDetails">
-      <form className="itemDetailsForm">
+      <form className="itemDetailsForm" onSubmit={updateItemData}>
         <h3>Details</h3>
         <input
           required
@@ -88,7 +64,9 @@ const TodoItemDetails = (props) => {
           maxLength="100"
           defaultValue={props.itemData.title}
           ref={titleFieldRef} />
+
         <input required type="date" defaultValue={props.itemData.dueDate} ref={dueDateFieldRef} />
+
         <textarea
           required
           minLength="2"
@@ -96,16 +74,17 @@ const TodoItemDetails = (props) => {
           defaultValue={props.itemData.desc}
           ref={descFieldRef}>
         </textarea>
+
         <div className="itemDetailsFormBtns">
           <button className="saveBtn" type="submit">
             <SaveIcon /> Save
           </button>
 
-          <button onClick={setItemCompleteOrNot} className="setDoneOrNotDone" type="button">
+          <button onClick={setItemStatus} className="setDoneOrNotDone" type="button">
             <DoneIcon /> Mark Done/Not Done
           </button>
 
-          <button onClick={deleteTodoItem} className="deleteBtn" type="button">
+          <button onClick={deleteItem} className="deleteBtn" type="button">
             <DeleteIcon /> Delete
           </button>
         </div>
