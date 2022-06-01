@@ -4,16 +4,17 @@ import Modal from "../../../modal/Modal";
 import DoneIcon from '@mui/icons-material/Done';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from "@mui/icons-material/Delete";
+import { appManager } from "../../../../managers/appManager";
 
 import "./TodoItemDetails.css";
 
 const TodoItemDetails = (props) => {
+  const { setProjects } = useContext(TodoListContext);
   const titleFieldRef = useRef();
   const dueDateFieldRef = useRef();
   const descFieldRef = useRef();
-
-  const { setProjects, activeProjectID } = useContext(TodoListContext);
-
+  
+  const activeProjectID = appManager.activeProjectID;
   function updateItemData(e)
   {
     e.preventDefault();
