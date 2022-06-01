@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;400;500;700&display=swap');
+
 .backdrop {
   position: fixed;
   top: 0;
@@ -17,4 +19,41 @@
   border-radius: 10px;
   background-color: rgb(250, 222, 161);
   z-index: 100;
+}
+
+.addTodo, .itemDetails {
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.addTodo *, .itemDetails * {
+  font-family: inherit;
+}
+
+.addTodo h3, .itemDetails h3 {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.addTodo > form, .itemDetails > form {
+  padding: 0 1rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: medium;
+}
+
+.addTodo > form > input, .itemDetails > form > input {
+  font-size: 1rem;
+  color: rgb(100, 100, 100);
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid darksalmon;
+}
+
+.addTodo > form > input::placeholder,
+.addTodo > form > textarea::placeholder,
+.itemDetails > form > input::placeholder,
+.itemDetails > form > textarea::placeholder {
+  color: rgb(100, 100, 100);
+  font-size: medium;
 }
