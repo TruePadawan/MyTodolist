@@ -1,26 +1,36 @@
 import { useContext } from "react";
 import TodoListContext from "../context/TodoListContext";
 import { appManager } from "../../managers/appManager";
-import { createProjectItem, createJSXProjectItems } from "../../functions/projects";
+import { createJSXProjectItems } from "../../functions/projects";
 
 import styles from "./sidebar.module.css";
 
+
 const SideBar = (props) => {
-  const { projects, setProjects } = useContext(TodoListContext);
+  const { projects, setProjects, userSignedIn, userID } = useContext(TodoListContext);
 
   function addProject() {
-    const project = createProjectItem("Untitled");
+    if (!userSignedIn)
+    {
+      const project = appManager.addProjectItem(false, { title : "Untitled"});
 
-    setProjects((projects) => {
-      // IF THIS IS THE FIRST AND ONLY PROJECT ITEM, MAKE IT ACTIVE
-      if (Object.keys(projects).length === 0)
-      {
-        project.active = true;
-      }
+      setProjects((projects) => {
+        // IF THIS IS THE FIRST AND ONLY PROJECT ITEM, MAKE IT ACTIVE
+        if (Object.keys(projects).length === 0)
+        {
+          project.active = true;
+        }
 
-      projects[project.id] = project;
-      return { ...projects };
-    });
+        projects[project.id] = project;
+        return { ...projects };
+      });
+      return;
+    }
+    appManager.addProjectItem(true, {
+      title : "Untitled",
+      active : false,
+      todos : {}
+    }, userID);
   }
 
   const projectsList = createJSXProjectItems(projects);
