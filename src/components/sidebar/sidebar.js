@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import TodoListContext from "../context/TodoListContext";
+import { appManager } from "../../managers/appManager";
 import { createProjectItem, createJSXProjectItems } from "../../functions/projects";
 
 import styles from "./sidebar.module.css";
