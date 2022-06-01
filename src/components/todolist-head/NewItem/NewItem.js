@@ -4,7 +4,7 @@ import { todoManager } from "../../../managers/todoManager";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import Modal from "../../modal/Modal";
 
-import styles from "./NewItem.module.css";
+import "./NewItem.css";
 
 const NewItem = (props) => {
   const titleRef = useRef();
@@ -52,9 +52,9 @@ const NewItem = (props) => {
   }
 
   return (
-    <Modal className={styles["addTodo"]} close={props.closeDialog}>
-      <h3>New Item</h3>
+    <Modal className="addTodo" close={props.closeDialog}>
       <form onSubmit={addTodo}>
+        <h3>New Item</h3>
         <input
           ref={titleRef}
           minLength="2"
@@ -69,10 +69,10 @@ const NewItem = (props) => {
           ref={descRef}
           placeholder="Review calculus in math before saturday"
           required
-          className={styles["desc"]}
+          className="desc"
           minLength="2"
         ></textarea>
-        <button className={styles["addTodoBtn"]}>
+        <button className="addTodoBtn">
           <AddTaskIcon /> Add
         </button>
       </form>
