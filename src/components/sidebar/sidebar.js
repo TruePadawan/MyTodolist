@@ -7,10 +7,10 @@ import styles from "./sidebar.module.css";
 
 
 const SideBar = (props) => {
-  const { projects, setProjects, userSignedIn } = useContext(TodoListContext);
+  const { projects, setProjects } = useContext(TodoListContext);
 
   function addProject() {
-    if (!userSignedIn)
+    if (!appManager.userSignedIn)
     {
       const project = appManager.addProjectItem(false, { title : "Untitled"});
 
