@@ -1,12 +1,13 @@
 import { useState, useContext } from "react";
 import TodoListContext from "../../context/TodoListContext";
 import TodoItemDetails from "./TodoItemDetails/TodoItemDetails";
+import { appManager } from "../../../managers/appManager";
 
 import styles from "./TodoItem.module.css";
 
 const TodoItem = (props) => {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-  const { projects, activeProjectID } = useContext(TodoListContext);
+  const { projects } = useContext(TodoListContext);
 
   function openEditDialog() {
     setOpenDetailsDialog(true);
@@ -16,6 +17,7 @@ const TodoItem = (props) => {
     setOpenDetailsDialog(false);
   }
 
+  const activeProjectID = appManager.activeProjectID;
   let componentClassName = `${styles["todolist-item"]} ${styles[props.done ? "task_done" : ""]}`;
   let data = projects[activeProjectID].todos[props.id];
   
