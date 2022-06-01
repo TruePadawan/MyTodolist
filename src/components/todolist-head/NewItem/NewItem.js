@@ -10,7 +10,7 @@ const NewItem = (props) => {
   const titleRef = useRef();
   const dueDateRef = useRef();
   const descRef = useRef();
-  const { userSignedIn, activeProjectID, setProjects } = useContext(TodoListContext);
+  const { userSignedIn, activeProjectID, setProjects, createDefaultProject } = useContext(TodoListContext);
 
   function addTodo(e) {
     e.preventDefault();
@@ -32,7 +32,7 @@ const NewItem = (props) => {
 
       setProjects((projects) => {
         try {
-          if (activeProjectID === null) throw new Error("No Projects");
+          if (activeProjectID === null) throw new Error("No Projects, Creating Default Project...");
           if (activeProjectID in projects) {
             projects[activeProjectID].todos[itemID] = item;
             return { ...projects };
@@ -41,6 +41,10 @@ const NewItem = (props) => {
         }
         catch (error) {
           alert(error);
+          if (Object.keys(projects).length === 0) // IF THERE IS NO PROJECT, CREATE A DEFAULT ONE
+          {
+            createDefaultProject();
+          }
         }
       });
     }
