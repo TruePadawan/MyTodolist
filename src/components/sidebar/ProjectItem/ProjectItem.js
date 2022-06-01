@@ -3,10 +3,11 @@ import TodoListContext from "../../context/TodoListContext";
 import { persistProjectsListData, setActiveProject, setNewActiveProject } from "../../../functions/projects";
 import { appManager } from "../../../managers/appManager";
 import TrashImg from "./resources/trash.png";
+
 import styles from "./ProjectItem.module.css";
 
 const ProjectItem = (props) => {
-  const { setProjects, userSignedIn } = useContext(TodoListContext);
+  const { setProjects } = useContext(TodoListContext);
 
   if (props.active === true)
   {
@@ -26,7 +27,7 @@ const ProjectItem = (props) => {
   {
     setProjects((projects) => {
       projects[props.id].title = e.target.innerText;
-      persistProjectsListData(projects, userSignedIn);
+      persistProjectsListData(projects, appManager.userSignedIn);
       return projects; // DONT REDRAW PAGE WHEN USER CHANGES PROJECT TITLE
     });
     if (props.active === true)
