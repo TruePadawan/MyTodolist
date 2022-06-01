@@ -54,7 +54,7 @@ const DateTime = () => {
 
 
 const TodoListHeader = () => {
-  const { setContextData } = useContext(TodoListContext);
+  const { setProjects } = useContext(TodoListContext);
   const [newTaskDialogOpened, setNewTaskDialogOpened] = useState(false);
 
   function openDialogHandler() {
@@ -69,7 +69,7 @@ const TodoListHeader = () => {
     const btnValue = e.target.textContent;
 
     if (btnValue === "Done") {
-      setContextData(currentContextData => {
+      setProjects(currentContextData => {
         let sortedTaskList = sortBasedOnCompletion(currentContextData.taskList);
         
         if (!MainController.userLoggedIn)
@@ -80,7 +80,7 @@ const TodoListHeader = () => {
       });
     }
     else if (btnValue === "Not Done") {
-      setContextData(currentContextData => {
+      setProjects(currentContextData => {
         let sortedTaskList = sortBasedOnUncompletion(currentContextData.taskList);
         
         if (!MainController.userLoggedIn)

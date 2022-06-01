@@ -6,12 +6,12 @@ import DoneIcon from '@mui/icons-material/Done';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import styles from "./TodoItemDetails.css";
+import "./TodoItemDetails.css";
 
 const TodoItemDetails = (props) => {
   const [editItemInputValue, setEditItemInputValue] = useState(props.currentValue);
 
-  const { contextData, setContextData, MainController, userSignedIn } = useContext(TodoListContext);
+  const { projects, setProjects, MainController, userSignedIn } = useContext(TodoListContext);
 
   function updateItemTitle(e) {
     e.preventDefault();
@@ -20,23 +20,23 @@ const TodoItemDetails = (props) => {
     
     if (!MainController.userLoggedIn)
     {
-      const itemIndex = contextData.taskList.findIndex((item) => Object.keys(item)[0] === props.itemID);
-      let currentTitle = contextData.taskList[itemIndex][props.itemID].title;
+      const itemIndex = projects.taskList.findIndex((item) => Object.keys(item)[0] === props.itemID);
+      let currentTitle = projects.taskList[itemIndex][props.itemID].title;
       
       /* Update item only if the new value isn't the same as the already-stored title for task item to be updated */
       if (currentTitle.trim() !== newTitle.trim()) {
-        setContextData((currentContextData) => {
+        setProjects((currentprojects) => {
           if (itemIndex !== -1) {
-            const item = currentContextData.taskList[itemIndex];
+            const item = currentprojects.taskList[itemIndex];
             item[props.itemID].title = newTitle;
 
-            currentContextData.taskList[itemIndex] = item;
-            const updatedContextValue = { taskList: currentContextData.taskList };
+            currentprojects.taskList[itemIndex] = item;
+            const updatedContextValue = { taskList: currentprojects.taskList };
 
             window.localStorage.setObj("taskList", updatedContextValue.taskList);
             return updatedContextValue;
           }
-          return currentContextData;
+          return currentprojects;
         });
       }
     }
@@ -52,20 +52,20 @@ const TodoItemDetails = (props) => {
     
     if (!MainController.userLoggedIn)
     {
-      setContextData((currentContextData) => {
-        const itemIndex = currentContextData.taskList.findIndex((item) => Object.keys(item)[0] === props.itemID);
+      setProjects((currentprojects) => {
+        const itemIndex = currentprojects.taskList.findIndex((item) => Object.keys(item)[0] === props.itemID);
 
         if (itemIndex !== -1) {
-          const item = currentContextData.taskList[itemIndex];
+          const item = currentprojects.taskList[itemIndex];
           item[props.itemID].complete = !item[props.itemID].complete;
 
-          currentContextData.taskList[itemIndex] = item;
-          let updatedContextValue = { taskList: currentContextData.taskList };
-          window.localStorage.setObj("taskList", currentContextData.taskList);
+          currentprojects.taskList[itemIndex] = item;
+          let updatedContextValue = { taskList: currentprojects.taskList };
+          window.localStorage.setObj("taskList", currentprojects.taskList);
 
           return updatedContextValue;
         }
-        return currentContextData;
+        return currentprojects;
       });
     }
     else {
@@ -81,19 +81,19 @@ const TodoItemDetails = (props) => {
 
     if (!MainController.userLoggedIn)
     {
-      setContextData((currentContextData) => {
-        const itemIndex = currentContextData.taskList.findIndex((item) => Object.keys(item)[0] === props.itemID);
+      setProjects((currentprojects) => {
+        const itemIndex = currentprojects.taskList.findIndex((item) => Object.keys(item)[0] === props.itemID);
         
         if (itemIndex !== -1) {
-          currentContextData.taskList.splice(itemIndex, 1);
+          currentprojects.taskList.splice(itemIndex, 1);
 
-          const updatedContextValue = { taskList: currentContextData.taskList };
+          const updatedContextValue = { taskList: currentprojects.taskList };
 
           window.localStorage.setObj("taskList", updatedContextValue.taskList);
 
           return updatedContextValue;
         }
-        return currentContextData;
+        return currentprojects;
       });
     }
     else {

@@ -10,7 +10,7 @@ const NewItem = (props) => {
   const titleRef = useRef();
   const dueDateRef = useRef();
   const descRef = useRef();
-  const { userSignedIn, activeProjectID, setContextData } = useContext(TodoListContext);
+  const { userSignedIn, activeProjectID, setProjects } = useContext(TodoListContext);
 
   function addTodo(e) {
     e.preventDefault();
@@ -30,7 +30,7 @@ const NewItem = (props) => {
       const item = todoManager.addTodoItem(false, itemData);
       const itemID = item.id;
 
-      setContextData((projects) => {
+      setProjects((projects) => {
         try {
           if (activeProjectID === null) throw new Error("No Projects");
           if (activeProjectID in projects) {

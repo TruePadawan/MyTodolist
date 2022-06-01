@@ -5,12 +5,12 @@ import { createProjectItem, createJSXProjectItems } from "../../functions/projec
 import styles from "./sidebar.module.css";
 
 const SideBar = (props) => {
-  const { contextData, setContextData } = useContext(TodoListContext);
+  const { projects, setProjects } = useContext(TodoListContext);
 
   function addProject() {
     const project = createProjectItem("Untitled");
 
-    setContextData((projects) => {
+    setProjects((projects) => {
       // IF THIS IS THE FIRST AND ONLY PROJECT ITEM, MAKE IT ACTIVE
       if (Object.keys(projects).length === 0)
       {
@@ -22,7 +22,7 @@ const SideBar = (props) => {
     });
   }
 
-  const projectsList = createJSXProjectItems(contextData);
+  const projectsList = createJSXProjectItems(projects);
 
   return (
     <aside className={`${styles["sidebar"]} ${styles[props.state]}`}>

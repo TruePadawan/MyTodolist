@@ -5,7 +5,7 @@ import TrashImg from "./resources/trash.png";
 import styles from "./ProjectItem.module.css";
 
 const ProjectItem = (props) => {
-  const { setContextData, userSignedIn, setActiveProjectID } = useContext(TodoListContext);
+  const { setProjects, userSignedIn, setActiveProjectID } = useContext(TodoListContext);
 
   let itemClass = `${styles["projectItem"]} ${(props.active === true) ? styles["active"] : ""}`;
   if (props.active === true)
@@ -16,7 +16,7 @@ const ProjectItem = (props) => {
   function makeActive()
   {
     if (props.active === true) return;
-    setContextData((projects) => {
+    setProjects((projects) => {
       let updatedProjects = setActiveProject(props.id,projects);
       return updatedProjects;
     });
@@ -24,7 +24,7 @@ const ProjectItem = (props) => {
 
   function updateProjectTitle(e)
   {
-    setContextData((projects) => {
+    setProjects((projects) => {
       projects[props.id].title = e.target.innerText;
       persistProjectsListData(projects, userSignedIn);
       return projects; // DONT REDRAW PAGE WHEN USER CHANGES PROJECT TITLE
@@ -39,14 +39,14 @@ const ProjectItem = (props) => {
   {
     e.stopPropagation(); // PREVENT CLICK EVENT FROM PROPAGATING TO BUTTON
 
-    setContextData((projects) => {
+    setProjects((projects) => {
       delete projects[props.id];
       return { ...projects };
     });
     
     if (props.active === true)
     {
-      setContextData((projects) => {
+      setProjects((projects) => {
         let newList = setNewActiveProject(projects);
         if (newList !== null)
         {

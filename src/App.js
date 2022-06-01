@@ -15,18 +15,20 @@ import TodoListBody from "./components/todolist-body/TodoListBody";
 import "./App.css";
 
 function App() {
-  const { sidebarState,
-          contextData,
-          setContextData,
-          MainController,
-          activeProjectID } = useContext(TodoListContext);
+  const {
+    sidebarState,
+    projects,
+    setProjects,
+    MainController,
+    activeProjectID,
+  } = useContext(TodoListContext);
   const signedInIndicatorRef = useRef(null);
   const [signInBtnText, setSignInBtnText] = useState("Sign In");
 
   const loadTodoItemsFromDB = useCallback((snapshot) => {
     const todoList = DB_actions.getTodoItemsFromDB(snapshot);
-    setContextData({ taskList: todoList });
-  }, [setContextData]);
+    setProjects({ taskList: todoList });
+  }, [setProjects]);
 
   /* When app loads, sign in the user if there was a previous sign in */
   useEffect(() => {
@@ -61,12 +63,12 @@ function App() {
       MainController.userID = "";
 
       setSignInBtnText("Sign In");
-      setContextData({ taskList: window.localStorage.getObj("taskList") }); // WHEN THE USER SIGNS OUT, LOAD TODOITEMS FROM LOCAL STORAGE
+      setProjects({ taskList: window.localStorage.getObj("taskList") }); // WHEN THE USER SIGNS OUT, LOAD TODOITEMS FROM LOCAL STORAGE
     }
   };
 
   const mainClassName = sidebarState === "closed" ? "sidebarClosed" : "sidebarOpened";
-  let activeProject = contextData[activeProjectID];
+  let activeProject = projects[activeProjectID];
   // IN CASE OF NO PROJECT ITEMS
   if (activeProjectID === null)
   {
