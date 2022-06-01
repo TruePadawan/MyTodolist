@@ -38,7 +38,7 @@ function App() {
         todos : {}
       }, userID);
     }
-  }, []);
+  }, [userID]);
 
   /* When app loads, sign in the user if there was a previous sign in */
   useEffect(() => {
@@ -53,7 +53,7 @@ function App() {
         onValue(projectsDataRef, loadAppData);
       }
     });
-  }, [loadAppData]);
+  }, [loadAppData, setUserID, setUserSignedIn, userSignedIn]);
 
   const signInWithGoogle = async () => {
     // IF THERE IS NO USER CURRENTLY LOGGED IN, LOGIN. ELSE, SIGN OUT
