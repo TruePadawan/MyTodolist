@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import TodoListContext from "../../../context/TodoListContext";
 import Modal from "../../../modal/Modal";
 
@@ -9,41 +9,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import "./TodoItemDetails.css";
 
 const TodoItemDetails = (props) => {
-  const [editItemInputValue, setEditItemInputValue] = useState(props.currentValue);
+  const titleFieldRef = useRef();
+  const dueDateFieldRef = useRef();
+  const descFieldRef = useRef();
 
   const { projects, setProjects, MainController, userSignedIn } = useContext(TodoListContext);
 
   function updateItemTitle(e) {
     e.preventDefault();
 
-    const newTitle = document.getElementById("editItemInput").value;
-    
-    if (!MainController.userLoggedIn)
-    {
-      const itemIndex = projects.taskList.findIndex((item) => Object.keys(item)[0] === props.itemID);
-      let currentTitle = projects.taskList[itemIndex][props.itemID].title;
-      
-      /* Update item only if the new value isn't the same as the already-stored title for task item to be updated */
-      if (currentTitle.trim() !== newTitle.trim()) {
-        setProjects((currentprojects) => {
-          if (itemIndex !== -1) {
-            const item = currentprojects.taskList[itemIndex];
-            item[props.itemID].title = newTitle;
-
-            currentprojects.taskList[itemIndex] = item;
-            const updatedContextValue = { taskList: currentprojects.taskList };
-
-            window.localStorage.setObj("taskList", updatedContextValue.taskList);
-            return updatedContextValue;
-          }
-          return currentprojects;
-        });
-      }
-    }
-    else {
-      MainController.updateTodoItemInDB(props.itemID,{title: newTitle});
-    }
-    
     props.closeDialog();
   }
 
@@ -108,22 +82,30 @@ const TodoItemDetails = (props) => {
       <form className="itemDetailsForm">
         <h3>Details</h3>
         <input
+          required
           autoFocus
           minLength="2"
           maxLength="100"
-          value={props.itemData.title} />
-        <input type="date" value={props.itemData.dueDate} required />
-        <textarea required minLength="2" className="desc" value={props.itemData.desc}></textarea>
+          defaultValue={props.itemData.title}
+          ref={titleFieldRef} />
+        <input required type="date" defaultValue={props.itemData.dueDate} ref={dueDateFieldRef} />
+        <textarea
+          required
+          minLength="2"
+          className="desc"
+          defaultValue={props.itemData.desc}
+          ref={descFieldRef}>
+        </textarea>
         <div className="itemDetailsFormBtns">
-          <button onClick={updateItemTitle} className="saveBtn">
+          <button className="saveBtn" type="submit">
             <SaveIcon /> Save
           </button>
 
-          <button onClick={setItemCompleteOrNot} className="setDoneOrNotDone">
+          <button onClick={setItemCompleteOrNot} className="setDoneOrNotDone" type="button">
             <DoneIcon /> Mark Done/Not Done
           </button>
 
-          <button onClick={deleteTodoItem} className="deleteBtn">
+          <button onClick={deleteTodoItem} className="deleteBtn" type="button">
             <DeleteIcon /> Delete
           </button>
         </div>
