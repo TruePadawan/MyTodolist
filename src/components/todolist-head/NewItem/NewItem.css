@@ -1,0 +1,20 @@
+.addTodoBtn {
+  border: none;
+  height: 2.5rem;
+  background-color: lightgreen;
+  border-radius: 10px;
+  box-shadow: 1px 1px 5px grey;
+}
+
+.addTodoBtn svg {
+  vertical-align: -7px;
+  margin-right: 4px;
+}
+
+.addTodoBtn:hover {
+  background-color: rgb(108, 185, 108);
+}
+
+.addTodoBtn:active {
+  background-color: lightgreen;
+}
