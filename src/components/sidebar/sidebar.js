@@ -7,7 +7,7 @@ import styles from "./sidebar.module.css";
 
 
 const SideBar = (props) => {
-  const { projects, setProjects, userSignedIn, userID } = useContext(TodoListContext);
+  const { projects, setProjects, userSignedIn } = useContext(TodoListContext);
 
   function addProject() {
     if (!userSignedIn)
@@ -30,7 +30,7 @@ const SideBar = (props) => {
       title : "Untitled",
       active : false,
       todos : {}
-    }, userID);
+    });
   }
 
   const projectsList = createJSXProjectItems(projects);
