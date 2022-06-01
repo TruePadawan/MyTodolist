@@ -7,7 +7,6 @@ import styles from "./ProjectItem.module.css";
 const ProjectItem = (props) => {
   const { setProjects, userSignedIn, setActiveProjectID } = useContext(TodoListContext);
 
-  let itemClass = `${styles["projectItem"]} ${(props.active === true) ? styles["active"] : ""}`;
   if (props.active === true)
   {
     setActiveProjectID(props.id);
@@ -59,6 +58,7 @@ const ProjectItem = (props) => {
     }
   }
 
+  let itemClass = `${styles["projectItem"]} ${(props.active === true) ? styles["active"] : ""}`;
   return (
     <>
       <button type="button" className={itemClass} onClick={makeActive}>
