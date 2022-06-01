@@ -6,7 +6,7 @@ import styles from "./TodoItem.module.css";
 
 const TodoItem = (props) => {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-  const { projects } = useContext(TodoListContext);
+  const { projects, activeProjectID } = useContext(TodoListContext);
 
   function openEditDialog() {
     setOpenDetailsDialog(true);
@@ -17,7 +17,7 @@ const TodoItem = (props) => {
   }
 
   let componentClassName = `${styles["todolist-item"]} ${styles[props.done ? "task_done" : ""]}`;
-  let data = projects[props.id];
+  let data = projects[activeProjectID].todos[props.id];
   
   return (
     <>
@@ -26,7 +26,7 @@ const TodoItem = (props) => {
           closeDialog={closeEditDialog}
           itemData={data}
           itemID={props.id}
-          isTaskComplete={props.done}
+          taskDone={props.done}
         />
       )}
 
