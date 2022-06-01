@@ -103,8 +103,6 @@ const TodoItemDetails = (props) => {
     props.closeDialog();
   }
 
-
-
   return (
     <Modal close={props.closeDialog} className="itemDetails">
       <form className="itemDetailsForm">
@@ -113,11 +111,9 @@ const TodoItemDetails = (props) => {
           autoFocus
           minLength="2"
           maxLength="100"
-          value={editItemInputValue}
-          onChange={(e) => setEditItemInputValue(e.target.value)}
-        />
-        <input type="date" required />
-        <textarea required minLength="2" className="desc"></textarea>
+          value={props.itemData.title} />
+        <input type="date" value={props.itemData.dueDate} required />
+        <textarea required minLength="2" className="desc" value={props.itemData.desc}></textarea>
         <div className="itemDetailsFormBtns">
           <button onClick={updateItemTitle} className="saveBtn">
             <SaveIcon /> Save
