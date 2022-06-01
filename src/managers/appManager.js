@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { createProjectItem } from "../functions/projects";
 import { DB_actions } from "../functions/firebase_db";
 
 class AppManager {
@@ -9,14 +10,19 @@ class AppManager {
         return data;
     }
 
-    #todoItemToDB(data, projectID)
+    #todoItemDB(data, projectID)
     {
         console.log(`storing ${data} in DB`);
     }
 
-    #projectItemLocal(data)
+    #projectItemLocal(title)
     {
+        return createProjectItem(title);
+    }
 
+    #projectItemDB(userID, data)
+    {
+        DB_actions.addProjectItem(userID, data);
     }
 
     addTodoItem(isUserSignedIn, data, projectID = "")
@@ -25,16 +31,17 @@ class AppManager {
         {
             return this.#todoItemLocal(data);
         }
-        this.#todoItemToDB(data, projectID);
+        this.#todoItemDB(data, projectID);
     }
 
-    // addProjectItem(isUserSignedIn, data)
-    // {
-    //     if (!isUserSignedIn)
-    //     {
-            
-    //     }
-    // }
+    addProjectItem(isUserSignedIn, data, userID = "")
+    {
+        if (!isUserSignedIn)
+        {
+            return this.#projectItemLocal(data.title);
+        }
+        this.#projectItemDB(userID, data);
+    }
 }
 
 export const appManager = new AppManager();
