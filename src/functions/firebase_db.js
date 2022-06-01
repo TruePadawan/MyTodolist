@@ -2,51 +2,77 @@ import { ref, push, remove, update } from "firebase/database";
 import { database } from "../firebase/firebase_init";
 
 export const DB_actions = {
-  addTodoItem: function (userID, todoItem) {
-    const todoItemsDBRef = ref(database, `/${userID}/items`);
+  addProjectItem: function (userID, projectItem) {
+    const databaseRef = ref(database, `/${userID}/projects`);
 
     try {
-      push(todoItemsDBRef, todoItem);
-    } catch (error) {
+      push(databaseRef, projectItem);
+    }
+    catch (error)
+    {
       alert(error.message);
     }
   },
 
-  updateTodoItem: function (userID, itemID, value) {
-    const itemRef = ref(database, `${userID}/items/${itemID}`);
+  addTodoItem: function (userID, projectID, todoItem) {
+    const databaseRef = ref(database, `/${userID}/projects/${projectID}`);
 
     try {
-      update(itemRef, value);
-    } catch (error) {
+      push(databaseRef, todoItem);
+    }
+    catch (error)
+    {
       alert(error.message);
     }
   },
 
-  deleteTodoItem: function (userID, itemID) {
-    const itemRef = ref(database, `${userID}/items/${itemID}`);
+  updateProjectItem: function (userID, projectID, value) {
+    const databaseRef = ref(database, `/${userID}/projects/${projectID}`);
 
     try {
-      remove(itemRef);
-    } catch (error) {
+      update(databaseRef, value);
+    }
+    catch (error)
+    {
       alert(error.message);
     }
   },
 
-  getTodoItemsFromDB: function (snapshot) {
-    const todoData = snapshot.val();
-    const todoList = [];
+  updateTodoItem: function (userID, projectID, itemID, value) {
+    const databaseRef = ref(database, `/${userID}/projects/${projectID}/${itemID}`);
 
-    for (let id in todoData) {
-      let todoItem = {
-        [id]: {
-          title: todoData[id].title,
-          complete: todoData[id].complete,
-        },
-      };
-
-      todoList.push(todoItem);
+    try {
+      update(databaseRef, value);
     }
-
-    return todoList;
+    catch (error) {
+      alert(error.message)
+    }
   },
+
+  deleteProjectItem: function (userID, projectID) {
+    const databaseRef = ref(database, `/${userID}/projects/${projectID}`);
+
+    try {
+      remove(databaseRef);
+    }
+    catch (error) {
+      alert(error.message);
+    }
+  },
+
+  deleteTodoItem: function (userID, projectID, itemID) {
+    const databaseRef = ref(database, `/${userID}/projects/${projectID}/${itemID}`);
+
+    try {
+      remove(databaseRef);
+    }
+    catch (error) {
+      alert(error.message)  
+    }
+  },
+
+  getAppData: function (snapshot) {
+    const data = snapshot.val();
+    return data;
+  }
 };
