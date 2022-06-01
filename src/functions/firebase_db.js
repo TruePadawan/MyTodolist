@@ -15,7 +15,7 @@ export const DB_actions = {
   },
 
   addTodoItem: function (userID, projectID, todoItem) {
-    const databaseRef = ref(database, `/${userID}/projects/${projectID}`);
+    const databaseRef = ref(database, `/${userID}/projects/${projectID}/todos`);
 
     try {
       push(databaseRef, todoItem);
