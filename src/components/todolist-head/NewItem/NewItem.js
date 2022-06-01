@@ -1,6 +1,6 @@
 import { useRef, useContext } from "react";
 import TodoListContext from "../../context/TodoListContext";
-import { todoManager } from "../../../managers/todoManager";
+import { appManager } from "../../../managers/appManager";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import Modal from "../../modal/Modal";
 
@@ -10,7 +10,10 @@ const NewItem = (props) => {
   const titleRef = useRef();
   const dueDateRef = useRef();
   const descRef = useRef();
-  const { userSignedIn, activeProjectID, setProjects, createDefaultProject } = useContext(TodoListContext);
+  const { userSignedIn,
+          activeProjectID,
+          projects, setProjects,
+          createDefaultProject } = useContext(TodoListContext);
 
   function addTodo(e) {
     e.preventDefault();
@@ -26,30 +29,42 @@ const NewItem = (props) => {
       done,
     };
 
-    if (!userSignedIn) {
-      const item = todoManager.addTodoItem(false, itemData);
-      const itemID = item.id;
+    try {
+      if (activeProjectID === null)
+      {
+        throw new Error("No Projects, Creating Default Project...");
+      }
 
-      setProjects((projects) => {
-        try {
-          if (activeProjectID === null) throw new Error("No Projects, Creating Default Project...");
-          if (activeProjectID in projects) {
-            projects[activeProjectID].todos[itemID] = item;
-            return { ...projects };
+      if (!userSignedIn) {
+        const item = appManager.addTodoItem(false, itemData);
+        const itemID = item.id;
+
+        setProjects((projects) => {
+          try {
+            if (activeProjectID in projects) {
+              projects[activeProjectID].todos[itemID] = item;
+              return { ...projects };
+            }
+            throw new Error(`Project with ID ${activeProjectID} not found`);
           }
-          throw new Error(`Project with ID ${activeProjectID} not found`);
-        }
-        catch (error) {
-          alert(error);
-          if (Object.keys(projects).length === 0) // IF THERE IS NO PROJECT, CREATE A DEFAULT ONE
-          {
-            createDefaultProject();
+          catch (error) {
+            alert(error.message);
           }
-        }
-      });
+        });
+
+      }
+      else {
+        appManager.addTodoItem(true, itemData, activeProjectID);
+      }
     }
-    else {
-      todoManager.addTodoItem(true, itemData);
+    catch (error) {
+      alert(error.message);
+
+      if (Object.keys(projects).length === 0)
+      {
+        // IF THERE IS NO PROJECT, CREATE A DEFAULT ONE
+        createDefaultProject();
+      }
     }
 
     props.closeDialog();
