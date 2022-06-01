@@ -3,9 +3,9 @@ import { createProjectItem } from "../functions/projects";
 import { DB_actions } from "../functions/firebase_db";
 
 class AppManager {
-    uid;
-    activeProjectID;
-    userSignedIn;
+    uid = null;
+    activeProjectID = null;
+    userSignedIn = false;
 
     setUID(id)
     {
