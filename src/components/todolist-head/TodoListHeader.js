@@ -19,7 +19,10 @@ const DateTime = () => {
 
   /* Update the time every 1 second */
   setTimeout(() => {
-    setCurrentTime(new Date().toLocaleTimeString());
+    setCurrentTime(new Date().toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit'
+    }));
   }, 1000);
 
   let currentDate = useMemo(() => {
