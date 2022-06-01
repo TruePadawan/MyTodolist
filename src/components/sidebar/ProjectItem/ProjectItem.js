@@ -44,8 +44,10 @@ const ProjectItem = (props) => {
       return { ...projects };
     });
     
+    // IF THE DELETED ITEM WAS THE ACTIVE PROJECT, SET A NEW PROJECT AS ACTIVE
     if (props.active === true)
     {
+      setActiveProjectID(null);
       setProjects((projects) => {
         let newList = setNewActiveProject(projects);
         if (newList !== null)
@@ -54,7 +56,6 @@ const ProjectItem = (props) => {
         }
         return {};
       });
-      setActiveProjectID(null);
     }
   }
 
