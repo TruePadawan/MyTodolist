@@ -1,15 +1,16 @@
 import { useContext } from "react";
 import TodoListContext from "../../context/TodoListContext";
 import { persistProjectsListData, setActiveProject, setNewActiveProject } from "../../../functions/projects";
+import { appManager } from "../../../managers/appManager";
 import TrashImg from "./resources/trash.png";
 import styles from "./ProjectItem.module.css";
 
 const ProjectItem = (props) => {
-  const { setProjects, userSignedIn, setActiveProjectID } = useContext(TodoListContext);
+  const { setProjects, userSignedIn } = useContext(TodoListContext);
 
   if (props.active === true)
   {
-    setActiveProjectID(props.id);
+    appManager.setActiveProjectID(props.id);
   }
 
   function makeActive()
@@ -46,7 +47,7 @@ const ProjectItem = (props) => {
     // IF THE DELETED ITEM WAS THE ACTIVE PROJECT, SET A NEW PROJECT AS ACTIVE
     if (props.active === true)
     {
-      setActiveProjectID(null);
+      appManager.setActiveProjectID(null);
       setProjects((projects) => {
         let newList = setNewActiveProject(projects);
         if (newList !== null)
