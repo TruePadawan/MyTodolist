@@ -10,9 +10,7 @@ const NewItem = (props) => {
   const titleRef = useRef();
   const dueDateRef = useRef();
   const descRef = useRef();
-  const { userSignedIn,
-          projects, setProjects,
-          createDefaultProject } = useContext(TodoListContext);
+  const { projects, setProjects, createDefaultProject } = useContext(TodoListContext);
 
   function addTodo(e) {
     e.preventDefault();
@@ -35,7 +33,7 @@ const NewItem = (props) => {
         throw new Error("No Projects, Creating Default Project...");
       }
 
-      if (!userSignedIn) {
+      if (!appManager.userSignedIn) {
         const item = appManager.addTodoItem(false, itemData);
         const itemID = item.id;
 
