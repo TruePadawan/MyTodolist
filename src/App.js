@@ -4,7 +4,7 @@ import { onValue, ref } from "firebase/database";
 import { auth, database, googleProvider } from "./firebase/firebase_init";
 import { DB_actions } from "./functions/firebase_db";
 import { appManager } from "./managers/appManager";
-import { getActiveProject, getLocalAppData, toLocalStorage } from "./functions/projects";
+import { getActiveProject, getActiveProjectID, getLocalAppData, setNewActiveProject, toLocalStorage } from "./functions/projects";
 import { v4 as uuidv4 } from "uuid";
 import Button from "@mui/material/Button";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -26,7 +26,6 @@ function App() {
   const loadAppData = useCallback(
     (snapshot) => {
       const data = DB_actions.getAppData(snapshot);
-      console.log('data from db', data);
       setLoading(false);
 
       // IF USER IS SIGNING IN FOR FIRST TIME, CREATE DEFAULT PROJECT
@@ -34,6 +33,12 @@ function App() {
       {
         const item = appManager.createProjectItem("Default", true);
         DB_actions.addProjectItem(appManager.uid, item);
+        return;
+      }
+      else if (getActiveProjectID(data) === null)
+      {
+        const updatedAppData = setNewActiveProject(data);
+        DB_actions.setProjects(appManager.uid, updatedAppData);
         return;
       }
       // ELSE LOAD APPDATA
