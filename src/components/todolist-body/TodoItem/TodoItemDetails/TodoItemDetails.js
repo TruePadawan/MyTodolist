@@ -35,7 +35,7 @@ const TodoItemDetails = (props) => {
       });
     }
     else {
-      DB_actions.updateTodoItem(appManager.uid, appManager.activeProjectID, { title, dueDate, desc });
+      DB_actions.updateTodoItem(appManager.uid, appManager.activeProjectID, props.itemID, { title, dueDate, desc });
     }
 
     props.closeDialog();
@@ -54,7 +54,7 @@ const TodoItemDetails = (props) => {
     }
     else {
       let currentStatus = projects[appManager.activeProjectID].todos[props.itemID].done;
-      DB_actions.updateTodoItem(appManager.uid, appManager.activeProjectID, { done : !currentStatus});
+      DB_actions.updateTodoItem(appManager.uid, appManager.activeProjectID, props.itemID, { done : !currentStatus });
     }
 
     props.closeDialog();
