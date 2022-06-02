@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useContext } from "react";
+import TodoListContext from "../context/TodoListContext";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ButtonUnstyled from "@mui/base/ButtonUnstyled";
 import NewItem from "./NewItem/NewItem";
@@ -50,6 +51,7 @@ const DateTime = () => {
 
 
 const TodoListHeader = () => {
+  const { noProjects } = useContext(TodoListContext);
   const [onAddNewItem, setOnAddNewItem] = useState(false);
 
   function openDialogHandler() {
@@ -68,7 +70,7 @@ const TodoListHeader = () => {
       <div className="todolist--header-outer">
         <DateTime />
         <div className="todolist--header">
-          <ButtonUnstyled onClick={openDialogHandler}>
+          <ButtonUnstyled onClick={openDialogHandler} disabled={noProjects}>
             <AddCircleOutlineIcon />
             New Item
           </ButtonUnstyled>

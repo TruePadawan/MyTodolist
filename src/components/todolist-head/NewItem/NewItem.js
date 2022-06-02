@@ -1,8 +1,11 @@
+import { appManager } from "../../../managers/appManager";
+import { v4 as uuidv4 } from "uuid";
 import { useRef, useContext } from "react";
 import TodoListContext from "../../context/TodoListContext";
-import { appManager } from "../../../managers/appManager";
+import { toLocalStorage } from "../../../functions/projects";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import Modal from "../../modal/Modal";
+import { DB_actions } from "../../../functions/firebase_db";
 
 import "./NewItem.css";
 
@@ -10,7 +13,8 @@ const NewItem = (props) => {
   const titleRef = useRef();
   const dueDateRef = useRef();
   const descRef = useRef();
-  const { projects, setProjects, createDefaultProject } = useContext(TodoListContext);
+  const { projects, setProjects, createDefaultProject } =
+    useContext(TodoListContext);
 
   function addTodo(e) {
     e.preventDefault();
@@ -19,52 +23,27 @@ const NewItem = (props) => {
     const desc = descRef.current.value;
     const done = false;
 
-    const itemData = {
+    const activeProjectID = appManager.activeProjectID;
+    const item = {
       title,
       dueDate,
       desc,
       done,
     };
-    const activeProjectID = appManager.activeProjectID;
 
-    try {
-      if (activeProjectID === null)
-      {
-        throw new Error("No Projects, Creating Default Project...");
-      }
-
-      if (!appManager.userSignedIn) {
-        const item = appManager.addTodoItem(false, itemData);
-        const itemID = item.id;
-
-        setProjects((projects) => {
-          try {
-            if (activeProjectID in projects) {
-              projects[activeProjectID].todos[itemID] = item;
-              return { ...projects };
-            }
-            throw new Error(`Project with ID ${activeProjectID} not found`);
-          }
-          catch (error) {
-            alert(error.message);
-          }
-        });
-
-      }
-      else {
-        appManager.addTodoItem(true, itemData, activeProjectID);
-      }
+    if (!appManager.userSignedIn) {
+      const itemID = uuidv4();
+      setProjects((projects) => {
+        if (activeProjectID in projects) {
+          projects[activeProjectID].todos[itemID] = item;
+          toLocalStorage(projects);
+          return { ...projects };
+        }
+      });
     }
-    catch (error) {
-      alert(error.message);
-
-      if (Object.keys(projects).length === 0)
-      {
-        // IF THERE IS NO PROJECT, CREATE A DEFAULT ONE
-        createDefaultProject();
-      }
+    else {
+      DB_actions.addTodoItem(appManager.uid, activeProjectID, item);
     }
-
     props.closeDialog();
   }
 

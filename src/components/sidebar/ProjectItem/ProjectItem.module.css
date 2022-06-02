@@ -23,15 +23,10 @@
 
 .projectTitle {
     overflow: hidden;
-
     border: none;
-    border-bottom: 1px dashed;
-
     font-size: 18px;
     color: #535151;
     margin-left: auto;
-
-    cursor: text;
 }
 
 .projectTitle:focus {

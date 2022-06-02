@@ -1,16 +1,16 @@
-.itemDetailsFormBtns {
+.btnGroup {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.itemDetailsFormBtns > button {
+.btnGroup > button {
   border: none;
   height: 2rem;
   border-radius: 10px;
 }
 
-.itemDetailsFormBtns > button > svg {
+.btnGroup > button > svg {
   vertical-align: -7px;
 }
 

@@ -1,17 +1,4 @@
 import ProjectItem from "../components/sidebar/ProjectItem/ProjectItem";
-import { v4 as uuidv4 } from "uuid";
-
-export function createProjectItem(_title, active = false) {
-  let projectID = uuidv4();
-  let projectItem = {
-    id: projectID,
-    title: _title,
-    active,
-    todos: {},
-  };
-
-  return projectItem;
-}
 
 export function setActiveProject(projectID, projectsList) {
   const projectIDs = Object.keys(projectsList);
@@ -34,17 +21,6 @@ export function createJSXProjectItems(list) {
     return <ProjectItem id={id} title={title} active={status} key={id} />;
   });
   return projectsList;
-}
-
-
-export function persistProjectsListData(list, userSignedIn = false)
-{
-  if (!userSignedIn)
-  {
-    window.localStorage.setObj("projects", list);
-    return;
-  }
-  console.log('storing data to DB');
 }
 
 export function setNewActiveProject(list)
@@ -70,4 +46,26 @@ export function getActiveProjectID(list)
     }
   }
   return null;
+}
+
+export function getActiveProject(projects, id)
+{
+  if (id === null)
+  {
+    return {
+      title: "",
+      todos: {},
+    }
+  }
+  return projects[id];
+}
+
+export function toLocalStorage(data)
+{
+  window.localStorage.setObj("projects", data);
+}
+
+export function getLocalAppData()
+{
+  return window.localStorage.getObj("projects");
 }
