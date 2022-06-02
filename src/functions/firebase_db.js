@@ -1,7 +1,18 @@
-import { ref, push, remove, update } from "firebase/database";
+import { ref, push, remove, update, set } from "firebase/database";
 import { database } from "../firebase/firebase_init";
 
 export const DB_actions = {
+  setProjects: function (userID, projects) {
+    const databaseRef = ref(database, `/${userID}/projects`);
+
+    try {
+      set(databaseRef, projects);
+    }
+    catch (error) {
+      alert(error.message);
+    }
+  },
+
   addProjectItem: function (userID, projectItem) {
     const databaseRef = ref(database, `/${userID}/projects`);
 
@@ -39,7 +50,7 @@ export const DB_actions = {
   },
 
   updateTodoItem: function (userID, projectID, itemID, value) {
-    const databaseRef = ref(database, `/${userID}/projects/${projectID}/${itemID}`);
+    const databaseRef = ref(database, `/${userID}/projects/${projectID}/todos/${itemID}`);
 
     try {
       update(databaseRef, value);
@@ -61,7 +72,7 @@ export const DB_actions = {
   },
 
   deleteTodoItem: function (userID, projectID, itemID) {
-    const databaseRef = ref(database, `/${userID}/projects/${projectID}/${itemID}`);
+    const databaseRef = ref(database, `/${userID}/projects/${projectID}/todos/${itemID}`);
 
     try {
       remove(databaseRef);
