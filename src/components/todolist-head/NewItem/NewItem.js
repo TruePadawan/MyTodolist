@@ -13,8 +13,7 @@ const NewItem = (props) => {
   const titleRef = useRef();
   const dueDateRef = useRef();
   const descRef = useRef();
-  const { projects, setProjects, createDefaultProject } =
-    useContext(TodoListContext);
+  const { setProjects } = useContext(TodoListContext);
 
   function addTodo(e) {
     e.preventDefault();
