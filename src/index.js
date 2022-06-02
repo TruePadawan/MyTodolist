@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { createProjectItem } from "./functions/projects";
 import TodoListContextProvider from "./components/context/TodoListContextProvider";
+import { getLocalAppData } from "./functions/projects";
 import App from "./App";
 
 import "./index.css";
@@ -16,13 +16,10 @@ Storage.prototype.getObj = function (key) {
 };
 
 /* Create a key-value pair in local storage when the app is initially run for the very first time */
-let projects = window.localStorage.getObj("projects");
-if (projects === null || Object.keys(projects).length === 0) {
-  let projectItem = createProjectItem("Default", true);
-  let defaultProjectsList = {
-    [projectItem.id] : projectItem
-  };
-  window.localStorage.setObj("projects", defaultProjectsList);
+let projects = getLocalAppData();
+if (projects === null)
+{
+  window.localStorage.setObj("projects", {});
 }
 
 ReactDOM.render(
