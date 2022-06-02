@@ -1,37 +1,29 @@
 import { useState, useEffect } from "react";
 import TodoListContext from "./TodoListContext";
-import { persistProjectsListData, getActiveProjectID, createProjectItem } from "../../functions/projects";
+import { getActiveProjectID } from "../../functions/projects";
 import { appManager } from "../../managers/appManager";
 
 const TodoListContextProvider = (props) => {
   const [projects, setProjects] = useState({});
-  const [userSignedIn, setUserSignedIn] = useState(false);
-  const [userID, setUserID] = useState("");
+  const [noProjects, setNoProjects] = useState(false);
   const [sidebarState, setSideBarState] = useState("opened");
-
-  function createDefaultProject() {
-    let projectItem = createProjectItem("Default", true);
-    let defaultProjectsList = {
-      [projectItem.id]: projectItem,
-    };
-    window.localStorage.setObj("projects", defaultProjectsList);
-    setProjects(window.localStorage.getObj("projects"));
-  }
-
+  appManager.activeProjectID = getActiveProjectID(projects);
+  
   useEffect(() => {
-    persistProjectsListData(projects);
-  }, [projects]);
-
-  appManager.setActiveProjectID(getActiveProjectID(projects));
+    if (Object.keys(projects).length === 0)
+    {
+      setNoProjects(true);
+    } else {
+      setNoProjects(false);
+    }
+  }, [setNoProjects, projects]);
   
   return (
     <TodoListContext.Provider
       value={{
         projects, setProjects,
+        noProjects,
         sidebarState, setSideBarState,
-        userSignedIn, setUserSignedIn,
-        userID, setUserID,
-        createDefaultProject,
       }}
     >
       {props.children}
