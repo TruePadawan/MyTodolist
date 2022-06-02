@@ -1,39 +1,33 @@
 import { useContext } from "react";
 import TodoListContext from "../context/TodoListContext";
 import { appManager } from "../../managers/appManager";
-import { createJSXProjectItems } from "../../functions/projects";
+import { v4 as uuidv4 } from "uuid";
+import { DB_actions } from "../../functions/firebase_db";
+import { createJSXProjectItems, toLocalStorage } from "../../functions/projects";
 
 import styles from "./sidebar.module.css";
 
 
 const SideBar = (props) => {
-  const { projects, setProjects } = useContext(TodoListContext);
+  const { setProjects } = useContext(TodoListContext);
 
   function addProject() {
+    const item = appManager.createProjectItem("Untitled");
     if (!appManager.userSignedIn)
     {
-      const project = appManager.addProjectItem(false, { title : "Untitled"});
+      const id = uuidv4();
 
       setProjects((projects) => {
-        // IF THIS IS THE FIRST AND ONLY PROJECT ITEM, MAKE IT ACTIVE
-        if (Object.keys(projects).length === 0)
-        {
-          project.active = true;
-        }
-
-        projects[project.id] = project;
+        projects[id] = item;
+        toLocalStorage(projects);
         return { ...projects };
       });
       return;
     }
-    appManager.addProjectItem(true, {
-      title : "Untitled",
-      active : false,
-      todos : {}
-    });
+    DB_actions.addProjectItem(appManager.uid, item);
   }
 
-  const projectsList = createJSXProjectItems(projects);
+  const projectsList = createJSXProjectItems(props.data);
 
   return (
     <aside className={`${styles["sidebar"]} ${styles[props.state]}`}>
