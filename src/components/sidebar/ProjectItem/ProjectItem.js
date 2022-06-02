@@ -11,7 +11,7 @@ import styles from "./ProjectItem.module.css";
 
 const ProjectItem = (props) => {
   const [onEditItem, setEditItem] = useState(false);
-  const { setProjects } = useContext(TodoListContext);
+  const { projects, setProjects } = useContext(TodoListContext);
 
   if (props.active === true) appManager.activeProjectID = props.id;
 
@@ -37,7 +37,8 @@ const ProjectItem = (props) => {
       });
       return;
     }
-    DB_actions.updateProjectItem(appManager.uid, props.id, { active : true });
+    const updatedProjects = setActiveProject(props.id, projects);
+    DB_actions.setProjects(appManager.uid, updatedProjects);
   }
 
   function updateProjectTitle(newValue)
