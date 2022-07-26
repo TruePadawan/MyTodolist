@@ -8,28 +8,34 @@ import { v4 as uuidv4 } from "uuid";
 import { appManager } from "../../../managers/appManager";
 import { toLocalStorage } from "../../../functions/projects";
 import { DB_actions } from "../../../functions/firebase_db";
+import { differenceInMilliseconds, formatDistanceStrict } from "date-fns";
 
 import "./NewItem.css";
 
 const NewItem = (props) => {
+  const timeframe = useRef();
   const titleRef = useRef();
-  const dueDateRef = useRef();
+  const timeframeFromRef = useRef();
+  const timeframeToRef = useRef();
   const descRef = useRef();
-  const { setProjects } = useContext(TodoListContext);
+  const { setProjects, scheduleNotification } = useContext(TodoListContext);
 
-  function addTodo(e) {
+  const addTodoItem = (e) => {
     e.preventDefault();
-    const title = titleRef.current.value;
-    const dueDate = dueDateRef.current.value;
-    const desc = descRef.current.value;
-    const done = false;
+
+    const itemTitle = titleRef.current.value;
+    const itemTimeframe = {
+      from: timeframeFromRef.current.value,
+      to: timeframeToRef.current.value
+    };
+    const itemDescription = descRef.current.value;
 
     const activeProjectID = appManager.activeProjectID;
     const item = {
-      title,
-      dueDate,
-      desc,
-      done,
+      title: itemTitle,
+      timeframe: itemTimeframe,
+      desc: itemDescription,
+      done: false,
     };
 
     if (!appManager.userSignedIn) {
@@ -41,6 +47,10 @@ const NewItem = (props) => {
           return { ...projects };
         }
       });
+      // const timeout = differenceInMilliseconds(new Date(itemTimeframe.to), new Date(itemTimeframe.from));
+      // scheduleNotification({
+      //   id: itemID, title: itemTitle, body: "Have you done this?"
+      // }, timeout);
     }
     else {
       DB_actions.addTodoItem(appManager.uid, activeProjectID, item);
@@ -55,13 +65,18 @@ const NewItem = (props) => {
   }
 
   const currentDate = getCurrentDate();
+  const updateTimeframe = () => {
+    const start = new Date(timeframeFromRef.current.value);
+    const end = new Date(timeframeToRef.current.value);
+    timeframe.current.value = formatDistanceStrict(end, start);
+  }
 
   return (
     <Modal className="addTodo" close={props.closeDialog}>
-      <form onSubmit={addTodo}>
+      <form onSubmit={addTodoItem}>
         <h3>New Item</h3>
         <InputField
-          ref={titleRef}
+          inputRef={titleRef}
           label={"Title"}
           minLength="2"
           maxLength="100"
@@ -70,11 +85,12 @@ const NewItem = (props) => {
           autoComplete="off"
           required
         />
-        <InputField type="datetime-local" label={"From"} required value={currentDate} readOnly />
-        <InputField type="datetime-local" ref={dueDateRef} min={currentDate} label={"To"} required />
+        <InputField type="datetime-local" inputRef={timeframeFromRef} label={"From (read-only)"} required value={currentDate} readOnly />
+        <InputField type="datetime-local" inputRef={timeframeToRef} min={currentDate} label={"To"} required onChange={updateTimeframe} />
+        <InputField type="text" label={"Timeframe (read-only)"} inputRef={timeframe} readOnly />
         <TextArea
           label={"Description"}
-          ref={descRef}
+          inputRef={descRef}
           placeholder="Review calculus in math before saturday"
           required
           className="desc"

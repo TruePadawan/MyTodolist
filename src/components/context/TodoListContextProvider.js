@@ -17,6 +17,13 @@ const TodoListContextProvider = (props) => {
       setNoProjects(false);
     }
   }, [setNoProjects, projects]);
+
+  const scheduleNotification = ({title, body}, timeout) => {
+    console.log("scheduling")
+    setTimeout(() => {
+      new Notification(title, {body});
+    }, timeout);
+  }
   
   return (
     <TodoListContext.Provider
@@ -24,6 +31,7 @@ const TodoListContextProvider = (props) => {
         projects, setProjects,
         noProjects,
         sidebarState, setSideBarState,
+        scheduleNotification
       }}
     >
       {props.children}

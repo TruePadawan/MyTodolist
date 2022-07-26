@@ -7,44 +7,38 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { appManager } from "../../../../managers/appManager";
 import { toLocalStorage } from "../../../../functions/projects";
 import { DB_actions } from "../../../../functions/firebase_db";
+import { InputField, TextArea } from "../../../Input/InputField";
 
 import "./TodoItemDetails.css";
+import { formatDistanceStrict } from "date-fns";
 
 const TodoItemDetails = (props) => {
   const { projects, setProjects } = useContext(TodoListContext);
   const titleFieldRef = useRef();
-  const dueDateFieldRef = useRef();
   const descFieldRef = useRef();
   
   const activeProjectID = appManager.activeProjectID;
-  function updateItemData(e)
-  {
+  const updateItemData = (e) => {
     e.preventDefault();
     const title = titleFieldRef.current.value;
-    const dueDate = dueDateFieldRef.current.value;
     const desc = descFieldRef.current.value;
 
-    if (!appManager.userSignedIn)
-    {
+    if (!appManager.userSignedIn) {
       setProjects((projects) => {
         projects[activeProjectID].todos[props.itemID].title = title;
-        projects[activeProjectID].todos[props.itemID].dueDate = dueDate;
         projects[activeProjectID].todos[props.itemID].desc = desc;
         toLocalStorage(projects);
         return { ...projects };
       });
     }
     else {
-      DB_actions.updateTodoItem(appManager.uid, appManager.activeProjectID, props.itemID, { title, dueDate, desc });
+      DB_actions.updateTodoItem(appManager.uid, appManager.activeProjectID, props.itemID, { title, desc });
     }
-
     props.closeDialog();
   }
 
-  function setItemStatus()
-  {
-    if (!appManager.userSignedIn)
-    {
+  const setItemStatus = () => {
+    if (!appManager.userSignedIn) {
       setProjects((projects) => {
         let currentStatus = projects[activeProjectID].todos[props.itemID].done;
         projects[activeProjectID].todos[props.itemID].done = !currentStatus;
@@ -60,10 +54,8 @@ const TodoItemDetails = (props) => {
     props.closeDialog();
   }
 
-  function deleteItem()
-  {
-    if (!appManager.userSignedIn)
-    {
+  const deleteItem = () => {
+    if (!appManager.userSignedIn) {
       setProjects((projects) => {
         delete projects[activeProjectID].todos[props.itemID];
         toLocalStorage(projects);
@@ -77,27 +69,37 @@ const TodoItemDetails = (props) => {
     props.closeDialog();
   }
 
+  const { from, to } = props.itemData.timeframe;
+  const timeframe = formatDistanceStrict(new Date(to), new Date(from));
+
   return (
     <Modal close={props.closeDialog} className="itemDetails">
       <form className="itemDetailsForm" onSubmit={updateItemData}>
         <h3>Details</h3>
-        <input
+        <InputField
+          type={"text"}
+          label={"Title"}
           required
           autoFocus
           minLength="2"
           maxLength="100"
           defaultValue={props.itemData.title}
-          ref={titleFieldRef} />
+          inputRef={titleFieldRef} />
 
-        <input required type="date" defaultValue={props.itemData.dueDate} ref={dueDateFieldRef} />
+        <InputField
+          type={"text"}
+          label={"Timeframe (read-only)"}
+          value={timeframe}
+          readOnly />
 
-        <textarea
+        <TextArea
+          label={"Description"}
           required
           minLength="2"
           className="desc"
           defaultValue={props.itemData.desc}
-          ref={descFieldRef}>
-        </textarea>
+          inputRef={descFieldRef}>
+        </TextArea>
 
         <div className="btnGroup">
           <button className="saveBtn" type="submit">
