@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import TodoListContext from "./TodoListContext";
 import { getActiveProjectID } from "../../functions/projects";
 import { appManager } from "../../managers/appManager";
+import TodoListContext from "./TodoListContext";
+import notifIcon from "./assets/todolist.ico";
 
 const TodoListContextProvider = (props) => {
   const [projects, setProjects] = useState({});
@@ -29,8 +30,9 @@ const TodoListContextProvider = (props) => {
           alert(err.message);
         });
     }
+    console.log(`Scheduling for ${title}`);
     setTimeout(() => {
-      new Notification(title, {body});
+      new Notification(title, { body, icon: notifIcon });
     }, timeout);
   };
 

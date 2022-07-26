@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import { appManager } from "../../../managers/appManager";
 import { toLocalStorage } from "../../../functions/projects";
 import { DB_actions } from "../../../functions/firebase_db";
-import { differenceInMilliseconds, formatDistanceStrict } from "date-fns";
+import { formatDistanceStrict } from "date-fns";
 
 import "./NewItem.css";
 
@@ -18,7 +18,7 @@ const NewItem = (props) => {
   const timeframeFromRef = useRef();
   const timeframeToRef = useRef();
   const descRef = useRef();
-  const { setProjects, scheduleNotification } = useContext(TodoListContext);
+  const { setProjects } = useContext(TodoListContext);
 
   const addTodoItem = (e) => {
     e.preventDefault();
@@ -47,11 +47,6 @@ const NewItem = (props) => {
           return { ...projects };
         }
       });
-      
-      const timeout = differenceInMilliseconds(new Date(itemTimeframe.to), new Date(itemTimeframe.from));
-      scheduleNotification({
-        id: itemID, title: itemTitle, body: "Have you done this?"
-      }, timeout);
     }
     else {
       DB_actions.addTodoItem(appManager.uid, activeProjectID, item);

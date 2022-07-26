@@ -87,7 +87,7 @@ const TodoItemDetails = (props) => {
   let remainingTime = formatDistanceToNow(new Date(to));
   if (compareAsc(Date.now(), new Date(to)) === 1)
   {
-    remainingTime = "0 minutes";
+    remainingTime = "Timeframe Elapsed";
   }
 
   return (
