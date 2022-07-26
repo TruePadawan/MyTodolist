@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getActiveProjectID } from "../../functions/projects";
 import { appManager } from "../../managers/appManager";
 import TodoListContext from "./TodoListContext";
@@ -8,6 +8,7 @@ const TodoListContextProvider = (props) => {
   const [projects, setProjects] = useState({});
   const [noProjects, setNoProjects] = useState(false);
   const [sidebarState, setSideBarState] = useState("opened");
+  const scheduledNotifs = useRef({});
   appManager.activeProjectID = getActiveProjectID(projects);
 
   useEffect(() => {
@@ -18,7 +19,7 @@ const TodoListContextProvider = (props) => {
     }
   }, [setNoProjects, projects]);
 
-  const scheduleNotification = ({ title, body }, timeout) => {
+  const scheduleNotification = ({ id, title, body }, timeout) => {
     if (Notification.permission !== "granted") {
       Notification.requestPermission()
         .then((permission) => {
@@ -30,9 +31,12 @@ const TodoListContextProvider = (props) => {
           alert(err.message);
         });
     }
+    if (id in scheduledNotifs.current) return;
     console.log(`Scheduling for ${title}`);
+    scheduledNotifs.current[id] = "scheduled";
     setTimeout(() => {
       new Notification(title, { body, icon: notifIcon });
+      delete scheduledNotifs.current[id];
     }, timeout);
   };
 

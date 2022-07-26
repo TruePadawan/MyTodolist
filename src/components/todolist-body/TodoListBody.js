@@ -38,6 +38,7 @@ const TodoListBody = ({ todos }) => {
     if (isThereUncompletedTodo)
     {
       scheduleNotification({
+        id: "uncomp",
         title: "MyTodoList",
         body: "You have uncompleted todos"
       }, 1000);
