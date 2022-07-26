@@ -1,10 +1,12 @@
-import { appManager } from "../../../managers/appManager";
-import { v4 as uuidv4 } from "uuid";
 import { useRef, useContext } from "react";
 import TodoListContext from "../../context/TodoListContext";
-import { toLocalStorage } from "../../../functions/projects";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import Modal from "../../modal/Modal";
+import {InputField, TextArea} from "../../Input/InputField";
+
+import { v4 as uuidv4 } from "uuid";
+import { appManager } from "../../../managers/appManager";
+import { toLocalStorage } from "../../../functions/projects";
 import { DB_actions } from "../../../functions/firebase_db";
 
 import "./NewItem.css";
@@ -46,12 +48,21 @@ const NewItem = (props) => {
     props.closeDialog();
   }
 
+  const getCurrentDate = () => {
+    let currentDateTime = new Date();
+    currentDateTime.setMinutes(currentDateTime.getMinutes() - currentDateTime.getTimezoneOffset());
+    return currentDateTime.toISOString().slice(0, 16);
+  }
+
+  const currentDate = getCurrentDate();
+
   return (
     <Modal className="addTodo" close={props.closeDialog}>
       <form onSubmit={addTodo}>
         <h3>New Item</h3>
-        <input
+        <InputField
           ref={titleRef}
+          label={"Title"}
           minLength="2"
           maxLength="100"
           placeholder="Review calculus in Math"
@@ -59,14 +70,15 @@ const NewItem = (props) => {
           autoComplete="off"
           required
         />
-        <input type="date" required ref={dueDateRef} />
-        <textarea
+        <InputField type="datetime-local" label={"From"} required value={currentDate} readOnly />
+        <InputField type="datetime-local" ref={dueDateRef} min={currentDate} label={"To"} required />
+        <TextArea
+          label={"Description"}
           ref={descRef}
           placeholder="Review calculus in math before saturday"
           required
           className="desc"
-          minLength="2"
-        ></textarea>
+          minLength="2" />
         <button className="addTodoBtn">
           <AddTaskIcon /> Add
         </button>

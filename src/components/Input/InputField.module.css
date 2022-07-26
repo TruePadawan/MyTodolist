@@ -1,0 +1,27 @@
+.inputfield, .textArea {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.inputfield label, .textArea label {
+  font-size: 14px;
+}
+
+.inputfield>input {
+  font-size: 1rem;
+  color: rgb(100, 100, 100);
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid darksalmon;
+}
+
+.inputfield>input::placeholder {
+  color: rgb(100, 100, 100);
+  font-size: medium;
+}
+
+.textArea > textarea {
+  color: rgb(100, 100, 100);
+  font-size: medium;
+}
