@@ -7,7 +7,6 @@ import styles from "./TodoListBody.module.css";
 const TodoListBody = ({ todos }) => {
   const { scheduleNotification } = useContext(TodoListContext);
   let todoList = [];
-  let isThereUncompletedTodo = false;
 
   for (const itemID in todos) {
     const itemTitle = todos[itemID].title;
@@ -31,17 +30,6 @@ const TodoListBody = ({ todos }) => {
         },
         timeout
       );
-    } else {
-      isThereUncompletedTodo = true;
-    }
-
-    if (isThereUncompletedTodo)
-    {
-      scheduleNotification({
-        id: "uncomp",
-        title: "MyTodoList",
-        body: "You have uncompleted todos"
-      }, 1000);
     }
   }
 

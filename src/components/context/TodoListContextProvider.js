@@ -32,7 +32,6 @@ const TodoListContextProvider = (props) => {
         });
     }
     if (id in scheduledNotifs.current) return;
-    console.log(`Scheduling for ${title}`);
     scheduledNotifs.current[id] = "scheduled";
     setTimeout(() => {
       new Notification(title, { body, icon: notifIcon });
