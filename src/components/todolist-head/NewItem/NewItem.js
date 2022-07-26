@@ -47,10 +47,11 @@ const NewItem = (props) => {
           return { ...projects };
         }
       });
-      // const timeout = differenceInMilliseconds(new Date(itemTimeframe.to), new Date(itemTimeframe.from));
-      // scheduleNotification({
-      //   id: itemID, title: itemTitle, body: "Have you done this?"
-      // }, timeout);
+      
+      const timeout = differenceInMilliseconds(new Date(itemTimeframe.to), new Date(itemTimeframe.from));
+      scheduleNotification({
+        id: itemID, title: itemTitle, body: "Have you done this?"
+      }, timeout);
     }
     else {
       DB_actions.addTodoItem(appManager.uid, activeProjectID, item);

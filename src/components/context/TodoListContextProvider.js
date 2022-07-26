@@ -19,7 +19,6 @@ const TodoListContextProvider = (props) => {
   }, [setNoProjects, projects]);
 
   const scheduleNotification = ({title, body}, timeout) => {
-    console.log("scheduling")
     setTimeout(() => {
       new Notification(title, {body});
     }, timeout);
