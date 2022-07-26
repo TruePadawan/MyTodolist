@@ -10,7 +10,7 @@ import { DB_actions } from "../../../../functions/firebase_db";
 import { InputField, TextArea } from "../../../Input/InputField";
 
 import "./TodoItemDetails.css";
-import { formatDistanceStrict } from "date-fns";
+import { compareAsc, formatDistanceStrict, formatDistanceToNow } from "date-fns";
 
 const TodoItemDetails = (props) => {
   const { projects, setProjects } = useContext(TodoListContext);
@@ -83,8 +83,13 @@ const TodoItemDetails = (props) => {
 
   const { from, to } = props.itemData.timeframe;
   const timeframe = formatDistanceStrict(new Date(to), new Date(from));
-  const remainingTime = formatDistanceStrict(new Date(to), Date.now());
-  
+  // IF THE TIMEFRAME HAS ELAPSED, SHOW 0 MINUTES
+  let remainingTime = formatDistanceToNow(new Date(to));
+  if (compareAsc(Date.now(), new Date(to)) === 1)
+  {
+    remainingTime = "0 minutes";
+  }
+
   return (
     <Modal close={props.closeDialog} className="itemDetails">
       <form className="itemDetailsForm" onSubmit={updateItemData}>
