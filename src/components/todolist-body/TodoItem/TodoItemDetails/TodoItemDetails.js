@@ -83,7 +83,7 @@ const TodoItemDetails = (props) => {
 
   const { from, to } = props.itemData.timeframe;
   const timeframe = formatDistanceStrict(new Date(to), new Date(from));
-  // IF THE TIMEFRAME HAS ELAPSED, SHOW 0 MINUTES
+  // INDICATE WHEN TIMEFRAME HAS ELAPSED
   let remainingTime = formatDistanceToNow(new Date(to));
   if (compareAsc(Date.now(), new Date(to)) === 1)
   {
