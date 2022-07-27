@@ -34,8 +34,12 @@ const TodoListContextProvider = (props) => {
     if (id in scheduledNotifs.current) return;
     scheduledNotifs.current[id] = "scheduled";
     setTimeout(() => {
-      new Notification(title, { body, icon: notifIcon });
-      delete scheduledNotifs.current[id];
+      const activeProjectID = appManager.activeProjectID;
+      if (id in projects[activeProjectID].todos && projects[activeProjectID].todos[id].done === false)
+      {
+        new Notification(title, { body, icon: notifIcon });
+        delete scheduledNotifs.current[id];
+      }
     }, timeout);
   };
 
