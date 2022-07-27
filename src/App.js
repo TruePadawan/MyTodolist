@@ -23,6 +23,7 @@ function App() {
   const [onLoading, setLoading] = useState(true);
   const [user, setUser] = useState("Sign In");
 
+  // RESPONSIBLE FOR LOADING IN THE PROJECT AND TODO DATA
   const loadAppData = useCallback(
     (snapshot) => {
       const data = DB_actions.getAppData(snapshot);
@@ -56,7 +57,7 @@ function App() {
       setProjects(data);
     }, [setLoading, setProjects]);
 
-  /* When app loads, sign in the user if there was a previous sign in */
+  // When app loads, sign in the user if there was a previous sign in
   useEffect(() => {
     auth.onAuthStateChanged(function signUserIn() {
       if (auth.currentUser && !appManager.userSignedIn) {
@@ -73,27 +74,6 @@ function App() {
       }
     });
   }, [loadAppData]);
-
-  const signInWithGoogle = async () => {
-    // IF THERE IS NO USER CURRENTLY LOGGED IN, LOGIN. ELSE, SIGN OUT
-    try {
-      if (auth.currentUser === null) {
-          await signInWithPopup(auth, googleProvider);
-      }
-      else {
-        await signOut(auth);
-  
-        setUser("Sign In");
-        appManager.userSignedIn = false;
-        appManager.uid = "";
-  
-        setProjects(getLocalAppData()); // WHEN THE USER SIGNS OUT, LOAD TODOITEMS FROM LOCAL STORAGE
-      }
-    } catch (error)
-    {
-      alert(error.message);
-    }
-  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -119,6 +99,27 @@ function App() {
       }
     }, 4000);
   }, [setProjects]);
+
+  const signInWithGoogle = async () => {
+    // IF THERE IS NO USER CURRENTLY LOGGED IN, LOGIN. ELSE, SIGN OUT
+    try {
+      if (auth.currentUser === null) {
+          await signInWithPopup(auth, googleProvider);
+      }
+      else {
+        await signOut(auth);
+  
+        setUser("Sign In");
+        appManager.userSignedIn = false;
+        appManager.uid = "";
+  
+        setProjects(getLocalAppData()); // WHEN THE USER SIGNS OUT, LOAD TODOITEMS FROM LOCAL STORAGE
+      }
+    } catch (error)
+    {
+      alert(error.message);
+    }
+  };
 
   const activeProject = getActiveProject(projects, appManager.activeProjectID);
   const mainClassName = sidebarState === "closed" ? "sidebarClosed" : "sidebarOpened";
