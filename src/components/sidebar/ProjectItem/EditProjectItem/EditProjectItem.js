@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import Modal from "../../../modal/Modal";
+import { InputField } from "../../../Input/InputField";
 import "./EditProjectItem.css";
 
 const EditProjectItem = (props) => {
@@ -21,8 +22,8 @@ const EditProjectItem = (props) => {
     <Modal className="editProjectItem" close={props.close}>
       <form onSubmit={modifyItem}>
         <h3>Edit Project</h3>
-        <input
-          ref={titleRef}
+        <InputField
+          inputRef={titleRef}
           type="text"
           minLength="2"
           maxLength="25"
