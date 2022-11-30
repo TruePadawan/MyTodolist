@@ -1,5 +1,5 @@
 import { useMemo, useState, useContext } from "react";
-import TodoListContext from "../context/TodoListContext";
+import { TodoListContext } from "../../context/TodoListContextProvider";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ButtonUnstyled from "@mui/base/ButtonUnstyled";
 import NewItem from "./NewItem/NewItem";

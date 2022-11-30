@@ -1,9 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import TodoListContextProvider from "./components/context/TodoListContextProvider";
+import TodoListContextProvider from "./context/TodoListContextProvider";
 import { getLocalAppData } from "./functions/projects";
 import App from "./App";
-
 import "./index.css";
 
 /* Simple functions for easily adding objects and array to localStorage */

@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 import GoogleIcon from "@mui/icons-material/Google";
 import Header from "./components/header/Header";
 import SideBar from "./components/sidebar/sidebar";
-import TodoListContext from "./components/context/TodoListContext";
+import { TodoListContext } from "./context/TodoListContextProvider";
 import TodoListHeader from "./components/todolist-head/TodoListHeader";
 import TodoListBody from "./components/todolist-body/TodoListBody";
 import Info from "./components/info/info";

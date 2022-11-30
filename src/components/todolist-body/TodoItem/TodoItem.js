@@ -1,8 +1,7 @@
 import { useState, useContext } from "react";
-import TodoListContext from "../../context/TodoListContext";
 import TodoItemDetails from "./TodoItemDetails/TodoItemDetails";
 import { appManager } from "../../../managers/appManager";
-
+import { TodoListContext } from "../../../context/TodoListContextProvider";
 import styles from "./TodoItem.module.css";
 
 const TodoItem = (props) => {

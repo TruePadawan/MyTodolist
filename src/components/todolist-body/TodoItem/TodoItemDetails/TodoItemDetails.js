@@ -1,5 +1,4 @@
 import { useContext, useRef } from "react";
-import TodoListContext from "../../../context/TodoListContext";
 import Modal from "../../../modal/Modal";
 import DoneIcon from "@mui/icons-material/Done";
 import SaveIcon from "@mui/icons-material/Save";
@@ -8,9 +7,9 @@ import { appManager } from "../../../../managers/appManager";
 import { toLocalStorage } from "../../../../functions/projects";
 import { DB_actions } from "../../../../functions/firebase_db";
 import { InputField, TextArea } from "../../../Input/InputField";
-
-import "./TodoItemDetails.css";
+import { TodoListContext } from "../../../../context/TodoListContextProvider";
 import { compareAsc, formatDistanceStrict, formatDistanceToNow } from "date-fns";
+import "./TodoItemDetails.css";
 
 const TodoItemDetails = (props) => {
   const { projects, setProjects } = useContext(TodoListContext);

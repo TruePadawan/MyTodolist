@@ -1,15 +1,13 @@
 import { useRef, useContext } from "react";
-import TodoListContext from "../../context/TodoListContext";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import Modal from "../../modal/Modal";
 import {InputField, TextArea} from "../../Input/InputField";
-
 import { v4 as uuidv4 } from "uuid";
 import { appManager } from "../../../managers/appManager";
 import { toLocalStorage } from "../../../functions/projects";
 import { DB_actions } from "../../../functions/firebase_db";
 import { formatDistanceStrict } from "date-fns";
-
+import { TodoListContext } from "../../../context/TodoListContextProvider";
 import "./NewItem.css";
 
 const NewItem = (props) => {
