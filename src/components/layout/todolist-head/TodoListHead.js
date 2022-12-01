@@ -1,13 +1,11 @@
-import { useState, useContext, Fragment } from "react";
-import { TodoListContext } from "../../context/TodoListContextProvider";
+import { useState, Fragment } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import CreateTodoItemDialog from "../dialogs/CreateTodoItemDialog/CreateTodoItemDialog";
-import DateTime from "../datetime/datetime";
+import CreateTodoItemDialog from "../../other/dialog/CreateTodoItemDialog/CreateTodoItemDialog";
+import DateTime from "../../other/datetime/datetime";
 import { Button } from "@mui/material";
 import styles from "./styles.module.css";
 
-const TodoListHead = () => {
-	const { data } = useContext(TodoListContext);
+const TodoListHead = ({ appData: data }) => {
 	const [showNewItemDialog, setShowNewItemDialog] = useState(false);
 
 	function dialogOpenHandler() {
@@ -21,7 +19,9 @@ const TodoListHead = () => {
 	const noActiveProject = Object.keys(data).length === 0;
 	return (
 		<Fragment>
-			{showNewItemDialog && <CreateTodoItemDialog onClose={dialogCloseHandler} />}
+			{showNewItemDialog && (
+				<CreateTodoItemDialog onClose={dialogCloseHandler} />
+			)}
 			<div className={styles["todolist-header-outer"]}>
 				<DateTime />
 				<div className={styles["todolist--header"]}>

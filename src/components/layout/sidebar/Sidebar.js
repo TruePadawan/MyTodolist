@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CreateProjectDialog from "../dialogs/CreateProjectDialog/CreateProjectDialog";
+import CreateProjectDialog from "../../other/dialog/CreateProjectDialog/CreateProjectDialog";
 import styles from "./sidebar.module.css";
 
 const Sidebar = (props) => {

@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import Modal from "../../../modal/Modal";
+import Modal from "../../../other/modal/Modal";
 import { InputField } from "../../../Input/InputField";
 import "./EditProjectItem.css";
 
