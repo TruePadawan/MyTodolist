@@ -1,4 +1,4 @@
-.addTodoBtn {
+.add-todo-btn {
   border: none;
   height: 2.5rem;
   background-color: lightgreen;
@@ -6,15 +6,20 @@
   box-shadow: 1px 1px 5px grey;
 }
 
-.addTodoBtn svg {
-  vertical-align: -7px;
-  margin-right: 4px;
-}
-
-.addTodoBtn:hover {
+.add-todo-btn:hover {
   background-color: rgb(108, 185, 108);
 }
 
-.addTodoBtn:active {
+.add-todo-btn:active {
   background-color: lightgreen;
+}
+
+.todo-item-priority {
+  border: none;
+  background-color: #fbb45f;
+  padding: 5px 0;
+}
+
+.todo-item-priority:focus {
+  outline: none;
 }

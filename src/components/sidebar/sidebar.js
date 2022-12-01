@@ -1,17 +1,10 @@
-import { appManager } from "../../managers/appManager";
-import { v4 as uuidv4 } from "uuid";
-import { DB_actions } from "../../functions/firebase_db";
-import {
-	createJSXProjectItems,
-	toLocalStorage,
-} from "../../functions/projects";
-import styles from "./sidebar.module.css";
-import CreateProjectDialog from "../create-project/create-project";
 import { useState } from "react";
+import CreateProjectDialog from "../dialogs/CreateProjectDialog/CreateProjectDialog";
+import styles from "./sidebar.module.css";
 
 const Sidebar = (props) => {
 	const [dialogIsOpen, setDialogIsOpen] = useState(false);
-	const projectsList = createJSXProjectItems(props.data);
+	const projectsList = [];
 
 	function openCreateProjectDialog() {
 		setDialogIsOpen(true);

@@ -2,7 +2,7 @@ import { useContext, useState, Fragment } from "react";
 import Header from "./components/header/Header";
 import Sidebar from "./components/sidebar/Sidebar";
 import { TodoListContext } from "./context/TodoListContextProvider";
-import TodoListHeader from "./components/todolist-head/TodoListHeader";
+import TodoListHead from "./components/todolist-head/TodoListHead";
 import TodoListBody from "./components/todolist-body/TodoListBody";
 import Info from "./components/info/info";
 import GoogleAuthBtn from "./components/button/GoogleAuthBtn/GoogleAuthBtn";
@@ -109,7 +109,7 @@ export default function App() {
 							{activeProjectData.title}
 						</h2>
 						<div className="todolist">
-							<TodoListHeader />
+							<TodoListHead />
 							<TodoListBody todos={activeProjectData.todos} />
 						</div>
 					</section>

@@ -1,7 +1,7 @@
 import { Box, Button, Modal } from "@mui/material";
 import { useContext, useState } from "react";
-import { InputField } from "../Input/InputField";
-import { TodoListContext } from "../../context/TodoListContextProvider";
+import { TodoListContext } from "../../../context/TodoListContextProvider";
+import { InputField } from "../../Input/InputField";
 
 export default function CreateProjectDialog(props) {
 	const { createNewProject } = useContext(TodoListContext);

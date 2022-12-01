@@ -1,0 +1,6 @@
+.date-time {
+    display: flex;
+    padding: 0 10px;
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+    justify-content: space-between;
+  }

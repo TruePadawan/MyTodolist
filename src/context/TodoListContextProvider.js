@@ -7,8 +7,9 @@ import { AuthContext } from "./AuthContextProvider";
 import { v4 as uuid } from "uuid";
 
 export const TodoListContext = createContext({
-	data: [],
+	data: {},
 	createNewProject: (projectTitle) => {},
+	addTodoItemToActiveProject: async (todoItemData) => {},
 });
 
 const TodoListContextProvider = (props) => {
@@ -34,12 +35,16 @@ const TodoListContextProvider = (props) => {
 		}
 	}, []);
 
+	const addTodoItemToActiveProject = useCallback(async (todoItemData) => {
+		console.log(todoItemData);
+	}, []);
+
 	const processAppData = useCallback((snapshot) => {
 		// PROCESS DATA
 		console.log(snapshot);
 	}, []);
 
-	// LOAD USER TODO DATA FROM DB IF USER SIGNS IN
+	// LOAD USER TODO DATA FROM DB IF USER SIGNS IN ELSE FROM LOCALSTORAGE
 	useEffect(() => {
 		if (authenticatedUserData !== null) {
 			const { id: userID } = authenticatedUserData;
@@ -50,7 +55,7 @@ const TodoListContextProvider = (props) => {
 		}
 	}, [authenticatedUserData, processAppData]);
 
-	const value = { data, createNewProject };
+	const value = { data, createNewProject, addTodoItemToActiveProject };
 	return (
 		<TodoListContext.Provider value={value}>
 			{props.children}
