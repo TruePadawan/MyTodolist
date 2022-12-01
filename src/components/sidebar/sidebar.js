@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { appManager } from "../../managers/appManager";
 import { v4 as uuidv4 } from "uuid";
 import { DB_actions } from "../../functions/firebase_db";
@@ -6,44 +5,46 @@ import {
 	createJSXProjectItems,
 	toLocalStorage,
 } from "../../functions/projects";
-import { TodoListContext } from "../../context/TodoListContextProvider";
 import styles from "./sidebar.module.css";
+import CreateProjectDialog from "../create-project/create-project";
+import { useState } from "react";
 
-const SideBar = (props) => {
-	const { setProjects } = useContext(TodoListContext);
-
-	function addProject() {
-		const item = appManager.createProjectItem("Untitled");
-		if (!appManager.userSignedIn) {
-			const id = uuidv4();
-
-			setProjects((projects) => {
-				projects[id] = item;
-				toLocalStorage(projects);
-				return { ...projects };
-			});
-			return;
-		}
-		DB_actions.addProjectItem(appManager.uid, item);
-	}
-
+const Sidebar = (props) => {
+	const [dialogIsOpen, setDialogIsOpen] = useState(false);
 	const projectsList = createJSXProjectItems(props.data);
 
+	function openCreateProjectDialog() {
+		setDialogIsOpen(true);
+	}
+
+	function closeCreateProjectDialog() {
+		setDialogIsOpen(false);
+	}
+
+	const componentClassName = `${styles.sidebar} ${
+		props.open ? styles.opened : styles.closed
+	}`;
 	return (
-		<aside className={`${styles["sidebar"]} ${styles[props.state]}`}>
+		<aside className={componentClassName}>
 			{props.children}
-			<div className={styles["projectsContainer"]}>
-				<h2>Projects</h2>
+			<CreateProjectDialog
+				open={dialogIsOpen}
+				onClose={closeCreateProjectDialog}
+			/>
+			<section
+				aria-labelledby="sidebar-title"
+				className={styles["projects-section"]}>
+				<h2 id="sidebar-title">Projects</h2>
 				<button
 					type="button"
-					className={styles["newProjectBtn"]}
-					onClick={addProject}>
+					className={styles["new-project-btn"]}
+					onClick={openCreateProjectDialog}>
 					New Project
 				</button>
 				<div className={styles["projects"]}>{projectsList}</div>
-			</div>
+			</section>
 		</aside>
 	);
 };
 
-export default SideBar;
+export default Sidebar;

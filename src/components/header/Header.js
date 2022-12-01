@@ -1,30 +1,17 @@
-import styles from "./Header.module.css";
-import MenuBtnImg from "./resources/menu.png";
-import { useContext } from "react";
-import { TodoListContext } from "../../context/TodoListContextProvider";
+import { Menu } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
+import styles from "./styles.module.css";
 
-const Header = () => {
-	const { setSideBarState } = useContext(TodoListContext);
-
-	function toggleSidebar() {
-		setSideBarState((currentState) => {
-			return currentState === "closed" ? "opened" : "closed";
-		});
-	}
-
+const Header = (props) => {
 	return (
-		<header>
-			<nav>
-				<button
-					type="button"
-					className={styles["sidebarBtn"]}
-					onClick={toggleSidebar}>
-					<img src={MenuBtnImg} alt="Sidebar" />
-				</button>
-				<div className={styles["navMain"]}>
-					<h1>MyTodoList</h1>
-				</div>
-			</nav>
+		<header className={styles.header}>
+			<IconButton
+				type="button"
+				className={styles["sidebar-btn"]}
+				onClick={props.onSidebarBtnClicked}>
+				<Menu />
+			</IconButton>
+			<h1 className={styles["header-text"]}>MyTodoList</h1>
 		</header>
 	);
 };

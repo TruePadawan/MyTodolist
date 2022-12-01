@@ -10,17 +10,16 @@ export default function AuthContextProvider(props) {
 
 	// LISTEN FOR CHANGES IN AUTH STATE
 	useEffect(() => {
-		auth.onAuthStateChanged(() => {
-			setAuthenticatedUserData((snapshot) => {
-				if (auth.currentUser && snapshot === null) {
-					return {
-						uid: auth.currentUser.uid,
-						displayName: auth.currentUser.displayName,
-						email: auth.currentUser.email,
-					};
-				}
-				return snapshot;
-			});
+		auth.onAuthStateChanged((authSnapshot) => {
+			if (authSnapshot.currentUser) {
+				setAuthenticatedUserData({
+					uid: authSnapshot.currentUser.uid,
+					displayName: authSnapshot.currentUser.displayName,
+					email: authSnapshot.currentUser.email,
+				});
+			} else {
+				setAuthenticatedUserData(null);
+			}
 		});
 	}, []);
 

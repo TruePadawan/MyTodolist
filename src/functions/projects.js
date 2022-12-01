@@ -1,4 +1,4 @@
-import ProjectItem from "../components/sidebar/ProjectItem/ProjectItem";
+import ProjectItem from "../components/items/ProjectItem/ProjectItem";
 
 export function setActiveProject(projectID, projectsList) {
   const projectIDs = Object.keys(projectsList);

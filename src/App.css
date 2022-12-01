@@ -8,18 +8,6 @@
   row-gap: 1rem;
 }
 
-h1 {
-  font-size: 3rem;
-  font-family: "Shizuru", cursive;
-}
-
-main {
-  display: grid;
-  grid-auto-rows: 100%;
-  width: 100%;
-  height: calc(100% - 80px);
-}
-
 .todolist {
   height: calc(100% - 58px);
   box-shadow: -2px 2px 5px darkgray;
@@ -32,17 +20,15 @@ main {
   flex-direction: column;
 }
 
-/* SIDEBAR */
-
-.sidebarOpened {
+.sidebar-opened {
   grid-template-columns: min(100%, 280px) 1fr;
 }
 
-.sidebarClosed {
+.sidebar-closed {
   grid-template-columns: 1fr;
 }
 
-#currentProjectTitle {
+.current-project-title {
   font-family: "Open Sans", sans-serif;
   font-weight: normal;
   font-size: 2rem;
@@ -57,22 +43,14 @@ main {
   gap: 1.2rem;
 }
 
-.container > * {
+.container>* {
   margin: 0 auto;
   max-width: 102rem;
   width: 100%;
 }
 
-#signInBtn {
-  font-weight: 700;
-  color: brown;
-  display: flex;
-  align-items: center;
-  border: none;
-}
-
 @media screen and (max-width: 700px) {
-  .sidebarClosed {
+  .sidebar-closed {
     grid-template-columns: 1fr;
   }
 }

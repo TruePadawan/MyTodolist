@@ -2,39 +2,57 @@ import { onValue, ref } from "firebase/database";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { createContext } from "react";
 import { firebaseRealtimeDBInstance as database } from "../firebase/firebase_init";
-import { APP_LOCALSTORAGE_KEY } from "../utils/other-utils";
+import { getLocalAppData, storeAppDataLocally } from "../utils/other-utils";
 import { AuthContext } from "./AuthContextProvider";
+import { v4 as uuid } from "uuid";
 
 export const TodoListContext = createContext({
 	data: [],
+	createNewProject: (projectTitle) => {},
 });
 
 const TodoListContextProvider = (props) => {
 	const { authenticatedUserData } = useContext(AuthContext);
-	const [data, setData] = useState(() => {
-		const cachedData = localStorage.getObj(APP_LOCALSTORAGE_KEY);
-		if (cachedData === null) {
-			return [];
-		}
-		return cachedData;
-	});
+	const [data, setData] = useState(getLocalAppData());
+	const userSignedIn = authenticatedUserData !== null;
 
-	const updateAppData = useCallback((snapshot) => {
-		// TRANSFORM DATA
+	const createNewProject = useCallback((projectTitle) => {
+		if (!userSignedIn) {
+			// UPDATE STATE AND DATA IN LOCALSTORAGE
+			setData((snapshot) => {
+				const projectID = uuid();
+				snapshot[projectID] = {
+					title: projectTitle,
+					active: false,
+					todos: {},
+				};
+				storeAppDataLocally(snapshot);
+				return { ...snapshot };
+			});
+		} else {
+			// CREATE PROJECT IN DB
+		}
+	}, []);
+
+	const processAppData = useCallback((snapshot) => {
+		// PROCESS DATA
 		console.log(snapshot);
 	}, []);
 
+	// LOAD USER TODO DATA FROM DB IF USER SIGNS IN
 	useEffect(() => {
 		if (authenticatedUserData !== null) {
-			// LOAD USER TODO DATA FROM DB
 			const { id: userID } = authenticatedUserData;
 			const appDataDBRef = ref(database, `/${userID}/projects`);
-			return onValue(appDataDBRef, updateAppData);
+			return onValue(appDataDBRef, processAppData);
+		} else {
+			setData(getLocalAppData());
 		}
-	}, [authenticatedUserData, updateAppData]);
+	}, [authenticatedUserData, processAppData]);
 
+	const value = { data, createNewProject };
 	return (
-		<TodoListContext.Provider value={data}>
+		<TodoListContext.Provider value={value}>
 			{props.children}
 		</TodoListContext.Provider>
 	);

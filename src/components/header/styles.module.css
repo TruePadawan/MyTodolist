@@ -1,31 +1,19 @@
-header {
+.header {
     width: 100%;
-}
-
-nav {
     padding: 16px 14px;
-
     height: 80px;
-
     display: flex;
     align-items: center;
 }
 
-.navMain {
-    display: flex;
-    align-items: center;
+.header-text {
     margin: 0 auto;
 }
 
-.sidebarBtn {
+.sidebar-btn {
     border: none;
     border-radius: 8px;
     padding: 10px;
     cursor: pointer;
     background-color: transparent;
-}
-
-.sidebarBtn>img {
-    width: 40px;
-    height: auto;
 }

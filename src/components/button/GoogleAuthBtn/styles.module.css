@@ -1,0 +1,7 @@
+.btn {
+    font-weight: 700;
+    color: brown;
+    display: flex;
+    align-items: center;
+    border: none;
+}

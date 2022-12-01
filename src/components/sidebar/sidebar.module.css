@@ -5,14 +5,14 @@
     scrollbar-width: thin;
 }
 
-.projectsContainer {
+.projects-section {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 1.2rem;
 }
 
-.projectsContainer > h2 {
+.projects-section>h2 {
     text-align: center;
 }
 
@@ -47,16 +47,16 @@
     font-weight: 600;
 }
 
-.newProjectBtn {
+.new-project-btn {
     background-color: #b89466;
-    
+
     font-size: 1.2rem;
     min-height: 50px;
     border-radius: 8px;
     border: none;
 }
 
-.newProjectBtn:hover {
+.new-project-btn:hover {
     background-color: rgba(165, 156, 125, 0.7);
 }
 
