@@ -1,42 +1,39 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import TodoItemDetails from "./TodoItemDetails/TodoItemDetails";
-import { appManager } from "../../../managers/appManager";
-import { TodoListContext } from "../../../../context/TodoListContextProvider";
 import styles from "./TodoItem.module.css";
 
 const TodoItem = (props) => {
-  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-  const { projects } = useContext(TodoListContext);
+	const [showDetails, setShowDetails] = useState(false);
 
-  function openEditDialog() {
-    setOpenDetailsDialog(true);
-  }
+	function openDetailsDialog() {
+		setShowDetails(true);
+	}
 
-  function closeEditDialog() {
-    setOpenDetailsDialog(false);
-  }
+	function closeDetailsDialog() {
+		setShowDetails(false);
+	}
 
-  const activeProjectID = appManager.activeProjectID;
-  let componentClassName = `${styles["todolist-item"]} ${styles[props.done ? "task_done" : ""]}`;
-  let data = projects[activeProjectID].todos[props.id];
-  
-  return (
-    <>
-      {openDetailsDialog && (
-        <TodoItemDetails
-          closeDialog={closeEditDialog}
-          itemData={data}
-          itemID={props.id}
-          taskDone={props.done}
-        />
-      )}
-
-      <li className={componentClassName}>
-        <p>{props.title}</p>
-        <button onClick={openEditDialog} type="button">Edit</button>
-      </li>
-    </>
-  );
+	const { title, done } = props.data;
+	const listElClassName = `${styles["todo-item"]} ${
+		done ? styles["todo-done"] : ""
+	}`;
+	return (
+		<li className={listElClassName}>
+			<span>{title}</span>
+			<button
+				type="button"
+				onClick={openDetailsDialog}
+				className={styles["details-btn"]}>
+				Details
+			</button>
+			<TodoItemDetails
+				open={showDetails}
+				onClose={closeDetailsDialog}
+				todoID={props.id}
+				todoData={props.data}
+			/>
+		</li>
+	);
 };
 
 export default TodoItem;

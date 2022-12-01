@@ -1,4 +1,4 @@
-.todolist-item {
+.todo-item {
   background-color: cornsilk;
   margin: 10px;
   padding: 5px 10px;
@@ -9,7 +9,7 @@
   gap: 5px;
 }
 
-.todolist-item button {
+.details-btn {
   cursor: pointer;
   background-color: rgba(173, 216, 230, 0.713);
   border: none;
@@ -17,18 +17,18 @@
   height: 30px;
 }
 
-.todolist-item button:hover {
+.details-btn:hover {
   background-color: rgba(173, 216, 230, 0.926);
 }
 
-.todolist-item button:active {
+.details-btn:active {
   background-color: rgba(173, 216, 230, 0.713);
 }
 
-.task_done {
+.todo-done {
   background-color: rgba(148, 210, 148, 0.606);
 }
 
-.task_done>p {
+.todo-done>p {
   text-decoration: line-through;
 }

@@ -1,26 +1,16 @@
 import TodoItem from "../../other/item/TodoItem/TodoItem";
-import styles from "./TodoListBody.module.css";
+import styles from "./styles.module.css";
 
 const TodoListBody = ({ todos }) => {
-	let todoList = [];
-
-	for (const todoItemID in todos) {
-		const itemTitle = todos[todoItemID].title;
-		const isItemDone = todos[todoItemID].done;
-		todoList.push(
-			<TodoItem
-				id={todoItemID}
-				key={todoItemID}
-				title={itemTitle}
-				done={isItemDone}
-			/>
-		);
-	}
+	// TRANSFORM DATA TO JSX ELEMENTS
+	const transformedList = Object.keys(todos).map((todoItemID) => {
+		const todoItemData = todos[todoItemID];
+		return <TodoItem key={todoItemID} id={todoItemID} data={todoItemData} />;
+	});
 
 	return (
 		<div className={styles["todolist-body"]}>
-			<ul>{todoList}</ul>
-			<ul></ul>
+			<ul>{transformedList}</ul>
 		</div>
 	);
 };
