@@ -1,9 +1,9 @@
 import { ref, push, remove, update, set } from "firebase/database";
-import { database } from "../firebase/firebase_init";
+import { firebaseRealtimeDBInstance } from "../firebase/firebase_init";
 
 export const DB_actions = {
   setProjects: function (userID, projects) {
-    const databaseRef = ref(database, `/${userID}/projects`);
+    const databaseRef = ref(firebaseRealtimeDBInstance, `/${userID}/projects`);
 
     try {
       set(databaseRef, projects);
@@ -14,7 +14,7 @@ export const DB_actions = {
   },
 
   addProjectItem: function (userID, projectItem) {
-    const databaseRef = ref(database, `/${userID}/projects`);
+    const databaseRef = ref(firebaseRealtimeDBInstance, `/${userID}/projects`);
 
     try {
       push(databaseRef, projectItem);
@@ -26,7 +26,7 @@ export const DB_actions = {
   },
 
   addTodoItem: function (userID, projectID, todoItem) {
-    const databaseRef = ref(database, `/${userID}/projects/${projectID}/todos`);
+    const databaseRef = ref(firebaseRealtimeDBInstance, `/${userID}/projects/${projectID}/todos`);
 
     try {
       push(databaseRef, todoItem);
@@ -38,7 +38,7 @@ export const DB_actions = {
   },
 
   updateProjectItem: function (userID, projectID, value) {
-    const databaseRef = ref(database, `/${userID}/projects/${projectID}`);
+    const databaseRef = ref(firebaseRealtimeDBInstance, `/${userID}/projects/${projectID}`);
 
     try {
       update(databaseRef, value);
@@ -50,7 +50,7 @@ export const DB_actions = {
   },
 
   updateTodoItem: function (userID, projectID, itemID, value) {
-    const databaseRef = ref(database, `/${userID}/projects/${projectID}/todos/${itemID}`);
+    const databaseRef = ref(firebaseRealtimeDBInstance, `/${userID}/projects/${projectID}/todos/${itemID}`);
 
     try {
       update(databaseRef, value);
@@ -61,7 +61,7 @@ export const DB_actions = {
   },
 
   deleteProjectItem: function (userID, projectID) {
-    const databaseRef = ref(database, `/${userID}/projects/${projectID}`);
+    const databaseRef = ref(firebaseRealtimeDBInstance, `/${userID}/projects/${projectID}`);
 
     try {
       remove(databaseRef);
@@ -72,7 +72,7 @@ export const DB_actions = {
   },
 
   deleteTodoItem: function (userID, projectID, itemID) {
-    const databaseRef = ref(database, `/${userID}/projects/${projectID}/todos/${itemID}`);
+    const databaseRef = ref(firebaseRealtimeDBInstance, `/${userID}/projects/${projectID}/todos/${itemID}`);
 
     try {
       remove(databaseRef);

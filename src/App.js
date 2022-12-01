@@ -1,7 +1,7 @@
 import { useContext, useState, useRef, useEffect, useCallback } from "react";
-import { signInWithPopup, signOut } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+
 import { onValue, ref } from "firebase/database";
-import { auth, database, googleProvider } from "./firebase/firebase_init";
 import { DB_actions } from "./functions/firebase_db";
 import { appManager } from "./managers/appManager";
 import { getActiveProject, getActiveProjectID, getLocalAppData, setNewActiveProject, toLocalStorage } from "./functions/projects";
@@ -14,10 +14,11 @@ import { TodoListContext } from "./context/TodoListContextProvider";
 import TodoListHeader from "./components/todolist-head/TodoListHeader";
 import TodoListBody from "./components/todolist-body/TodoListBody";
 import Info from "./components/info/info";
-
+import { firebaseAuthInstance, firebaseRealtimeDBInstance } from "./firebase/firebase_init";
 import "./App.css";
 
-function App() {
+const googleProvider = new GoogleAuthProvider();
+export default function App() {
   const { sidebarState, projects, setProjects } = useContext(TodoListContext);
   const signedInIndicatorRef = useRef(null);
   const [onLoading, setLoading] = useState(true);
@@ -59,16 +60,16 @@ function App() {
 
   // When app loads, sign in the user if there was a previous sign in
   useEffect(() => {
-    auth.onAuthStateChanged(function signUserIn() {
-      if (auth.currentUser && !appManager.userSignedIn) {
+    firebaseAuthInstance.onAuthStateChanged(function signUserIn() {
+      if (firebaseAuthInstance.currentUser && !appManager.userSignedIn) {
         setLoading(true);
-        setUser(auth.currentUser.displayName);
+        setUser(firebaseAuthInstance.currentUser.displayName);
         appManager.userSignedIn = true;
-        appManager.uid = auth.currentUser.uid;
+        appManager.uid = firebaseAuthInstance.currentUser.uid;
 
         const appDataRef = ref(
-          database,
-          `/${auth.currentUser.uid}/projects`
+          firebaseRealtimeDBInstance,
+          `/${firebaseAuthInstance.currentUser.uid}/projects`
         );
         onValue(appDataRef, loadAppData);
       }
@@ -77,7 +78,7 @@ function App() {
 
   useEffect(() => {
     setTimeout(() => {
-      if (auth.currentUser === null) {
+      if (firebaseAuthInstance.currentUser === null) {
         setLoading(false);
 
         // CREATE DEFAULT PROJECT IF THERE IS NONE, ELSE LOAD EXISTING APP DATA
@@ -103,11 +104,11 @@ function App() {
   const signInWithGoogle = async () => {
     // IF THERE IS NO USER CURRENTLY LOGGED IN, LOGIN. ELSE, SIGN OUT
     try {
-      if (auth.currentUser === null) {
-          await signInWithPopup(auth, googleProvider);
+      if (firebaseAuthInstance.currentUser === null) {
+          await signInWithPopup(firebaseAuthInstance, googleProvider);
       }
       else {
-        await signOut(auth);
+        await signOut(firebaseAuthInstance);
   
         setUser("Sign In");
         appManager.userSignedIn = false;
@@ -154,5 +155,3 @@ function App() {
     </>
   );
 }
-
-export default App;

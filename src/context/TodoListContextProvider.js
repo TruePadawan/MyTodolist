@@ -1,36 +1,40 @@
-import { useState, useEffect } from "react";
-import { getActiveProjectID } from "../functions/projects";
-import { appManager } from "../managers/appManager";
+import { onValue, ref } from "firebase/database";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { createContext } from "react";
+import { firebaseRealtimeDBInstance as database } from "../firebase/firebase_init";
+import { APP_LOCALSTORAGE_KEY } from "../utils/other-utils";
+import { AuthContext } from "./AuthContextProvider";
 
 export const TodoListContext = createContext({
-	projects: {},
-	setProjects: () => {},
-	noProjects: undefined,
+	data: [],
 });
 
 const TodoListContextProvider = (props) => {
-	const [projects, setProjects] = useState({});
-	const [noProjects, setNoProjects] = useState(false);
-	const [sidebarState, setSideBarState] = useState("opened");
-	appManager.activeProjectID = getActiveProjectID(projects);
+	const { authenticatedUserData } = useContext(AuthContext);
+	const [data, setData] = useState(() => {
+		const cachedData = localStorage.getObj(APP_LOCALSTORAGE_KEY);
+		if (cachedData === null) {
+			return [];
+		}
+		return cachedData;
+	});
+
+	const updateAppData = useCallback((snapshot) => {
+		// TRANSFORM DATA
+		console.log(snapshot);
+	}, []);
 
 	useEffect(() => {
-		if (Object.keys(projects).length === 0) {
-			setNoProjects(true);
-		} else {
-			setNoProjects(false);
+		if (authenticatedUserData !== null) {
+			// LOAD USER TODO DATA FROM DB
+			const { id: userID } = authenticatedUserData;
+			const appDataDBRef = ref(database, `/${userID}/projects`);
+			return onValue(appDataDBRef, updateAppData);
 		}
-	}, [setNoProjects, projects]);
+	}, [authenticatedUserData, updateAppData]);
+
 	return (
-		<TodoListContext.Provider
-			value={{
-				projects,
-				setProjects,
-				noProjects,
-				sidebarState,
-				setSideBarState,
-			}}>
+		<TodoListContext.Provider value={data}>
 			{props.children}
 		</TodoListContext.Provider>
 	);
