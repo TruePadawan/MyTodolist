@@ -1,10 +1,9 @@
 import { useRef, useContext, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import Modal from "../../modal/Modal";
 import { InputField, TextArea } from "../../Input/InputField";
-import { TodoListContext } from "../../../context/TodoListContextProvider";
 import { Alert, Button, Snackbar } from "@mui/material";
+import { TodoListContext } from "../../../../context/TodoListContextProvider";
 import styles from "./styles.module.css";
 
 const initialSnackbarState = { severity: "error", text: "", open: false };
@@ -17,7 +16,8 @@ const CreateTodoItemDialog = ({ onClose }) => {
 	const priorityRef = useRef();
 
 	const handleError = (errorText, errorObj) => {
-		setSnackbarData({ severity: "error", text: errorText, open: true });
+		const text = `${errorText} - ${errorObj.message}`;
+		setSnackbarData({ severity: "error", text, open: true });
 	};
 
 	const closeSnackbar = () => {
