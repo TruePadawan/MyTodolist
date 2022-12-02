@@ -1,26 +1,41 @@
 import { onValue, ref } from "firebase/database";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { createContext } from "react";
-import { firebaseRealtimeDBInstance as database } from "../firebase/firebase_init";
-import { getLocalAppData, storeAppDataLocally } from "../utils/other-utils";
+import {
+	firebaseRealtimeDBInstance as database,
+	firebaseRealtimeDBInstance,
+} from "../firebase/firebase_init";
+import {
+	getActiveProject,
+	getLocalAppData,
+	storeAppDataLocally,
+} from "../utils/other-utils";
 import { AuthContext } from "./AuthContextProvider";
 import { v4 as uuid } from "uuid";
-import { createProjectInDB } from "../utils/firebase-utils";
+import {
+	createProjectInDB,
+	deleteProjectItemFromDB,
+	deleteTodoItemFromDB,
+	setProjects,
+	updateProjectItemInDB,
+	updateTodoItemInDB,
+} from "../utils/firebase-utils";
 
 export const TodoListContext = createContext({
 	data: {},
-	handleProjectCreation: (projectTitle) => {},
+	handleProjectCreation: async (projectTitle) => {},
 	addTodoItemToActiveProject: async (todoItemData) => {},
-	updateTodoItem: (todoItemID, projectID, newData) => {},
-	deleteTodoItem: (todoItemID, projectID) => {},
-	updateProjectItem: (projectID, newData) => {},
-	deleteProjectItem: (projectID) => {},
-	setProjectAsActive: (projectID) => {},
+	updateTodoItem: async (todoItemID, projectID, newData) => {},
+	deleteTodoItem: async (todoItemID, projectID) => {},
+	updateProjectItem: async (projectID, newData) => {},
+	deleteProjectItem: async (projectID) => {},
+	setProjectAsActive: async (projectID) => {},
 });
 
 const TodoListContextProvider = (props) => {
 	const { authenticatedUserData } = useContext(AuthContext);
 	const [data, setData] = useState(getLocalAppData());
+	const userSignedIn = authenticatedUserData !== null;
 
 	useEffect(() => {
 		storeAppDataLocally(data);
@@ -63,50 +78,121 @@ const TodoListContextProvider = (props) => {
 		[authenticatedUserData]
 	);
 
-	const addTodoItemToActiveProject = useCallback(async (todoItemData) => {
-		console.log(todoItemData);
-	}, []);
+	const addTodoItemToActiveProject = async (todoItemData) => {
+		const project = getActiveProject(data);
+		const todos = project.todos;
+		const todoID = uuid();
+		todos[todoID] = todoItemData;
+		const updatedProjectData = {
+			title: project.title,
+			active: project.active,
+			todos,
+		};
+		updateProjectItem(project.id, updatedProjectData);
+	};
 
-	const updateTodoItem = useCallback((todoItemID, projectID, newData) => {
-		setData((snapshot) => {
-			snapshot[projectID].todos[todoItemID] = newData;
-			return { ...snapshot };
-		});
-	}, []);
-
-	const deleteTodoItem = useCallback((todoItemID, projectID) => {
-		setData((snapshot) => {
-			Reflect.deleteProperty(snapshot[projectID].todos, todoItemID);
-			return { ...snapshot };
-		});
-	}, []);
-
-	const updateProjectItem = useCallback((projectID, newData) => {
-		setData((snapshot) => {
-			const project = snapshot[projectID];
-			snapshot[projectID] = { ...project, ...newData };
-			return { ...snapshot };
-		});
-	}, []);
-
-	const deleteProjectItem = useCallback((projectID) => {
-		setData((snapshot) => {
-			Reflect.deleteProperty(snapshot, projectID);
-			return { ...snapshot };
-		});
-	}, []);
-
-	const setProjectAsActive = useCallback((projectID) => {
-		setData((snapshot) => {
-			snapshot[projectID].active = true;
-			for (const key in snapshot) {
-				if (key !== projectID) {
-					snapshot[key].active = false;
-				}
+	const updateTodoItem = useCallback(
+		(todoItemID, projectID, newData) => {
+			if (!userSignedIn) {
+				setData((snapshot) => {
+					const todos = snapshot[projectID].todos;
+					snapshot[projectID].todos[todoItemID] = { ...todos, ...newData };
+					return { ...snapshot };
+				});
+			} else {
+				updateTodoItemInDB(
+					authenticatedUserData.uid,
+					projectID,
+					todoItemID,
+					newData
+				);
 			}
-			return { ...snapshot };
-		});
-	}, []);
+		},
+		[userSignedIn, authenticatedUserData]
+	);
+
+	const deleteTodoItem = useCallback(
+		(todoItemID, projectID) => {
+			if (!userSignedIn) {
+				setData((snapshot) => {
+					Reflect.deleteProperty(snapshot[projectID].todos, todoItemID);
+					return { ...snapshot };
+				});
+			} else {
+				deleteTodoItemFromDB(authenticatedUserData.uid, projectID, todoItemID);
+			}
+		},
+		[userSignedIn, authenticatedUserData]
+	);
+
+	const updateProjectItem = useCallback(
+		(projectID, newData) => {
+			if (!userSignedIn) {
+				setData((snapshot) => {
+					const project = snapshot[projectID];
+					snapshot[projectID] = { ...project, ...newData };
+					return { ...snapshot };
+				});
+			} else {
+				updateProjectItemInDB(authenticatedUserData.uid, projectID, newData);
+			}
+		},
+		[authenticatedUserData, userSignedIn]
+	);
+
+	const deleteProjectItem = useCallback(
+		(projectID) => {
+			if (!userSignedIn) {
+				setData((snapshot) => {
+					Reflect.deleteProperty(snapshot, projectID);
+					return { ...snapshot };
+				});
+			} else {
+				deleteProjectItemFromDB(authenticatedUserData.uid, projectID);
+			}
+		},
+		[authenticatedUserData, userSignedIn]
+	);
+
+	const setProjectAsActive = useCallback(
+		(projectID) => {
+			if (!userSignedIn) {
+				setData((snapshot) => {
+					snapshot[projectID].active = true;
+					for (const key in snapshot) {
+						if (key !== projectID) {
+							snapshot[key].active = false;
+						}
+					}
+					return { ...snapshot };
+				});
+			} else {
+				// FIND ACTIVE PROJECT, DEACTIVATE,
+				// ACTIVATE OTHER PROJECT
+				const databaseRef = ref(
+					firebaseRealtimeDBInstance,
+					`/${authenticatedUserData.uid}/projects`
+				);
+				onValue(
+					databaseRef,
+					(snapshot) => {
+						const snapshotValue = snapshot.val();
+						if (snapshotValue) {
+							snapshotValue[projectID].active = true;
+							for (const key in snapshotValue) {
+								if (key !== projectID) {
+									snapshotValue[key].active = false;
+								}
+							}
+							setProjects(authenticatedUserData.uid, snapshotValue);
+						}
+					},
+					{ onlyOnce: true }
+				);
+			}
+		},
+		[userSignedIn, authenticatedUserData]
+	);
 
 	const value = {
 		data,

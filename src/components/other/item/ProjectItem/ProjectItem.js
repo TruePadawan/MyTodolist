@@ -3,14 +3,12 @@ import EditProjectItem from "../../dialog/EditProjectItem/EditProjectItem";
 import { TodoListContext } from "../../../../context/TodoListContextProvider";
 import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import { AuthContext } from "../../../../context/AuthContextProvider";
-import { updateProjectItem as updateProjectItemInDB } from "../../../../utils/firebase-utils";
 import styles from "./styles.module.css";
 
 const ProjectItem = ({ projectData }) => {
 	const [showEditProjectDialog, setShowEditProjectDialog] = useState(false);
-	const { authenticatedUserData } = useContext(AuthContext);
-	const { setProjectAsActive } = useContext(TodoListContext);
+	const { setProjectAsActive, updateProjectItem, deleteProjectItem } =
+		useContext(TodoListContext);
 
 	function editButtonClickHandler() {
 		setEditItem(true);
@@ -18,15 +16,7 @@ const ProjectItem = ({ projectData }) => {
 
 	function buttonClickHandler() {
 		if (projectData.active === true) return;
-
-		const userSignedIn = authenticatedUserData !== null;
-		if (!userSignedIn) {
-			setProjectAsActive(projectData.id);
-		} else {
-			updateProjectItemInDB(authenticatedUserData.uid, projectData.id, {
-				active: true,
-			});
-		}
+		setProjectAsActive(projectData.id);
 	}
 
 	let btnClasses = `${styles["project-item"]} ${
@@ -35,10 +25,12 @@ const ProjectItem = ({ projectData }) => {
 	return (
 		<Fragment>
 			<EditProjectItem
-				title={projectData.title}
-				projectID={projectData.id}
 				open={showEditProjectDialog}
 				onClose={() => setShowEditProjectDialog(false)}
+				title={projectData.title}
+				projectID={projectData.id}
+				updateProject={updateProjectItem}
+				deleteProject={deleteProjectItem}
 			/>
 			<button
 				aria-label="set as active"

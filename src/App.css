@@ -57,6 +57,39 @@
   font-size: medium;
 }
 
+.save-btn,
+.delete-btn {
+  border: none;
+  height: 2rem;
+  border-radius: 10px;
+}
+
+.save-btn {
+  background-color: lightgreen;
+  box-shadow: 1px 1px 3px rgba(172, 172, 172, 0.712);
+}
+
+.save-btn:hover {
+  background-color: rgb(118, 199, 118);
+}
+
+.save-btn:active {
+  background-color: lightgreen;
+}
+
+.delete-btn {
+  background-color: indianred;
+  box-shadow: 1px 1px 3px rgba(226, 154, 154, 0.856);
+}
+
+.delete-btn:hover {
+  background-color: rgb(182, 81, 81);
+}
+
+.delete-btn:active {
+  background-color: indianred;
+}
+
 @media screen and (max-width: 700px) {
   .sidebar-closed {
     grid-template-columns: 1fr;

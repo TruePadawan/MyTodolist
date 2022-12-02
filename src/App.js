@@ -6,7 +6,7 @@ import TodoListHead from "./components/layout/todolist-head/TodoListHead";
 import TodoListBody from "./components/layout/todolist-body/TodoListBody";
 import Info from "./components/other/info/info";
 import GoogleAuthBtn from "./components/other/button/GoogleAuthBtn/GoogleAuthBtn";
-import { getActiveProjectData } from "./utils/other-utils";
+import { getActiveProject } from "./utils/other-utils";
 import "./App.css";
 
 export default function App() {
@@ -90,7 +90,7 @@ export default function App() {
 	// }, [setProjects]);
 
 	// const activeProject = getActiveProject(projects, appManager.activeProjectID);
-	const activeProjectData = getActiveProjectData(data);
+	const activeProjectData = getActiveProject(data);
 	const mainClassName = sidebarIsOpen ? "sidebar-opened" : "sidebar-closed";
 
 	return (

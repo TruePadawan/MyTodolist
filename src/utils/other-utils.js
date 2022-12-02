@@ -20,9 +20,14 @@ export function storeAppDataLocally(data) {
 	localStorage.setObj(APP_LOCALSTORAGE_KEY, data);
 }
 
-export function getActiveProjectData(projectsData) {
-	return {
-		title: "",
-		todos: {},
-	};
+export function getActiveProject(projectsData) {
+	for (const projectID in projectsData) {
+		if (projectsData[projectID].active) {
+			return {
+				id: projectID,
+				...projectsData[projectID],
+			};
+		}
+	}
+	return null;
 }

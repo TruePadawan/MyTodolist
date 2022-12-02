@@ -15,17 +15,17 @@ export function createProjectInDB(userID, projectTitle) {
 	});
 }
 
-export function addTodoItem(userID, projectID, todoItem) {
+export function addTodoItemToDB(userID, projectID, todoItem) {
 	const databaseRef = ref(database, `/${userID}/projects/${projectID}/todos`);
 	push(databaseRef, todoItem);
 }
 
-export function updateProjectItem(userID, projectID, value) {
+export function updateProjectItemInDB(userID, projectID, value) {
 	const databaseRef = ref(database, `/${userID}/projects/${projectID}`);
 	update(databaseRef, value);
 }
 
-export function updateTodoItem(userID, projectID, itemID, value) {
+export function updateTodoItemInDB(userID, projectID, itemID, value) {
 	const databaseRef = ref(
 		database,
 		`/${userID}/projects/${projectID}/todos/${itemID}`
@@ -33,12 +33,12 @@ export function updateTodoItem(userID, projectID, itemID, value) {
 	update(databaseRef, value);
 }
 
-export function deleteProjectItem(userID, projectID) {
+export function deleteProjectItemFromDB(userID, projectID) {
 	const databaseRef = ref(database, `/${userID}/projects/${projectID}`);
 	remove(databaseRef);
 }
 
-export function deleteTodoItem(userID, projectID, itemID) {
+export function deleteTodoItemFromDB(userID, projectID, itemID) {
 	const databaseRef = ref(
 		database,
 		`/${userID}/projects/${projectID}/todos/${itemID}`
