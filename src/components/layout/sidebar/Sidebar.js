@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CreateProjectDialog from "../../other/dialog/CreateProjectDialog/CreateProjectDialog";
-import styles from "./sidebar.module.css";
+import styles from "./styles.module.css";
 
 const Sidebar = (props) => {
 	const [dialogIsOpen, setDialogIsOpen] = useState(false);

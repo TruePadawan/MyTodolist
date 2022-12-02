@@ -1,6 +1,6 @@
 import { useState } from "react";
-import TodoItemDetails from "./TodoItemDetails/TodoItemDetails";
-import styles from "./TodoItem.module.css";
+import TodoItemDetails from "../../dialog/TodoItemDetails/TodoItemDetails";
+import styles from "./styles.module.css";
 
 const TodoItem = (props) => {
 	const [showDetails, setShowDetails] = useState(false);

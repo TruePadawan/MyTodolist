@@ -13,13 +13,3 @@
 .add-todo-btn:active {
   background-color: lightgreen;
 }
-
-.todo-item-priority {
-  border: none;
-  background-color: #fbb45f;
-  padding: 5px 0;
-}
-
-.todo-item-priority:focus {
-  outline: none;
-}

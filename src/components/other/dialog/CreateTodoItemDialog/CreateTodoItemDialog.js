@@ -1,40 +1,45 @@
 import { useRef, useContext, useState } from "react";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import Modal from "../../modal/Modal";
-import { InputField, TextArea } from "../../Input/InputField";
+import { InputField, TextArea } from "../../input/InputField/InputField";
 import { Alert, Button, Snackbar } from "@mui/material";
 import { TodoListContext } from "../../../../context/TodoListContextProvider";
 import styles from "./styles.module.css";
+import TodoItemPriority from "../../input/TodoItemPriority/TodoItemPriority";
 
 const initialSnackbarState = { severity: "error", text: "", open: false };
 const CreateTodoItemDialog = ({ onClose }) => {
 	const { addTodoItemToActiveProject } = useContext(TodoListContext);
 	const [addBtnIsDisabled, setAddBtnIsDisabled] = useState(false);
 	const [snackbarData, setSnackbarData] = useState(initialSnackbarState);
+	const [priority, setPriority] = useState("low");
 	const titleRef = useRef();
 	const descRef = useRef();
 	const priorityRef = useRef();
 
-	const handleError = (errorText, errorObj) => {
+	function handleError(errorText, errorObj) {
 		const text = `${errorText} - ${errorObj.message}`;
 		setSnackbarData({ severity: "error", text, open: true });
-	};
+	}
 
-	const closeSnackbar = () => {
+	function closeSnackbar() {
 		setSnackbarData(initialSnackbarState);
-	};
+	}
 
-	const formSubmitHandler = async (event) => {
+	function onSelectValueChanged(event) {
+		setPriority(event.target.value);
+	}
+
+	async function formSubmitHandler(event) {
 		event.preventDefault();
-
 		setAddBtnIsDisabled(true);
 		const title = titleRef.current.value;
-		const description = descRef.current.value;
+		const desc = descRef.current.value;
 		const priority = priorityRef.current.value;
 
 		const todoItemData = {
 			title,
-			description,
+			desc,
 			priority,
 			done: false,
 		};
@@ -46,11 +51,11 @@ const CreateTodoItemDialog = ({ onClose }) => {
 			handleError("Unable to complete action", error);
 		}
 		setAddBtnIsDisabled(false);
-	};
+	}
 
 	return (
 		<Modal close={onClose}>
-			<form onSubmit={formSubmitHandler}>
+			<form onSubmit={formSubmitHandler} className="dialog-form">
 				<h3>Create Todo Item</h3>
 				<div className="d-flex flex-column p-1">
 					<InputField
@@ -61,14 +66,7 @@ const CreateTodoItemDialog = ({ onClose }) => {
 						autoFocus
 						required
 					/>
-					<select
-						ref={priorityRef}
-						className={styles["todo-item-priority"]}
-						required>
-						<option value="low">Low Priority</option>
-						<option value="med">Medium Priority</option>
-						<option value="high">High Priority</option>
-					</select>
+					<TodoItemPriority value={priority} onChange={onSelectValueChanged} />
 					<TextArea
 						label={"Description"}
 						inputRef={descRef}

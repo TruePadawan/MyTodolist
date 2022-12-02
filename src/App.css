@@ -49,6 +49,14 @@
   width: 100%;
 }
 
+.dialog-form {
+  padding: 0 1rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: medium;
+}
+
 @media screen and (max-width: 700px) {
   .sidebar-closed {
     grid-template-columns: 1fr;

@@ -4,8 +4,8 @@ import Sidebar from "./components/layout/sidebar/Sidebar";
 import { TodoListContext } from "./context/TodoListContextProvider";
 import TodoListHead from "./components/layout/todolist-head/TodoListHead";
 import TodoListBody from "./components/layout/todolist-body/TodoListBody";
-import Info from "./components/info/info";
-import GoogleAuthBtn from "./components/button/GoogleAuthBtn/GoogleAuthBtn";
+import Info from "./components/other/info/info";
+import GoogleAuthBtn from "./components/other/button/GoogleAuthBtn/GoogleAuthBtn";
 import { getActiveProjectData } from "./utils/other-utils";
 import "./App.css";
 
@@ -110,7 +110,10 @@ export default function App() {
 						</h2>
 						<div className="todolist">
 							<TodoListHead appData={data} />
-							<TodoListBody todos={activeProjectData.todos} />
+							<TodoListBody
+								projectID={activeProjectData.id}
+								todos={activeProjectData.todos}
+							/>
 						</div>
 					</section>
 				</main>

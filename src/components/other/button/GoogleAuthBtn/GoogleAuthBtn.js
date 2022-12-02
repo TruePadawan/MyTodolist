@@ -1,10 +1,10 @@
 import { Button } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import styles from "./styles.module.css";
-import { firebaseAuthInstance } from "../../../firebase/firebase_init";
+import { firebaseAuthInstance } from "../../../../firebase/firebase_init";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { useContext } from "react";
-import { AuthContext } from "../../../context/AuthContextProvider";
+import { AuthContext } from "../../../../context/AuthContextProvider";
 
 const googleProvider = new GoogleAuthProvider();
 export default function GoogleAuthBtn() {

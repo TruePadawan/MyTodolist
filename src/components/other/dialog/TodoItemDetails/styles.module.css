@@ -1,53 +1,36 @@
-.btnGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.btnGroup > button {
+.save-btn,
+.delete-btn {
   border: none;
   height: 2rem;
   border-radius: 10px;
 }
 
-.btnGroup > button > svg {
+.btn-group>button>svg {
   vertical-align: -7px;
 }
 
-.saveBtn {
+.save-btn {
   background-color: lightgreen;
   box-shadow: 1px 1px 3px rgba(172, 172, 172, 0.712);
 }
 
-.saveBtn:hover {
+.save-btn:hover {
   background-color: rgb(118, 199, 118);
 }
 
-.saveBtn:active {
+.save-btn:active {
   background-color: lightgreen;
 }
 
-.setDoneOrNotDone {
-  background-color: lightblue;
-}
-
-.setDoneOrNotDone:hover {
-  background-color: rgb(141, 186, 201);
-}
-
-.setDoneOrNotDone:active {
-  background-color: lightblue;
-}
-
-.deleteBtn {
+.delete-btn {
   background-color: indianred;
   box-shadow: 1px 1px 3px rgba(226, 154, 154, 0.856);
 }
 
-.deleteBtn:hover {
+.delete-btn:hover {
   background-color: rgb(182, 81, 81);
 }
 
-.deleteBtn:active {
+.delete-btn:active {
   background-color: indianred;
 }

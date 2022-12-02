@@ -1,10 +1,10 @@
 import { Box, Button, Modal } from "@mui/material";
 import { useContext, useState } from "react";
-import { TodoListContext } from "../../../context/TodoListContextProvider";
-import { InputField } from "../../Input/InputField";
+import { TodoListContext } from "../../../../context/TodoListContextProvider";
+import { InputField } from "../../input/InputField/InputField";
 
 export default function CreateProjectDialog(props) {
-	const { createNewProject } = useContext(TodoListContext);
+	const { handleProjectCreation } = useContext(TodoListContext);
 	const [projectTitle, setProjectTitle] = useState("");
 	const [helperText, setHelperText] = useState("");
 
@@ -18,7 +18,7 @@ export default function CreateProjectDialog(props) {
 			setHelperText("Project title must have at least 3 characters!");
 			return;
 		}
-		createNewProject(projectTitle);
+		handleProjectCreation(projectTitle);
 	}
 
 	const contentStyle = {
@@ -37,7 +37,11 @@ export default function CreateProjectDialog(props) {
 
 	return (
 		<Modal open={props.open} onClose={props.onClose}>
-			<Box style={contentStyle} component="form" onSubmit={formSubmitHandler}>
+			<Box
+				style={contentStyle}
+				component="form"
+				className="dialog-form"
+				onSubmit={formSubmitHandler}>
 				<h3>Create Project</h3>
 				<InputField
 					label="Project title"

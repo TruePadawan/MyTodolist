@@ -6,9 +6,13 @@ export function setProjects(userID, projects) {
 	set(databaseRef, projects);
 }
 
-export function addProjectItem(userID, projectItem) {
+export function createProjectInDB(userID, projectTitle) {
 	const databaseRef = ref(database, `/${userID}/projects`);
-	push(databaseRef, projectItem);
+	push(databaseRef, {
+		title: projectTitle,
+		active: false,
+		todos: {},
+	});
 }
 
 export function addTodoItem(userID, projectID, todoItem) {
