@@ -1,10 +1,14 @@
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import Modal from "../../../other/modal/Modal";
 import { InputField } from "../../../Input/InputField";
 import "./EditProjectItem.css";
 
 const EditProjectItem = (props) => {
 	const titleRef = useRef();
+
+	if (props.open === false) {
+		return <Fragment></Fragment>;
+	}
 
 	function formSubmitHandler(event) {
 		event.preventDefault();
@@ -16,7 +20,7 @@ const EditProjectItem = (props) => {
 	}
 
 	return (
-		<Modal close={props.close}>
+		<Modal close={props.onClose}>
 			<form className="d-flex flex-column" onSubmit={formSubmitHandler}>
 				<h3>Edit Project</h3>
 				<InputField

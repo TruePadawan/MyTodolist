@@ -6,22 +6,23 @@ import { Button } from "@mui/material";
 import styles from "./styles.module.css";
 
 const TodoListHead = ({ appData: data }) => {
-	const [showNewItemDialog, setShowNewItemDialog] = useState(false);
+	const [showCreateItemDialog, setShowCreateItemDialog] = useState(false);
 
 	function dialogOpenHandler() {
-		setShowNewItemDialog(true);
+		setShowCreateItemDialog(true);
 	}
 
 	function dialogCloseHandler() {
-		setShowNewItemDialog(false);
+		setShowCreateItemDialog(false);
 	}
 
 	const noActiveProject = Object.keys(data).length === 0;
 	return (
 		<Fragment>
-			{showNewItemDialog && (
-				<CreateTodoItemDialog onClose={dialogCloseHandler} />
-			)}
+			<CreateTodoItemDialog
+				open={showCreateItemDialog}
+				onClose={dialogCloseHandler}
+			/>
 			<div className={styles["todolist-header-outer"]}>
 				<DateTime />
 				<div className={styles["todolist--header"]}>

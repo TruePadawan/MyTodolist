@@ -1,4 +1,4 @@
-import { useRef, useContext, useState } from "react";
+import { useRef, useContext, useState, Fragment } from "react";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import Modal from "../../modal/Modal";
 import { InputField, TextArea } from "../../input/InputField/InputField";
@@ -8,7 +8,7 @@ import styles from "./styles.module.css";
 import TodoItemPriority from "../../input/TodoItemPriority/TodoItemPriority";
 
 const initialSnackbarState = { severity: "error", text: "", open: false };
-const CreateTodoItemDialog = ({ onClose }) => {
+const CreateTodoItemDialog = ({ onClose, open }) => {
 	const { addTodoItemToActiveProject } = useContext(TodoListContext);
 	const [addBtnIsDisabled, setAddBtnIsDisabled] = useState(false);
 	const [snackbarData, setSnackbarData] = useState(initialSnackbarState);
@@ -16,6 +16,10 @@ const CreateTodoItemDialog = ({ onClose }) => {
 	const titleRef = useRef();
 	const descRef = useRef();
 	const priorityRef = useRef();
+
+	if (open === false) {
+		return <Fragment></Fragment>;
+	}
 
 	function handleError(errorText, errorObj) {
 		const text = `${errorText} - ${errorObj.message}`;
