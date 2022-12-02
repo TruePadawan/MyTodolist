@@ -1,10 +1,4 @@
-.projects {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-}
-
-.projectItem {
+.project-item {
     background-color: rgb(243, 197, 105);
     padding: 10px 10px;
 
@@ -21,7 +15,7 @@
     font-size: 1.2rem;
 }
 
-.projectTitle {
+.project-title {
     overflow: hidden;
     border: none;
     font-size: 18px;
@@ -29,12 +23,8 @@
     margin-left: auto;
 }
 
-.projectTitle:focus {
+.project-title:focus {
     outline: none;
-}
-
-.projectItem>img {
-    margin-left: auto;
 }
 
 .active {

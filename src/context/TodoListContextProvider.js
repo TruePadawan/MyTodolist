@@ -13,6 +13,9 @@ export const TodoListContext = createContext({
 	addTodoItemToActiveProject: async (todoItemData) => {},
 	updateTodoItem: (todoItemID, projectID, newData) => {},
 	deleteTodoItem: (todoItemID, projectID) => {},
+	updateProjectItem: (projectID, newData) => {},
+	deleteProjectItem: (projectID) => {},
+	setProjectAsActive: (projectID) => {},
 });
 
 const TodoListContextProvider = (props) => {
@@ -24,7 +27,7 @@ const TodoListContextProvider = (props) => {
 	}, [data]);
 
 	const processAppData = useCallback((snapshot) => {
-		// PROCESS DATA
+		// PROCESS DATA, CREATE DEFAULT PROJECT IF NONE
 		console.log(snapshot);
 	}, []);
 
@@ -78,12 +81,42 @@ const TodoListContextProvider = (props) => {
 		});
 	}, []);
 
+	const updateProjectItem = useCallback((projectID, newData) => {
+		setData((snapshot) => {
+			const project = snapshot[projectID];
+			snapshot[projectID] = { ...project, ...newData };
+			return { ...snapshot };
+		});
+	}, []);
+
+	const deleteProjectItem = useCallback((projectID) => {
+		setData((snapshot) => {
+			Reflect.deleteProperty(snapshot, projectID);
+			return { ...snapshot };
+		});
+	}, []);
+
+	const setProjectAsActive = useCallback((projectID) => {
+		setData((snapshot) => {
+			snapshot[projectID].active = true;
+			for (const key in snapshot) {
+				if (key !== projectID) {
+					snapshot[key].active = false;
+				}
+			}
+			return { ...snapshot };
+		});
+	}, []);
+
 	const value = {
 		data,
 		handleProjectCreation,
 		addTodoItemToActiveProject,
 		updateTodoItem,
 		deleteTodoItem,
+		updateProjectItem,
+		deleteProjectItem,
+		setProjectAsActive,
 	};
 
 	return (
