@@ -1,6 +1,5 @@
 import { Button } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
-import styles from "./styles.module.css";
 import { firebaseAuthInstance } from "../../../../firebase/firebase_init";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { useContext } from "react";
@@ -23,8 +22,8 @@ export default function GoogleAuthBtn() {
 	const btnText = userDisplayName || "Sign In";
 	return (
 		<Button
-			className={styles.btn}
-			variant="outlined"
+			variant="text"
+			sx={{ color: "brown", fontWeight: "bold", fontFamily: "inherit" }}
 			startIcon={<GoogleIcon />}
 			onClick={signInWithGoogle}>
 			{btnText}

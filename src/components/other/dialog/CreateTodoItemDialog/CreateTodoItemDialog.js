@@ -4,7 +4,6 @@ import Modal from "../../modal/Modal";
 import { InputField, TextArea } from "../../input/InputField/InputField";
 import { Alert, Button, Snackbar } from "@mui/material";
 import { TodoListContext } from "../../../../context/TodoListContextProvider";
-import styles from "./styles.module.css";
 import TodoItemPriority from "../../input/TodoItemPriority/TodoItemPriority";
 
 const initialSnackbarState = { severity: "error", text: "", open: false };
@@ -57,11 +56,26 @@ const CreateTodoItemDialog = ({ onClose, open }) => {
 		setAddBtnIsDisabled(false);
 	}
 
+	const btnStyles = {
+		width: "100%",
+		height: "100%",
+		fontFamily: "inherit",
+		borderRadius: "inherit",
+		color: "brown",
+		backgroundColor: "#deaf72",
+		"&:hover": {
+			backgroundColor: "#a8885d",
+		},
+		"&:active": {
+			backgroundColor: "burlywood",
+		},
+	};
+
 	return (
 		<Modal close={onClose}>
 			<form onSubmit={formSubmitHandler} className="dialog-form">
 				<h3>Create Todo Item</h3>
-				<div className="d-flex flex-column p-1">
+				<div className="d-flex flex-column p-1 gap-2">
 					<InputField
 						inputRef={titleRef}
 						label={"Title"}
@@ -70,7 +84,18 @@ const CreateTodoItemDialog = ({ onClose, open }) => {
 						autoFocus
 						required
 					/>
-					<TodoItemPriority value={priority} onChange={onSelectValueChanged} />
+					<div
+						className="d-flex flex-column gap-1"
+						style={{ fontWeight: "500" }}>
+						<label htmlFor="todo-priority" style={{ fontSize: "1.2rem" }}>
+							Priority
+						</label>
+						<TodoItemPriority
+							value={priority}
+							onChange={onSelectValueChanged}
+							id="todo-priority"
+						/>
+					</div>
 					<TextArea
 						label={"Description"}
 						inputRef={descRef}
@@ -78,8 +103,9 @@ const CreateTodoItemDialog = ({ onClose, open }) => {
 						required
 					/>
 					<Button
+						variant="contained"
 						startIcon={<AddTaskIcon />}
-						className={styles["add-todo-btn"]}
+						sx={btnStyles}
 						disabled={addBtnIsDisabled}>
 						Add
 					</Button>

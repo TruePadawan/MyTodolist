@@ -16,6 +16,20 @@ const TodoListHead = ({ appData: data }) => {
 		setShowCreateItemDialog(false);
 	}
 
+	const btnStyles = {
+		width: "100%",
+		height: "100%",
+		fontFamily: "inherit",
+		borderRadius: "inherit",
+		color: "brown",
+		backgroundColor: "#deaf72",
+		"&:hover": {
+			backgroundColor: "#a8885d",
+		},
+		"&:active": {
+			backgroundColor: "burlywood",
+		},
+	};
 	const noActiveProject = Object.keys(data).length === 0;
 	return (
 		<Fragment>
@@ -25,8 +39,9 @@ const TodoListHead = ({ appData: data }) => {
 			/>
 			<div className={styles["todolist-header-outer"]}>
 				<DateTime />
-				<div className={styles["todolist--header"]}>
+				<div className={styles["todolist-header"]}>
 					<Button
+						sx={btnStyles}
 						startIcon={<AddCircleOutlineIcon />}
 						onClick={dialogOpenHandler}
 						disabled={noActiveProject}>

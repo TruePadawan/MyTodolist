@@ -2,15 +2,20 @@
   display: flex;
   flex-direction: column;
   gap: 3px;
+  font-weight: 500;
 }
 
 .inputfield label, .textArea label {
-  font-size: 14px;
+  font-size: 1.2rem;
+}
+
+.inputfield>input, .textArea>textarea {
+  font-size: 1rem;
+  font-weight: inherit;
+  color: black;
 }
 
 .inputfield>input {
-  font-size: 1rem;
-  color: black;
   background-color: transparent;
   border: none;
   border-bottom: 1px solid darksalmon;
@@ -18,10 +23,5 @@
 
 .inputfield>input::placeholder {
   color: rgb(100, 100, 100);
-  font-size: medium;
-}
-
-.textArea > textarea {
-  color: black;
   font-size: medium;
 }

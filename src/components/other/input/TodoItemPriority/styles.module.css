@@ -2,6 +2,7 @@
     border: none;
     background-color: #fbb45f;
     padding: 5px 0;
+    font-weight: 500;
 }
 
 .todo-item-priority:focus {
