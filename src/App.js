@@ -95,7 +95,11 @@ export default function App() {
 
 	return (
 		<Fragment>
-			{loading && <Info message={"Loading AppData..."} />}
+			<Info
+				message={"Retrieving data from database..."}
+				open={loading}
+				onClose={false}
+			/>
 			<div className="App">
 				<Header onSidebarBtnClicked={toggleSidebar} />
 				<main className={mainClassName}>
@@ -109,7 +113,10 @@ export default function App() {
 							{activeProjectData.title}
 						</h2>
 						<div className="todolist">
-							<TodoListHead appData={data} />
+							<TodoListHead
+								appData={data}
+								activeProjectData={activeProjectData}
+							/>
 							<TodoListBody
 								projectID={activeProjectData.id}
 								todos={activeProjectData.todos}

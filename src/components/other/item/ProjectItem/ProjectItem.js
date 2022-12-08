@@ -11,7 +11,7 @@ const ProjectItem = ({ projectData }) => {
 		useContext(TodoListContext);
 
 	function editButtonClickHandler() {
-		setEditItem(true);
+		setShowEditProjectDialog(true);
 	}
 
 	function buttonClickHandler() {
@@ -19,7 +19,7 @@ const ProjectItem = ({ projectData }) => {
 		setProjectAsActive(projectData.id);
 	}
 
-	let btnClasses = `${styles["project-item"]} ${
+	let componentClassName = `${styles["project-item"]} ${
 		projectData.active ? styles["active"] : ""
 	}`;
 	return (
@@ -32,19 +32,21 @@ const ProjectItem = ({ projectData }) => {
 				updateProject={updateProjectItem}
 				deleteProject={deleteProjectItem}
 			/>
-			<button
-				aria-label="set as active"
-				type="button"
-				className={btnClasses}
-				onClick={buttonClickHandler}>
-				<span className={styles["project-title"]}>{projectData.title}</span>
+			<div className={componentClassName}>
+				<button
+					aria-label="set project as active"
+					type="button"
+					className={styles["project-item-btn"]}
+					onClick={buttonClickHandler}>
+					<span className={styles["project-title"]}>{projectData.title}</span>
+				</button>
 				<IconButton
 					aria-label="edit project"
 					type="button"
 					onClick={editButtonClickHandler}>
 					<EditIcon />
 				</IconButton>
-			</button>
+			</div>
 		</Fragment>
 	);
 };

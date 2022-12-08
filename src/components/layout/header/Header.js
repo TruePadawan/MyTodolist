@@ -6,6 +6,8 @@ const Header = (props) => {
 	return (
 		<header className={styles.header}>
 			<IconButton
+				aria-label="Toggle sidebar"
+				title="Toggle sidebar"
 				type="button"
 				className={styles["sidebar-btn"]}
 				onClick={props.onSidebarBtnClicked}>

@@ -1,31 +1,22 @@
-import ReactDOM from "react-dom";
-import "./Modal.css";
-
-const Backdrop = (props) => {
-  return <div onClick={props.closeModal} className="backdrop"></div>;
-};
-
-const ModalBody = (props) => {
-  return <div className={`modal-body ${props.classes}`}>{props.passChild}</div>;
-};
+import { Box, Modal as MUIModal } from "@mui/material";
 
 const Modal = (props) => {
-  return (
-    <>
-      {ReactDOM.createPortal(
-        <Backdrop closeModal={props.close} />,
-        document.getElementById("modal")
-      )}
-      {ReactDOM.createPortal(
-        <ModalBody
-          closeModal={props.close}
-          passChild={props.children}
-          classes={props.className}
-        />,
-        document.getElementById("modal")
-      )}
-    </>
-  );
+	const styles = {
+		position: "absolute",
+		top: "50%",
+		left: "50%",
+		transform: "translate(-50%, -50%)",
+		width: "min(98%, 40rem)",
+		bgcolor: "#fadea1",
+		boxShadow: 24,
+		p: 2,
+	};
+
+	return (
+		<MUIModal open={props.open} onClose={props.onClose}>
+			<Box {...props.containerProps} sx={styles}>{props.children}</Box>
+		</MUIModal>
+	);
 };
 
 export default Modal;

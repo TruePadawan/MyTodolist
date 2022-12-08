@@ -7,6 +7,7 @@ ul {
   scrollbar-width: thin;
   scrollbar-color: bisque cornsilk;
   height: 100%;
+  padding: 0;
 }
 
 .todolist-body::-webkit-scrollbar {

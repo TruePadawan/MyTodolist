@@ -19,7 +19,7 @@ const TodoItem = (props) => {
 	}`;
 	return (
 		<li className={listElClassName}>
-			<span>{title}</span>
+			<div>{title}</div>
 			<button
 				type="button"
 				onClick={openDetailsDialog}
@@ -31,6 +31,7 @@ const TodoItem = (props) => {
 				onClose={closeDetailsDialog}
 				todoID={props.id}
 				todoData={props.data}
+				projectID={props.projectID}
 			/>
 		</li>
 	);

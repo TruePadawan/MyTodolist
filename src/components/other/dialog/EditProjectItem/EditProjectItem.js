@@ -1,7 +1,8 @@
 import { Fragment, useRef } from "react";
+import { PROJECT_TITLE_MINLENGTH } from "../../../../utils/other-utils";
 import Modal from "../../../other/modal/Modal";
-import { InputField } from "../../../Input/InputField";
-import "./EditProjectItem.css";
+import Button from "../../button/Button/Button";
+import { InputField } from "../../input/InputField/InputField";
 
 const EditProjectItem = (props) => {
 	const titleRef = useRef();
@@ -13,36 +14,42 @@ const EditProjectItem = (props) => {
 	function formSubmitHandler(event) {
 		event.preventDefault();
 		props.updateProject(props.projectID, { title: titleRef.current.value });
+		props.onClose();
 	}
 
 	function deleteButtonClickHandler() {
 		props.deleteProject(props.projectID);
+		props.onClose();
 	}
 
 	return (
-		<Modal close={props.onClose}>
-			<form className="d-flex flex-column" onSubmit={formSubmitHandler}>
-				<h3>Edit Project</h3>
-				<InputField
-					inputRef={titleRef}
-					type="text"
-					minLength="2"
-					maxLength="25"
-					defaultValue={props.title}
-					required
-				/>
-				<div className="d-flex flex-column gap-1">
-					<button type="submit" className="save-btn">
-						Save
-					</button>
-					<button
-						type="button"
-						className="delete-btn"
-						onClick={deleteButtonClickHandler}>
-						Delete
-					</button>
-				</div>
-			</form>
+		<Modal
+			open={props.open}
+			onClose={props.onClose}
+			containerProps={{
+				className: "dialog-form",
+				component: "form",
+				onSubmit: formSubmitHandler,
+			}}>
+			<h3 className="dialog-title">Edit Project</h3>
+			<InputField
+				inputRef={titleRef}
+				type="text"
+				minLength={PROJECT_TITLE_MINLENGTH}
+				defaultValue={props.title}
+				required
+			/>
+			<div className="d-flex flex-column gap-1">
+				<Button type="submit" sx={{ backgroundColor: "lightgreen" }}>
+					Save
+				</Button>
+				<Button
+					type="button"
+					sx={{ backgroundColor: "indianred", color: "whitesmoke" }}
+					onClick={deleteButtonClickHandler}>
+					Delete
+				</Button>
+			</div>
 		</Modal>
 	);
 };

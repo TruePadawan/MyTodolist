@@ -5,7 +5,7 @@ import DateTime from "../../other/datetime/datetime";
 import { Button } from "@mui/material";
 import styles from "./styles.module.css";
 
-const TodoListHead = ({ appData: data }) => {
+const TodoListHead = ({ activeProjectData }) => {
 	const [showCreateItemDialog, setShowCreateItemDialog] = useState(false);
 
 	function dialogOpenHandler() {
@@ -30,13 +30,17 @@ const TodoListHead = ({ appData: data }) => {
 			backgroundColor: "burlywood",
 		},
 	};
-	const noActiveProject = Object.keys(data).length === 0;
+
+	const noActiveProject = activeProjectData === null;
 	return (
 		<Fragment>
-			<CreateTodoItemDialog
-				open={showCreateItemDialog}
-				onClose={dialogCloseHandler}
-			/>
+			{!noActiveProject && (
+				<CreateTodoItemDialog
+					open={showCreateItemDialog}
+					onClose={dialogCloseHandler}
+					projectID={activeProjectData.id}
+				/>
+			)}
 			<div className={styles["todolist-header-outer"]}>
 				<DateTime />
 				<div className={styles["todolist-header"]}>

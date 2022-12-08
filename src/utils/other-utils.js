@@ -1,6 +1,9 @@
 import { v4 as uuid } from "uuid";
+import ProjectItem from "../components/other/item/ProjectItem/ProjectItem";
 
 export const APP_LOCALSTORAGE_KEY = "mytodolist-data";
+export const TODO_TITLE_MINLENGTH = 3;
+export const PROJECT_TITLE_MINLENGTH = 3;
 
 export function getLocalAppData() {
 	const cachedData = localStorage.getObj(APP_LOCALSTORAGE_KEY);
@@ -30,4 +33,13 @@ export function getActiveProject(projectsData) {
 		}
 	}
 	return null;
+}
+
+export function getProjectItems(data) {
+	let IDs = Object.keys(data);
+	let projectItems = IDs.map((id) => {
+		const { title, active } = data[id];
+		return <ProjectItem key={id} projectData={{ id, title, active }} />;
+	});
+	return projectItems;
 }

@@ -13,6 +13,7 @@ import {
 import { AuthContext } from "./AuthContextProvider";
 import { v4 as uuid } from "uuid";
 import {
+	addTodoItemToDB,
 	createProjectInDB,
 	deleteProjectItemFromDB,
 	deleteTodoItemFromDB,
@@ -24,7 +25,7 @@ import {
 export const TodoListContext = createContext({
 	data: {},
 	handleProjectCreation: async (projectTitle) => {},
-	addTodoItemToActiveProject: async (todoItemData) => {},
+	addTodoItem: async (todoItemData, projectID) => {},
 	updateTodoItem: async (todoItemID, projectID, newData) => {},
 	deleteTodoItem: async (todoItemID, projectID) => {},
 	updateProjectItem: async (projectID, newData) => {},
@@ -57,147 +58,160 @@ const TodoListContextProvider = (props) => {
 		}
 	}, [authenticatedUserData, processAppData]);
 
-	const handleProjectCreation = useCallback(
-		(projectTitle) => {
-			const userSignedIn = authenticatedUserData !== null;
-			if (!userSignedIn) {
-				setData((snapshot) => {
-					const projectID = uuid();
-					snapshot[projectID] = {
-						title: projectTitle,
-						active: false,
-						todos: {},
-					};
-					return { ...snapshot };
-				});
-			} else {
-				// CREATE PROJECT IN DB
-				createProjectInDB(authenticatedUserData.uid, projectTitle);
-			}
-		},
-		[authenticatedUserData]
-	);
+	function handleProjectCreation(projectTitle) {
+		if (!userSignedIn) {
+			setData((snapshot) => {
+				const projectID = uuid();
+				snapshot[projectID] = {
+					title: projectTitle,
+					active: false,
+					todos: {},
+				};
+				return { ...snapshot };
+			});
+		} else {
+			return createProjectInDB(authenticatedUserData.uid, projectTitle);
+		}
+		return Promise.resolve();
+	}
 
-	const addTodoItemToActiveProject = async (todoItemData) => {
-		const project = getActiveProject(data);
-		const todos = project.todos;
-		const todoID = uuid();
-		todos[todoID] = todoItemData;
-		const updatedProjectData = {
-			title: project.title,
-			active: project.active,
-			todos,
-		};
-		updateProjectItem(project.id, updatedProjectData);
-	};
+	function updateProjectItem(projectID, newData) {
+		if (!userSignedIn) {
+			setData((snapshot) => {
+				const project = snapshot[projectID];
+				snapshot[projectID] = { ...project, ...newData };
+				return { ...snapshot };
+			});
+		} else {
+			return updateProjectItemInDB(
+				authenticatedUserData.uid,
+				projectID,
+				newData
+			);
+		}
+		return Promise.resolve();
+	}
 
-	const updateTodoItem = useCallback(
-		(todoItemID, projectID, newData) => {
-			if (!userSignedIn) {
-				setData((snapshot) => {
-					const todos = snapshot[projectID].todos;
-					snapshot[projectID].todos[todoItemID] = { ...todos, ...newData };
-					return { ...snapshot };
-				});
-			} else {
-				updateTodoItemInDB(
-					authenticatedUserData.uid,
-					projectID,
-					todoItemID,
-					newData
-				);
-			}
-		},
-		[userSignedIn, authenticatedUserData]
-	);
-
-	const deleteTodoItem = useCallback(
-		(todoItemID, projectID) => {
-			if (!userSignedIn) {
-				setData((snapshot) => {
-					Reflect.deleteProperty(snapshot[projectID].todos, todoItemID);
-					return { ...snapshot };
-				});
-			} else {
-				deleteTodoItemFromDB(authenticatedUserData.uid, projectID, todoItemID);
-			}
-		},
-		[userSignedIn, authenticatedUserData]
-	);
-
-	const updateProjectItem = useCallback(
-		(projectID, newData) => {
-			if (!userSignedIn) {
-				setData((snapshot) => {
-					const project = snapshot[projectID];
-					snapshot[projectID] = { ...project, ...newData };
-					return { ...snapshot };
-				});
-			} else {
-				updateProjectItemInDB(authenticatedUserData.uid, projectID, newData);
-			}
-		},
-		[authenticatedUserData, userSignedIn]
-	);
-
-	const deleteProjectItem = useCallback(
-		(projectID) => {
-			if (!userSignedIn) {
-				setData((snapshot) => {
-					Reflect.deleteProperty(snapshot, projectID);
-					return { ...snapshot };
-				});
-			} else {
-				deleteProjectItemFromDB(authenticatedUserData.uid, projectID);
-			}
-		},
-		[authenticatedUserData, userSignedIn]
-	);
-
-	const setProjectAsActive = useCallback(
-		(projectID) => {
-			if (!userSignedIn) {
-				setData((snapshot) => {
-					snapshot[projectID].active = true;
-					for (const key in snapshot) {
-						if (key !== projectID) {
-							snapshot[key].active = false;
-						}
+	function deleteProjectItem(projectID) {
+		if (!userSignedIn) {
+			// IF THE PROJECT TO BE DELETED IS THE ACTIVE PROJECT, SET A NEW ACTIVE PROJECT
+			// IF DELETED PROJECT WAS THE ONLY PROJECT, CREATE A DEFAULT PROJECT
+			setData((snapshot) => {
+				Reflect.deleteProperty(snapshot, projectID);
+				const noActiveProject = getActiveProject(snapshot) === null;
+				if (noActiveProject) {
+					const projectIDs = Object.keys(snapshot);
+					if (projectIDs.length > 0) {
+						snapshot[projectIDs[0]].active = true;
+					} else {
+						snapshot = {
+							[uuid()]: {
+								title: "Default",
+								active: true,
+								todos: {},
+							},
+						};
 					}
-					return { ...snapshot };
-				});
-			} else {
-				// FIND ACTIVE PROJECT, DEACTIVATE,
-				// ACTIVATE OTHER PROJECT
-				const databaseRef = ref(
-					firebaseRealtimeDBInstance,
-					`/${authenticatedUserData.uid}/projects`
-				);
-				onValue(
-					databaseRef,
-					(snapshot) => {
-						const snapshotValue = snapshot.val();
-						if (snapshotValue) {
-							snapshotValue[projectID].active = true;
-							for (const key in snapshotValue) {
-								if (key !== projectID) {
-									snapshotValue[key].active = false;
-								}
+				}
+				return { ...snapshot };
+			});
+		} else {
+			return deleteProjectItemFromDB(authenticatedUserData.uid, projectID);
+		}
+		return Promise.resolve();
+	}
+
+	function addTodoItem(todoItemData, projectID) {
+		if (userSignedIn) {
+			return addTodoItemToDB(
+				authenticatedUserData.uid,
+				projectID,
+				todoItemData
+			);
+		} else {
+			setData((snapshot) => {
+				const todoID = uuid();
+				snapshot[projectID].todos[todoID] = todoItemData;
+				return { ...snapshot };
+			});
+		}
+		return Promise.resolve();
+	}
+
+	function updateTodoItem(todoItemID, projectID, newData) {
+		if (!userSignedIn) {
+			setData((snapshot) => {
+				snapshot[projectID].todos[todoItemID] = newData;
+				return { ...snapshot };
+			});
+		} else {
+			return updateTodoItemInDB(
+				authenticatedUserData.uid,
+				projectID,
+				todoItemID,
+				newData
+			);
+		}
+		return Promise.resolve();
+	}
+
+	function deleteTodoItem(todoItemID, projectID) {
+		if (!userSignedIn) {
+			setData((snapshot) => {
+				Reflect.deleteProperty(snapshot[projectID].todos, todoItemID);
+				return { ...snapshot };
+			});
+		} else {
+			return deleteTodoItemFromDB(
+				authenticatedUserData.uid,
+				projectID,
+				todoItemID
+			);
+		}
+		return Promise.resolve();
+	}
+
+	function setProjectAsActive(projectID) {
+		// FIND CURRENTLY ACTIVE PROJECT, DEACTIVATE IT,
+		// ACTIVATE OTHER PROJECT
+		if (!userSignedIn) {
+			setData((snapshot) => {
+				snapshot[projectID].active = true;
+				for (const key in snapshot) {
+					if (key !== projectID) {
+						snapshot[key].active = false;
+					}
+				}
+				return { ...snapshot };
+			});
+		} else {
+			const databaseRef = ref(
+				firebaseRealtimeDBInstance,
+				`/${authenticatedUserData.uid}/projects`
+			);
+			onValue(
+				databaseRef,
+				(snapshot) => {
+					const snapshotValue = snapshot.val();
+					if (snapshotValue) {
+						snapshotValue[projectID].active = true;
+						for (const key in snapshotValue) {
+							if (key !== projectID) {
+								snapshotValue[key].active = false;
 							}
-							setProjects(authenticatedUserData.uid, snapshotValue);
 						}
-					},
-					{ onlyOnce: true }
-				);
-			}
-		},
-		[userSignedIn, authenticatedUserData]
-	);
+						setProjects(authenticatedUserData.uid, snapshotValue);
+					}
+				},
+				{ onlyOnce: true }
+			);
+		}
+	}
 
 	const value = {
 		data,
 		handleProjectCreation,
-		addTodoItemToActiveProject,
+		addTodoItem,
 		updateTodoItem,
 		deleteTodoItem,
 		updateProjectItem,

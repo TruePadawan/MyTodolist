@@ -1,0 +1,29 @@
+.project-item {
+    display: flex;
+    gap: 5px;
+    border-radius: 8px;
+    background-color: rgb(243, 197, 105);
+    padding: 5px;
+}
+
+.project-item .project-item-btn {
+    flex-grow: 1;
+    border: none;
+    background-color: transparent;
+}
+
+.project-item.active {
+    box-shadow: inset 0 0 2px rgba(29, 29, 29, 0.74);
+    background-color: rgb(195, 159, 87);
+}
+
+.project-title {
+    flex-grow: 1;
+    font-size: 18px;
+    color: #535151;
+    overflow: hidden;
+}
+
+.project-title:focus {
+    outline: none;
+}

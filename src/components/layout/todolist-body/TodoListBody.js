@@ -2,7 +2,6 @@ import TodoItem from "../../other/item/TodoItem/TodoItem";
 import styles from "./styles.module.css";
 
 const TodoListBody = ({ projectID, todos }) => {
-	// TRANSFORM DATA TO JSX ELEMENTS
 	const transformedList = Object.keys(todos).map((todoItemID) => {
 		const todoItemData = todos[todoItemID];
 		return (
@@ -15,11 +14,7 @@ const TodoListBody = ({ projectID, todos }) => {
 		);
 	});
 
-	return (
-		<div className={styles["todolist-body"]}>
-			<ul>{transformedList}</ul>
-		</div>
-	);
+	return <ul className={styles["todolist-body"]}>{transformedList}</ul>;
 };
 
 export default TodoListBody;

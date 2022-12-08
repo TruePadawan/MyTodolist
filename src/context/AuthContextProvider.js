@@ -11,11 +11,11 @@ export default function AuthContextProvider(props) {
 	// LISTEN FOR CHANGES IN AUTH STATE
 	useEffect(() => {
 		auth.onAuthStateChanged((authSnapshot) => {
-			if (authSnapshot.currentUser) {
+			if (authSnapshot) {
 				setAuthenticatedUserData({
-					uid: authSnapshot.currentUser.uid,
-					displayName: authSnapshot.currentUser.displayName,
-					email: authSnapshot.currentUser.email,
+					uid: authSnapshot.uid,
+					displayName: authSnapshot.displayName,
+					email: authSnapshot.email,
 				});
 			} else {
 				setAuthenticatedUserData(null);

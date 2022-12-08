@@ -3,12 +3,12 @@ import { firebaseRealtimeDBInstance as database } from "../firebase/firebase_ini
 
 export function setProjects(userID, projects) {
 	const databaseRef = ref(database, `/${userID}/projects`);
-	set(databaseRef, projects);
+	return set(databaseRef, projects);
 }
 
 export function createProjectInDB(userID, projectTitle) {
 	const databaseRef = ref(database, `/${userID}/projects`);
-	push(databaseRef, {
+	return push(databaseRef, {
 		title: projectTitle,
 		active: false,
 		todos: {},
@@ -17,12 +17,12 @@ export function createProjectInDB(userID, projectTitle) {
 
 export function addTodoItemToDB(userID, projectID, todoItem) {
 	const databaseRef = ref(database, `/${userID}/projects/${projectID}/todos`);
-	push(databaseRef, todoItem);
+	return push(databaseRef, todoItem);
 }
 
 export function updateProjectItemInDB(userID, projectID, value) {
 	const databaseRef = ref(database, `/${userID}/projects/${projectID}`);
-	update(databaseRef, value);
+	return update(databaseRef, value);
 }
 
 export function updateTodoItemInDB(userID, projectID, itemID, value) {
@@ -30,12 +30,13 @@ export function updateTodoItemInDB(userID, projectID, itemID, value) {
 		database,
 		`/${userID}/projects/${projectID}/todos/${itemID}`
 	);
-	update(databaseRef, value);
+	return update(databaseRef, value);
 }
 
 export function deleteProjectItemFromDB(userID, projectID) {
+	// IF PROJECT TO BE DELETED IS LAST PROJECT, SET A DEFAULT PROJECT
 	const databaseRef = ref(database, `/${userID}/projects/${projectID}`);
-	remove(databaseRef);
+	return remove(databaseRef);
 }
 
 export function deleteTodoItemFromDB(userID, projectID, itemID) {
@@ -43,7 +44,7 @@ export function deleteTodoItemFromDB(userID, projectID, itemID) {
 		database,
 		`/${userID}/projects/${projectID}/todos/${itemID}`
 	);
-	remove(databaseRef);
+	return remove(databaseRef);
 }
 
 export function getAppData(snapshot) {
