@@ -36,6 +36,8 @@ export default function CreateProjectDialog(props) {
 
 	return (
 		<Modal
+			role="dialog"
+			aria-labelledby="create-project-dialog-title"
 			open={props.open}
 			onClose={props.onClose}
 			containerProps={{
@@ -43,7 +45,9 @@ export default function CreateProjectDialog(props) {
 				component: "form",
 				onSubmit: formSubmitHandler,
 			}}>
-			<h3 className="dialog-title">Create Project</h3>
+			<h3 id="create-project-dialog-title" className="dialog-title">
+				Create Project
+			</h3>
 			<InputField
 				label="Project title"
 				value={projectTitle}

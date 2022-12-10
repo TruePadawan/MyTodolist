@@ -24,6 +24,8 @@ const EditProjectItem = (props) => {
 
 	return (
 		<Modal
+			role="dialog"
+			aria-labelledby="edit-project-dialog-title"
 			open={props.open}
 			onClose={props.onClose}
 			containerProps={{
@@ -31,7 +33,9 @@ const EditProjectItem = (props) => {
 				component: "form",
 				onSubmit: formSubmitHandler,
 			}}>
-			<h3 className="dialog-title">Edit Project</h3>
+			<h3 id="edit-project-dialog-title" className="dialog-title">
+				Edit Project
+			</h3>
 			<InputField
 				inputRef={titleRef}
 				type="text"

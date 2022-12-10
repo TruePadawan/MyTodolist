@@ -45,6 +45,8 @@ const TodoItemDetails = (props) => {
 
 	return (
 		<Modal
+			role="dialog"
+			aria-labelledby="todo-details-dialog-title"
 			open={props.open}
 			onClose={props.onClose}
 			containerProps={{
@@ -52,7 +54,9 @@ const TodoItemDetails = (props) => {
 				component: "form",
 				onSubmit: formSubmitHandler,
 			}}>
-			<h3 className="dialog-title">Details</h3>
+			<h3 id="todo-details-dialog-title" className="dialog-title">
+				Details
+			</h3>
 			<InputField
 				label="Title"
 				inputRef={titleRef}

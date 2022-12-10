@@ -49,6 +49,8 @@ const CreateTodoItemDialog = ({ onClose, open, projectID }) => {
 
 	return (
 		<Modal
+			role="dialog"
+			aria-labelledby="create-todo-dialog-title"
 			open={open}
 			onClose={onClose}
 			containerProps={{
@@ -56,7 +58,9 @@ const CreateTodoItemDialog = ({ onClose, open, projectID }) => {
 				component: "form",
 				onSubmit: formSubmitHandler,
 			}}>
-			<h3 className="dialog-title">Create Todo Item</h3>
+			<h3 id="create-todo-dialog-title" className="dialog-title">
+				Create Todo Item
+			</h3>
 			<div className="d-flex flex-column p-1 gap-2">
 				<InputField
 					inputRef={titleRef}
