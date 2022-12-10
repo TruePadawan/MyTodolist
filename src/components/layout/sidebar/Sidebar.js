@@ -1,11 +1,9 @@
-import { useContext, useState } from "react";
-import { TodoListContext } from "../../../context/TodoListContextProvider";
+import { useState } from "react";
 import { getProjectItems } from "../../../utils/other-utils";
 import CreateProjectDialog from "../../other/dialog/CreateProjectDialog/CreateProjectDialog";
 import styles from "./styles.module.css";
 
 const Sidebar = (props) => {
-	const { data } = useContext(TodoListContext);
 	const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
 	function openCreateProjectDialog() {
@@ -16,8 +14,8 @@ const Sidebar = (props) => {
 		setDialogIsOpen(false);
 	}
 
-	const projectsList = getProjectItems(data);
-	
+	const projectsList = getProjectItems(props.data);
+
 	const componentClassName = `${styles.sidebar} ${
 		props.open ? styles.opened : styles.closed
 	}`;
