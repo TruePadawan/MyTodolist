@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import TodoItemDetails from "../../dialog/TodoItemDetails/TodoItemDetails";
 import styles from "./styles.module.css";
 
@@ -18,14 +18,7 @@ const TodoItem = (props) => {
 		done ? styles["todo-done"] : ""
 	}`;
 	return (
-		<li className={listElClassName}>
-			<div>{title}</div>
-			<button
-				type="button"
-				onClick={openDetailsDialog}
-				className={styles["details-btn"]}>
-				Details
-			</button>
+		<Fragment>
 			<TodoItemDetails
 				open={showDetails}
 				onClose={closeDetailsDialog}
@@ -33,7 +26,16 @@ const TodoItem = (props) => {
 				todoData={props.data}
 				projectID={props.projectID}
 			/>
-		</li>
+			<li className={listElClassName} aria-labelledby={props.id}>
+				<div id={props.id}>{title}</div>
+				<button
+					type="button"
+					onClick={openDetailsDialog}
+					className={styles["details-btn"]}>
+					Details
+				</button>
+			</li>
+		</Fragment>
 	);
 };
 

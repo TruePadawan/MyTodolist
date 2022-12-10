@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { getProjectItems } from "../../../utils/other-utils";
 import CreateProjectDialog from "../../other/dialog/CreateProjectDialog/CreateProjectDialog";
 import styles from "./styles.module.css";
@@ -20,25 +20,27 @@ const Sidebar = (props) => {
 		props.open ? styles.opened : styles.closed
 	}`;
 	return (
-		<aside className={componentClassName}>
-			{props.children}
+		<Fragment>
 			<CreateProjectDialog
 				open={dialogIsOpen}
 				onClose={closeCreateProjectDialog}
 			/>
-			<section
-				aria-labelledby="sidebar-title"
-				className={styles["projects-section"]}>
-				<h2 id="sidebar-title">Projects</h2>
-				<button
-					type="button"
-					className={styles["new-project-btn"]}
-					onClick={openCreateProjectDialog}>
-					New Project
-				</button>
-				<div className={styles["projects"]}>{projectsList}</div>
-			</section>
-		</aside>
+			<aside className={componentClassName} aria-label="sidebar">
+				{props.children}
+				<section
+					aria-labelledby="sidebar-title"
+					className={styles["projects-section"]}>
+					<h2 id="sidebar-title">Projects</h2>
+					<button
+						type="button"
+						className={styles["new-project-btn"]}
+						onClick={openCreateProjectDialog}>
+						New Project
+					</button>
+					<ul className={styles["projects"]}>{projectsList}</ul>
+				</section>
+			</aside>
+		</Fragment>
 	);
 };
 

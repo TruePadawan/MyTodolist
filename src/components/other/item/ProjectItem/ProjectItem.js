@@ -32,13 +32,15 @@ const ProjectItem = ({ projectData }) => {
 				updateProject={updateProjectItem}
 				deleteProject={deleteProjectItem}
 			/>
-			<div className={componentClassName}>
+			<li className={componentClassName} aria-labelledby={projectData.id}>
 				<button
 					aria-label="set project as active"
 					type="button"
 					className={styles["project-item-btn"]}
 					onClick={buttonClickHandler}>
-					<span className={styles["project-title"]}>{projectData.title}</span>
+					<span id={projectData.id} className={styles["project-title"]}>
+						{projectData.title}
+					</span>
 				</button>
 				<IconButton
 					aria-label="edit project"
@@ -46,7 +48,7 @@ const ProjectItem = ({ projectData }) => {
 					onClick={editButtonClickHandler}>
 					<EditIcon />
 				</IconButton>
-			</div>
+			</li>
 		</Fragment>
 	);
 };
