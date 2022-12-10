@@ -5,7 +5,7 @@ import DateTime from "../../other/datetime/datetime";
 import { Button } from "@mui/material";
 import styles from "./styles.module.css";
 
-const TodoListHead = ({ activeProjectData }) => {
+const TodoListHead = ({ activeProjectData = null }) => {
 	const [showCreateItemDialog, setShowCreateItemDialog] = useState(false);
 
 	function dialogOpenHandler() {
