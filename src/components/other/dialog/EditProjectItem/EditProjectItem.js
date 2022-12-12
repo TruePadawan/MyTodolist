@@ -13,8 +13,11 @@ const EditProjectItem = (props) => {
 
 	function formSubmitHandler(event) {
 		event.preventDefault();
-		props.updateProject(props.projectID, { title: titleRef.current.value });
-		props.onClose();
+		const projectTitle = titleRef.current.value;
+		if (projectTitle.trim().length >= 3) {
+			props.updateProject(props.projectID, { title: projectTitle });
+			props.onClose();
+		}
 	}
 
 	function deleteButtonClickHandler() {
@@ -43,6 +46,7 @@ const EditProjectItem = (props) => {
 				defaultValue={props.title}
 				required
 			/>
+			<span className="fs-6">Project title must have at least 3 characters!</span>
 			<div className="d-flex flex-column gap-1">
 				<Button type="submit" sx={{ backgroundColor: "lightgreen" }}>
 					Save

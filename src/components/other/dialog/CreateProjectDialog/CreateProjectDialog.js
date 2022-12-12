@@ -27,7 +27,7 @@ export default function CreateProjectDialog(props) {
 
 	function formSubmitHandler(event) {
 		event.preventDefault();
-		if (projectTitle.trim().length > 3) {
+		if (projectTitle.trim().length >= 3) {
 			handleProjectCreation(projectTitle);
 			setProjectTitle("");
 			props.onClose();
