@@ -24,7 +24,7 @@ import {
 
 export const TodoListContext = createContext({
 	data: {},
-	handleProjectCreation: async (projectTitle) => {},
+	handleProjectCreation: async (projectTitle, active = false) => {},
 	addTodoItem: async (todoItemData, projectID) => {},
 	updateTodoItem: async (todoItemID, projectID, newData) => {},
 	deleteTodoItem: async (todoItemID, projectID) => {},
@@ -38,27 +38,39 @@ const TodoListContextProvider = (props) => {
 	const [data, setData] = useState(getLocalAppData());
 	const userSignedIn = authenticatedUserData !== null;
 
+	const processAppData = useCallback(
+		(snapshot) => {
+			// PROCESS DATA, CREATE DEFAULT PROJECT IF NONE
+			const snapshotData = snapshot.val();
+			if (snapshotData === null) {
+				createProjectInDB(authenticatedUserData.uid, {
+					title: "Default",
+					active: true,
+					todos: {},
+				});
+			} else {
+				setData(snapshotData);
+			}
+		},
+		[authenticatedUserData]
+	);
+
 	useEffect(() => {
 		storeAppDataLocally(data);
 	}, [data]);
 
-	const processAppData = useCallback((snapshot) => {
-		// PROCESS DATA, CREATE DEFAULT PROJECT IF NONE
-		console.log(snapshot);
-	}, []);
-
 	// LOAD USER TODO DATA FROM DB IF USER SIGNS IN ELSE FROM LOCALSTORAGE
 	useEffect(() => {
 		if (authenticatedUserData !== null) {
-			const { id: userID } = authenticatedUserData;
-			const appDataDBRef = ref(database, `/${userID}/projects`);
+			const { uid } = authenticatedUserData;
+			const appDataDBRef = ref(database, `/${uid}/projects`);
 			return onValue(appDataDBRef, processAppData);
 		} else {
 			setData(getLocalAppData());
 		}
 	}, [authenticatedUserData, processAppData]);
 
-	function handleProjectCreation(projectTitle) {
+	function handleProjectCreation(projectTitle, active = false) {
 		if (!userSignedIn) {
 			setData((snapshot) => {
 				const projectID = uuid();
@@ -70,7 +82,11 @@ const TodoListContextProvider = (props) => {
 				return { ...snapshot };
 			});
 		} else {
-			return createProjectInDB(authenticatedUserData.uid, projectTitle);
+			return createProjectInDB(authenticatedUserData.uid, {
+				title: projectTitle,
+				active,
+				todos: {},
+			});
 		}
 		return Promise.resolve();
 	}
@@ -93,9 +109,9 @@ const TodoListContextProvider = (props) => {
 	}
 
 	function deleteProjectItem(projectID) {
+		// IF THE PROJECT TO BE DELETED IS THE ACTIVE PROJECT, SET A NEW ACTIVE PROJECT
+		// IF DELETED PROJECT WAS THE ONLY PROJECT, CREATE A DEFAULT PROJECT
 		if (!userSignedIn) {
-			// IF THE PROJECT TO BE DELETED IS THE ACTIVE PROJECT, SET A NEW ACTIVE PROJECT
-			// IF DELETED PROJECT WAS THE ONLY PROJECT, CREATE A DEFAULT PROJECT
 			setData((snapshot) => {
 				Reflect.deleteProperty(snapshot, projectID);
 				const noActiveProject = getActiveProject(snapshot) === null;
@@ -116,7 +132,26 @@ const TodoListContextProvider = (props) => {
 				return { ...snapshot };
 			});
 		} else {
-			return deleteProjectItemFromDB(authenticatedUserData.uid, projectID);
+			const { uid } = authenticatedUserData;
+			const appDataDBRef = ref(database, `/${uid}/projects`);
+			onValue(
+				appDataDBRef,
+				(snapshot) => {
+					const snapshotData = snapshot.val();
+					Reflect.deleteProperty(snapshotData, projectID);
+					const noActiveProject = getActiveProject(snapshotData) === null;
+					if (noActiveProject) {
+						const projectIDs = Object.keys(snapshotData);
+						if (projectIDs.length > 0) {
+							setProjectAsActive(projectIDs[0]);
+						} else {
+							handleProjectCreation("Default", true);
+						}
+					}
+					deleteProjectItemFromDB(uid, projectID);
+				},
+				{ onlyOnce: true }
+			);
 		}
 		return Promise.resolve();
 	}
