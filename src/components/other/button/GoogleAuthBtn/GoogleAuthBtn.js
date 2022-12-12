@@ -18,7 +18,7 @@ export default function GoogleAuthBtn() {
 		}
 	}
 
-	const userDisplayName = authenticatedUserData?.diplayName;
+	const userDisplayName = authenticatedUserData?.displayName;
 	const btnText = userDisplayName || "Sign In";
 	return (
 		<Button
