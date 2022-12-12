@@ -11,7 +11,7 @@ export default function AuthContextProvider(props) {
 	// LISTEN FOR CHANGES IN AUTH STATE
 	useEffect(() => {
 		auth.onAuthStateChanged((authSnapshot) => {
-			if (authSnapshot) {
+			if (authSnapshot !== null) {
 				setAuthenticatedUserData({
 					uid: authSnapshot.uid,
 					displayName: authSnapshot.displayName,
