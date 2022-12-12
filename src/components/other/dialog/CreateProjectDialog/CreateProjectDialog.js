@@ -53,6 +53,7 @@ export default function CreateProjectDialog(props) {
 				value={projectTitle}
 				onChange={onInputValueChanged}
 				minLength={PROJECT_TITLE_MINLENGTH}
+				autoFocus={true}
 				required
 			/>
 			{helperText !== "" && <span className="fs-6">{helperText}</span>}
