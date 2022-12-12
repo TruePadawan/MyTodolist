@@ -22,6 +22,8 @@ export default function GoogleAuthBtn() {
 	const btnText = userDisplayName || "Sign In";
 	return (
 		<Button
+			aria-label="Sign in with google"
+			title="Sign in with google"
 			variant="text"
 			sx={{ color: "brown", fontWeight: "bold", fontFamily: "inherit" }}
 			startIcon={<GoogleIcon />}
