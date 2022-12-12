@@ -17,80 +17,11 @@ export default function App() {
 	function toggleSidebar() {
 		setSidebarIsOpen((snapshot) => !snapshot);
 	}
-	// RESPONSIBLE FOR LOADING IN THE PROJECT AND TODO DATA
-	// const loadAppData = useCallback(
-	// 	(snapshot) => {
-	// 		const data = DB_actions.getAppData(snapshot);
-	// 		setLoading(false);
 
-	// 		// IF USER IS SIGNING IN FOR FIRST TIME, CREATE DEFAULT PROJECT
-	// 		if (data === null) {
-	// 			const item = appManager.createProjectItem("Default", true);
-	// 			DB_actions.addProjectItem(appManager.uid, item);
-	// 			return;
-	// 		} else if (getActiveProjectID(data) === null) {
-	// 			const updatedAppData = setNewActiveProject(data);
-	// 			DB_actions.setProjects(appManager.uid, updatedAppData);
-	// 			return;
-	// 		}
-	// 		// ELSE LOAD APPDATA
-	// 		for (const id in data) {
-	// 			if (data[id].active === true) {
-	// 				appManager.activeProjectID = id;
-	// 			}
-	// 			if (!data[id].hasOwnProperty("todos")) {
-	// 				data[id].todos = {};
-	// 			}
-	// 		}
-	// 		setProjects(data);
-	// 	},
-	// 	[setLoading, setProjects]
-	// );
-
-	// When app loads, sign in the user if there was a previous sign in
-	// useEffect(() => {
-	// 	firebaseAuthInstance.onAuthStateChanged(function signUserIn() {
-	// 		if (firebaseAuthInstance.currentUser && !appManager.userSignedIn) {
-	// 			setLoading(true);
-	// 			setUser(firebaseAuthInstance.currentUser.displayName);
-	// 			appManager.userSignedIn = true;
-	// 			appManager.uid = firebaseAuthInstance.currentUser.uid;
-
-	// 			const appDataRef = ref(
-	// 				firebaseRealtimeDBInstance,
-	// 				`/${firebaseAuthInstance.currentUser.uid}/projects`
-	// 			);
-	// 			onValue(appDataRef, loadAppData);
-	// 		}
-	// 	});
-	// }, [loadAppData]);
-
-	// useEffect(() => {
-	// 	setTimeout(() => {
-	// 		if (firebaseAuthInstance.currentUser === null) {
-	// 			setLoading(false);
-
-	// 			// CREATE DEFAULT PROJECT IF THERE IS NONE, ELSE LOAD EXISTING APP DATA
-	// 			const appData = getLocalAppData();
-	// 			const amountOfProjects = Object.keys(appData).length;
-	// 			if (amountOfProjects === 0) {
-	// 				const itemID = uuidv4();
-	// 				const item = appManager.createProjectItem("Default", true);
-	// 				const projects = {
-	// 					[itemID]: item,
-	// 				};
-
-	// 				toLocalStorage(projects);
-	// 				setProjects(projects);
-	// 				return;
-	// 			}
-	// 			setProjects(appData);
-	// 		}
-	// 	}, 4000);
-	// }, [setProjects]);
-
-	// const activeProject = getActiveProject(projects, appManager.activeProjectID);
 	const activeProjectData = getActiveProject(data);
+	if (activeProjectData?.todos === undefined) {
+		activeProjectData.todos = {};
+	}
 	const mainClassName = sidebarIsOpen ? "sidebar-opened" : "sidebar-closed";
 
 	return (
@@ -98,7 +29,7 @@ export default function App() {
 			<Info
 				message={"Retrieving data from database..."}
 				open={loading}
-				onClose={false}
+				onClose={() => false}
 			/>
 			<div className="App">
 				<Header onSidebarBtnClicked={toggleSidebar} />
