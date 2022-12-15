@@ -1,10 +1,7 @@
 import { onValue, ref } from "firebase/database";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { createContext } from "react";
-import {
-	firebaseRealtimeDBInstance as database,
-	firebaseRealtimeDBInstance,
-} from "../firebase/firebase_init";
+import { firebaseRealtimeDBInstance as database } from "../firebase/firebase_init";
 import {
 	getActiveProject,
 	getLocalAppData,
@@ -221,7 +218,7 @@ const TodoListContextProvider = (props) => {
 			});
 		} else {
 			const databaseRef = ref(
-				firebaseRealtimeDBInstance,
+				database,
 				`/${authenticatedUserData.uid}/projects`
 			);
 			onValue(
