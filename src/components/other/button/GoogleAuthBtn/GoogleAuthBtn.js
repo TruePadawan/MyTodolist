@@ -1,29 +1,24 @@
 import { Button } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
-import { firebaseAuthInstance } from "../../../../firebase/firebase_init";
+import { firebaseAuthInstance as auth } from "../../../../firebase/firebase_init";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-import { useContext } from "react";
-import { AuthContext } from "../../../../context/AuthContextProvider";
 
 const googleProvider = new GoogleAuthProvider();
-export default function GoogleAuthBtn() {
-	const { authenticatedUserData } = useContext(AuthContext);
-
-	function signInWithGoogle() {
-		// IF THERE IS NO USER CURRENTLY LOGGED IN, LOGIN. ELSE, SIGN OUT
-		if (firebaseAuthInstance.currentUser === null) {
-			signInWithPopup(firebaseAuthInstance, googleProvider);
-		} else {
-			signOut(firebaseAuthInstance);
-		}
+function signInWithGoogle() {
+	if (auth.currentUser === null) {
+		signInWithPopup(auth, googleProvider);
+	} else {
+		signOut(auth);
 	}
-
-	const userDisplayName = authenticatedUserData?.displayName;
+}
+export default function GoogleAuthBtn() {
+	const userDisplayName = auth.currentUser?.displayName;
 	const btnText = userDisplayName || "Sign In";
+	const accessibleTitle = auth.currentUser ? "Sign out" : "Sign in with google";
 	return (
 		<Button
-			aria-label="Sign in with google"
-			title="Sign in with google"
+			aria-label={accessibleTitle}
+			title={accessibleTitle}
 			variant="text"
 			sx={{ color: "brown", fontWeight: "bold", fontFamily: "inherit" }}
 			startIcon={<GoogleIcon />}
