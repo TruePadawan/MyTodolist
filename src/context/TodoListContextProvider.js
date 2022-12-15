@@ -52,10 +52,6 @@ const TodoListContextProvider = (props) => {
 		[authenticatedUserData]
 	);
 
-	useEffect(() => {
-		storeAppDataLocally(data);
-	}, [data]);
-
 	// LOAD USER TODO DATA FROM DB IF USER SIGNS IN ELSE FROM LOCALSTORAGE
 	useEffect(() => {
 		if (authenticatedUserData !== null) {
@@ -66,6 +62,12 @@ const TodoListContextProvider = (props) => {
 			setData(getLocalAppData());
 		}
 	}, [authenticatedUserData, processAppData]);
+
+	useEffect(() => {
+		if (!userSignedIn) {
+			storeAppDataLocally(data);
+		}
+	}, [data, userSignedIn]);
 
 	function handleProjectCreation(projectTitle, active = false) {
 		if (!userSignedIn) {
